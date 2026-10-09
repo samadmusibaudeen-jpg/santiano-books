@@ -175,7 +175,7 @@
 
 
     /* =========================
-       CATEGORIES
+       CATEGORIES (sidebar)
     ========================= */
 
     .categories-section {
@@ -220,6 +220,165 @@
       font-size: 13px;
 
       line-height: 1.5;
+    }
+
+
+    /* =========================
+       MOBILE CATEGORIES (horizontal)
+    ========================= */
+
+    .mobile-categories {
+
+      display: none;
+
+      background:
+        var(--books-paper);
+
+      border-bottom:
+        1px solid var(--books-line);
+
+      padding:
+        12px 0 14px;
+
+      position: sticky;
+
+      top: 57px; /* below mobile header */
+
+      z-index: 850;
+    }
+
+
+    .mobile-categories-inner {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 8px;
+
+      overflow-x: auto;
+
+      -webkit-overflow-scrolling: touch;
+
+      scrollbar-width: none; /* Firefox */
+
+      padding:
+        0 16px;
+    }
+
+
+    .mobile-categories-inner::-webkit-scrollbar {
+      display: none;
+    }
+
+
+    .mobile-categories-label {
+
+      flex-shrink: 0;
+
+      font-size: 11px;
+
+      font-weight: 700;
+
+      letter-spacing: 1.2px;
+
+      color:
+        var(--books-muted);
+
+      text-transform: uppercase;
+
+      padding-right: 4px;
+    }
+
+
+    #mobileCategoriesList {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 8px;
+
+      flex: 1;
+      min-width: 0;
+    }
+
+
+    #mobileCategoriesList a {
+
+      flex-shrink: 0;
+
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 6px;
+
+      padding:
+        8px 14px;
+
+      border-radius: 999px;
+
+      border:
+        1px solid var(--books-line);
+
+      background:
+        var(--books-cream);
+
+      color:
+        var(--books-text);
+
+      font-size: 13px;
+
+      font-weight: 500;
+
+      text-decoration: none;
+
+      white-space: nowrap;
+
+      transition:
+        background .2s,
+        border-color .2s,
+        color .2s;
+    }
+
+
+    #mobileCategoriesList a:hover,
+    #mobileCategoriesList a:focus {
+
+      background:
+        #efe6d8;
+
+      border-color:
+        #d9cfc0;
+    }
+
+
+    #mobileCategoriesList a.active {
+
+      background:
+        var(--books-dark);
+
+      border-color:
+        var(--books-dark);
+
+      color: #fff;
+
+      font-weight: 600;
+    }
+
+
+    #mobileCategoriesList .categories-loading,
+    #mobileCategoriesList .categories-empty {
+
+      padding: 8px 4px;
+
+      font-size: 13px;
+
+      color:
+        var(--books-muted);
+
+      white-space: nowrap;
     }
 
 
@@ -472,6 +631,11 @@
       }
 
 
+      .mobile-categories {
+        display: none !important;
+      }
+
+
       .books-sidebar {
 
         transform:
@@ -503,6 +667,18 @@
 
       .books-mobile-header {
         display: flex;
+      }
+
+
+      .mobile-categories {
+        display: block;
+      }
+
+
+      /* Hide categories inside the sidebar on mobile
+         so they only appear in the horizontal strip */
+      .books-sidebar .categories-section {
+        display: none;
       }
 
 
@@ -660,6 +836,33 @@
 
 
   <!-- =========================
+       MOBILE CATEGORIES (horizontal)
+  ========================= -->
+
+  <div
+    class="mobile-categories"
+    id="mobileCategories"
+    aria-label="Book categories"
+  >
+
+    <div class="mobile-categories-inner">
+
+      <span class="mobile-categories-label">
+        Categories
+      </span>
+
+      <div id="mobileCategoriesList">
+        <div class="categories-loading">
+          Loading...
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
        SIDEBAR
   ========================= -->
 
@@ -718,6 +921,7 @@
 
     <!-- =========================
          DYNAMIC CATEGORIES
+         (desktop / sidebar only)
     ========================= -->
 
     <div class="categories-section">
@@ -975,6 +1179,182 @@
 
       }
     );
+
+
+    /*
+     * Mirror categories from the
+     * sidebar list (#categoriesList)
+     * into the mobile horizontal strip
+     * so app.js only needs to fill one
+     * container.
+     *
+     * Mobile clicks call the same filter
+     * logic as app.js (filterBooks) and
+     * keep the active state in sync on
+     * both lists.
+     */
+    (function syncMobileCategories() {
+
+      const source =
+        document.getElementById(
+          "categoriesList"
+        );
+
+      const target =
+        document.getElementById(
+          "mobileCategoriesList"
+        );
+
+      if (!source || !target) {
+        return;
+      }
+
+
+      function copyCategories() {
+
+        /* Clone all children so links
+           and classes (incl. .active)
+           stay in sync */
+        target.innerHTML = "";
+
+        Array.from(source.children)
+          .forEach(child => {
+
+            const clone =
+              child.cloneNode(true);
+
+            /* Clones must not keep the
+               "already bound" flag from
+               setupCategories, otherwise
+               app.js skips them if it
+               re-runs setupCategories. */
+            if (clone.nodeType === 1) {
+              clone.removeAttribute(
+                "data-category-bound"
+              );
+              clone
+                .querySelectorAll(
+                  "[data-category-bound]"
+                )
+                .forEach(el => {
+                  el.removeAttribute(
+                    "data-category-bound"
+                  );
+                });
+            }
+
+            target.appendChild(clone);
+
+          });
+      }
+
+
+      /* Initial copy (covers already-
+         loaded content or loading state) */
+      copyCategories();
+
+
+      /* Watch for app.js updates
+         (new categories + active class) */
+      const observer =
+        new MutationObserver(
+          copyCategories
+        );
+
+      observer.observe(source, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+        attributes: true,
+        attributeFilter: ["class"]
+      });
+
+
+      /*
+       * Mobile category tap:
+       * 1. mark active on every
+       *    [data-category] link
+       * 2. update mobile title
+       * 3. call filterBooks (from app.js)
+       */
+      target.addEventListener(
+        "click",
+        event => {
+
+          const mobileLink =
+            event.target.closest("a");
+
+          if (!mobileLink) return;
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          const category =
+            mobileLink.getAttribute(
+              "data-category"
+            );
+
+          if (!category) return;
+
+
+          /* Active state on all category links */
+          document
+            .querySelectorAll(
+              "[data-category]"
+            )
+            .forEach(item => {
+              item.classList.remove(
+                "active"
+              );
+            });
+
+          mobileLink.classList.add(
+            "active"
+          );
+
+          /* Also mark the sidebar original */
+          const original =
+            source.querySelector(
+              '[data-category="' +
+              category
+                .replace(/\\/g, "\\\\")
+                .replace(/"/g, '\\"') +
+              '"]'
+            );
+
+          if (original) {
+            original.classList.add(
+              "active"
+            );
+          }
+
+
+          /* Mobile header title */
+          const mobileTitle =
+            document.getElementById(
+              "booksMobileTitle"
+            );
+
+          if (mobileTitle) {
+            mobileTitle.textContent =
+              category === "All"
+                ? "All Books"
+                : category;
+          }
+
+
+          /* Filter the book grid (app.js) */
+          if (
+            typeof filterBooks ===
+            "function"
+          ) {
+            filterBooks(category);
+          }
+
+        }
+      );
+
+    })();
 
   </script>
 
