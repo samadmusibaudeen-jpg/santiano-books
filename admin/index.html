@@ -1462,20 +1462,6 @@
 
 
 
-              <!-- PAGE COUNT -->
-              <div class="field">
-                <label for="pageCount">Number of Pages</label>
-                <input
-                  id="pageCount"
-                  name="page_count"
-                  type="number"
-                  min="1"
-                  step="1"
-                  placeholder="e.g. 180"
-                  required
-                >
-              </div>
-
               <!-- CATEGORY -->
 
 
@@ -2798,11 +2784,6 @@
 
 
 
-        const pageCount =
-          Number(
-            document.getElementById("pageCount").value
-          );
-
         const category =
 
           document.getElementById(
@@ -2863,8 +2844,6 @@
 
             !author ||
 
-            (!Number.isInteger(pageCount) || pageCount < 1) ||
-
             !category ||
 
             !description ||
@@ -2882,8 +2861,7 @@
 
 
           formMessage.textContent =
-
-            "Please complete all required fields and enter a valid page count.";
+            "Please complete all required fields.";
 
 
 
@@ -3054,11 +3032,6 @@
         );
 
 
-
-        formData.append(
-          "page_count",
-          String(pageCount)
-        );
 
 
         formData.append(

@@ -15,17 +15,15 @@ function getCoverUrl(coverKey) {
     return null;
   }
 
-  /*
-   * The database may contain:
-   * covers/example.jpg
-   * uploads/covers/example.jpg
-   * example.jpg
-   */
+  // Accept keys such as:
+  // covers/example.jpg
+  // uploads/covers/example.jpg
+  // example.jpg
 
   const filename = String(coverKey)
-    .replace(/^uploads\/covers\//, "")
-    .replace(/^covers\//, "")
-    .replace(/^\/+/, "");
+    .replace(/\\/g, "/")
+    .replace(/^\/+/, "")
+    .replace(/^(?:uploads\/)?covers\//i, "");
 
   const { data } = supabase.storage
     .from("covers")
@@ -65,7 +63,6 @@ router.get("/", async (req, res) => {
         category,
         author,
         price_kobo,
-        page_count,
         cover_key,
         file_key,
         is_published,
@@ -77,13 +74,13 @@ router.get("/", async (req, res) => {
 
     const books = result.rows.map(formatBook);
 
-    res.json({
+    return res.json({
       books
     });
   } catch (error) {
     console.error("Books fetch error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       error: "Unable to load books"
     });
   }
@@ -108,24 +105,23 @@ router.get("/:id", async (req, res) => {
 
     const result = await pool.query(
       `
-      SELECT
-        id,
-        title,
-        slug,
-        description,
-        category,
-        author,
-        price_kobo,
-        page_count,
-        cover_key,
-        file_key,
-        is_published,
-        created_at
-      FROM books
-      WHERE
-        id = $1
-        AND is_published = TRUE
-      LIMIT 1
+        SELECT
+          id,
+          title,
+          slug,
+          description,
+          category,
+          author,
+          price_kobo,
+          cover_key,
+          file_key,
+          is_published,
+          created_at
+        FROM books
+        WHERE
+          id = $1
+          AND is_published = TRUE
+        LIMIT 1
       `,
       [bookId]
     );
@@ -136,13 +132,13 @@ router.get("/:id", async (req, res) => {
       });
     }
 
-    res.json({
+    return res.json({
       book: formatBook(result.rows[0])
     });
   } catch (error) {
     console.error("Single book fetch error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       error: "Unable to load book details"
     });
   }
