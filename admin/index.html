@@ -1,1846 +1,3718 @@
 <!doctype html>
+
 <html lang="en">
+
 <head>
+
   <meta charset="utf-8">
+
   <meta
+
     name="viewport"
+
     content="width=device-width, initial-scale=1"
+
   >
+
+
 
   <title>Santiano Books — Admin</title>
 
+
+
   <style>
+
     :root {
+
       --black: #111111;
+
       --gold: #c7a45a;
+
       --cream: #f7f1e5;
+
       --white: #ffffff;
+
       --line: #ded7ca;
+
       --muted: #77716a;
+
       --danger: #a9473c;
+
       --success: #39734a;
+
     }
+
+
 
     * {
+
       box-sizing: border-box;
+
     }
+
+
 
     body {
+
       margin: 0;
+
       font-family:
+
         Arial,
+
         Helvetica,
+
         sans-serif;
+
       background: var(--cream);
+
       color: var(--black);
+
     }
+
+
 
     button,
+
     input,
+
     textarea {
+
       font: inherit;
+
     }
+
+
 
     button {
+
       cursor: pointer;
+
     }
 
+
+
     /* =========================
+
        TOP BAR
+
     ========================= */
+
+
 
     .topbar {
+
       min-height: 70px;
+
       padding: 0 28px;
 
+
+
       display: flex;
+
       align-items: center;
+
       justify-content: space-between;
 
+
+
       background: var(--black);
+
       color: var(--white);
+
     }
+
+
 
     .brand {
+
       display: flex;
+
       align-items: center;
+
       gap: 12px;
+
     }
+
+
 
     .brand-mark {
+
       width: 40px;
+
       height: 40px;
 
+
+
       display: grid;
+
       place-items: center;
 
+
+
       border: 1px solid var(--gold);
+
       border-radius: 8px;
 
+
+
       color: var(--gold);
+
       font-size: 20px;
+
       font-weight: 700;
+
     }
+
+
 
     .brand-text strong {
+
       display: block;
+
       font-size: 17px;
+
       letter-spacing: 1px;
+
     }
+
+
 
     .brand-text small {
+
       color: var(--gold);
+
       font-size: 10px;
+
       letter-spacing: 2px;
+
     }
+
+
 
     .logout-btn {
+
       border: 1px solid #555;
+
       background: transparent;
+
       color: #fff;
+
+
 
       padding: 9px 16px;
+
       border-radius: 7px;
 
+
+
       transition:
+
         background .2s,
+
         border-color .2s;
+
     }
+
+
 
     .logout-btn:hover {
+
       background: #242424;
+
       border-color: var(--gold);
+
     }
 
+
+
     /* =========================
+
        LAYOUT
+
     ========================= */
+
+
 
     .page {
+
       width: min(1180px, calc(100% - 32px));
+
       margin: 0 auto;
+
       padding: 40px 0 70px;
+
     }
+
+
 
     .dashboard {
+
       display: none;
+
     }
+
+
 
     .dashboard.visible {
+
       display: block;
+
     }
+
+
 
     .section {
+
       margin-bottom: 35px;
+
     }
+
+
 
     .section-heading {
+
       margin-bottom: 18px;
+
     }
+
+
 
     .section-heading h1,
+
     .section-heading h2 {
+
       margin: 0 0 7px;
+
     }
+
+
 
     .section-heading h1 {
+
       font-size: 30px;
+
     }
+
+
 
     .section-heading h2 {
+
       font-size: 22px;
+
     }
+
+
 
     .section-heading p {
+
       margin: 0;
+
       color: var(--muted);
+
       font-size: 14px;
+
     }
 
+
+
     /* =========================
+
        CARDS
+
     ========================= */
+
+
 
     .card {
+
       background: var(--white);
+
       border: 1px solid var(--line);
+
       border-radius: 12px;
+
       padding: 24px;
+
       box-shadow:
+
         0 5px 20px rgba(40, 30, 15, .04);
+
     }
+
+
 
     /* =========================
+
        FORM
+
     ========================= */
 
+
+
     .book-form {
+
       display: grid;
+
       gap: 18px;
+
     }
+
+
 
     .form-grid {
+
       display: grid;
+
       grid-template-columns:
+
         repeat(2, minmax(0, 1fr));
+
       gap: 18px;
+
     }
+
+
 
     .field {
+
       display: flex;
+
       flex-direction: column;
+
       gap: 7px;
+
     }
+
+
 
     .field.full {
+
       grid-column: 1 / -1;
+
     }
+
+
 
     .field label {
+
       font-size: 13px;
+
       font-weight: 700;
+
       color: #37322d;
+
     }
+
+
 
     .field input,
+
     .field textarea {
+
       width: 100%;
 
+
+
       border: 1px solid #cec6b9;
+
       border-radius: 8px;
+
+
 
       background: #fff;
+
       color: #1b1815;
 
+
+
       padding: 12px 13px;
+
       outline: none;
 
+
+
       transition:
+
         border-color .2s,
+
         box-shadow .2s;
+
     }
+
+
 
     .field input {
+
       min-height: 45px;
+
     }
+
+
 
     .field textarea {
+
       min-height: 130px;
+
       resize: vertical;
+
       line-height: 1.55;
+
     }
+
+
 
     .field input:focus,
+
     .field textarea:focus {
+
       border-color: var(--gold);
 
+
+
       box-shadow:
+
         0 0 0 3px rgba(199, 164, 90, .13);
+
     }
+
+
 
     .field small {
+
       color: var(--muted);
+
       font-size: 12px;
+
     }
+
+
 
     .file-input {
+
       padding: 10px !important;
+
     }
+
+
 
     .form-actions {
+
       display: flex;
+
       align-items: center;
+
       gap: 14px;
+
       flex-wrap: wrap;
+
       padding-top: 5px;
+
     }
 
+
+
     .publish-btn {
+
       border: none;
+
       border-radius: 8px;
 
+
+
       background: var(--black);
+
       color: #fff;
+
+
 
       padding: 12px 20px;
 
+
+
       font-weight: 700;
+
       letter-spacing: .4px;
 
+
+
       transition:
+
         background .2s,
+
         transform .2s;
+
     }
+
+
 
     .publish-btn:hover {
+
       background: #292929;
+
       transform: translateY(-1px);
+
     }
+
+
 
     .publish-btn:disabled {
+
       opacity: .55;
+
       cursor: not-allowed;
+
       transform: none;
+
     }
+
+
 
     .form-message {
+
       min-height: 20px;
+
       font-size: 13px;
+
       color: var(--muted);
+
     }
+
+
 
     .form-message.error {
+
       color: var(--danger);
+
     }
+
+
 
     .form-message.success {
+
       color: var(--success);
+
     }
+
+
 
     /* =========================
+
        BOOK LIST
+
     ========================= */
 
+
+
     .books-list {
+
       display: grid;
+
       gap: 12px;
+
     }
 
+
+
     .book-row {
+
       display: grid;
 
+
+
       grid-template-columns:
+
         minmax(0, 2fr)
+
         130px
+
         120px
+
         210px;
 
+
+
       gap: 18px;
+
       align-items: center;
+
+
 
       padding: 16px;
 
+
+
       border: 1px solid var(--line);
+
       border-radius: 10px;
 
+
+
       background: #fff;
+
     }
+
+
 
     .book-info {
+
       min-width: 0;
+
     }
+
+
 
     .book-title {
+
       margin: 0 0 5px;
 
+
+
       font-size: 15px;
+
       font-weight: 700;
+
+
 
       overflow: hidden;
+
       text-overflow: ellipsis;
+
       white-space: nowrap;
+
     }
+
+
 
     .book-category {
+
       color: var(--gold);
+
       font-size: 12px;
+
       font-weight: 700;
+
       letter-spacing: .4px;
+
     }
+
+
 
     .book-author {
+
       margin-top: 3px;
+
       color: var(--muted);
+
       font-size: 12px;
+
     }
+
+
 
     .book-price {
+
       font-size: 14px;
+
       font-weight: 700;
+
     }
+
+
 
     .status {
+
       display: inline-flex;
+
       width: fit-content;
 
+
+
       padding: 5px 9px;
+
       border-radius: 999px;
 
+
+
       font-size: 11px;
+
       font-weight: 700;
+
     }
+
+
 
     .status.published {
+
       background: #e8f4eb;
+
       color: var(--success);
+
     }
+
+
 
     .status.unpublished {
+
       background: #f3eee7;
+
       color: #766b5f;
+
     }
+
+
 
     .actions {
+
       display: flex;
+
       justify-content: flex-end;
+
       gap: 7px;
+
       flex-wrap: wrap;
+
     }
 
+
+
     .action-btn {
+
       border: 1px solid var(--line);
+
       background: #fff;
 
+
+
       padding: 7px 10px;
+
       border-radius: 7px;
+
+
 
       font-size: 12px;
 
+
+
       transition:
+
         background .2s,
+
         border-color .2s;
+
     }
+
+
 
     .action-btn:hover {
+
       background: var(--cream);
+
       border-color: var(--gold);
+
     }
+
+
 
     .action-btn.delete {
+
       color: var(--danger);
+
     }
+
+
 
     .empty {
+
       padding: 35px 20px;
 
+
+
       border: 1px dashed #cfc6b8;
+
       border-radius: 10px;
 
+
+
       color: var(--muted);
+
       text-align: center;
+
       font-size: 14px;
+
     }
+
+
 
     /* =========================
+
        LOGIN
+
     ========================= */
 
+
+
     .login-screen {
+
       min-height: calc(100vh - 70px);
 
+
+
       display: grid;
+
       place-items: center;
 
+
+
       padding: 30px 16px;
+
     }
 
+
+
     .login-card {
+
       width: min(430px, 100%);
 
+
+
       background: #fff;
+
       border: 1px solid var(--line);
+
       border-radius: 13px;
+
+
 
       padding: 30px;
 
+
+
       box-shadow:
+
         0 12px 40px rgba(40, 30, 15, .08);
+
     }
+
+
 
     .login-card h1 {
+
       margin: 0 0 7px;
+
       font-size: 25px;
+
     }
+
+
 
     .login-card p {
+
       margin: 0 0 24px;
+
       color: var(--muted);
+
       font-size: 14px;
+
       line-height: 1.5;
+
     }
+
+
 
     .login-form {
+
       display: grid;
+
       gap: 17px;
+
     }
 
+
+
     .login-btn {
+
       width: 100%;
 
+
+
       border: none;
+
       border-radius: 8px;
 
+
+
       background: var(--black);
+
       color: #fff;
+
+
 
       padding: 13px;
 
+
+
       font-weight: 700;
+
       letter-spacing: .5px;
+
     }
+
+
 
     .login-btn:hover {
+
       background: #292929;
+
     }
+
+
 
     .login-btn:disabled {
+
       opacity: .55;
+
       cursor: not-allowed;
+
     }
+
+
 
     .login-message {
+
       min-height: 20px;
+
       color: var(--danger);
+
       font-size: 13px;
+
     }
+
+
 
     /* =========================
+
        RESPONSIVE
+
     ========================= */
 
+
+
     @media (max-width: 850px) {
+
       .book-row {
+
         grid-template-columns: 1fr;
+
         gap: 10px;
+
       }
+
+
 
       .actions {
+
         justify-content: flex-start;
+
       }
+
+
 
       .book-title {
+
         white-space: normal;
+
       }
+
     }
+
+
 
     @media (max-width: 700px) {
+
       .topbar {
+
         padding: 0 16px;
+
       }
+
+
 
       .page {
+
         width: min(
+
           100% - 24px,
+
           1180px
+
         );
 
+
+
         padding-top: 25px;
+
       }
+
+
 
       .form-grid {
+
         grid-template-columns: 1fr;
+
       }
+
+
 
       .field.full {
+
         grid-column: auto;
+
       }
+
+
 
       .section-heading h1 {
+
         font-size: 25px;
+
       }
 
+
+
       .card {
+
         padding: 18px;
+
       }
+
     }
+
   </style>
+
 </head>
+
+
 
 <body>
 
+
+
   <!-- =========================
+
        TOP BAR
+
   ========================= -->
+
+
 
   <header class="topbar">
 
+
+
     <div class="brand">
 
+
+
       <div class="brand-mark">
+
         S
+
       </div>
 
+
+
       <div class="brand-text">
+
         <strong>SANTIANO</strong>
+
         <small>BOOKS ADMIN</small>
+
       </div>
+
+
 
     </div>
 
+
+
     <button
+
       type="button"
+
       class="logout-btn"
+
       id="logout"
+
     >
+
       Logout
+
     </button>
+
+
 
   </header>
 
 
+
+
+
   <!-- =========================
+
        LOGIN
+
   ========================= -->
 
+
+
   <section
+
     class="login-screen"
+
     id="loginScreen"
+
   >
+
+
 
     <div class="login-card">
 
+
+
       <h1>Admin Login</h1>
 
+
+
       <p>
+
         Sign in to manage books,
+
         categories and your Santiano
+
         Books collection.
+
       </p>
 
+
+
       <form
+
         class="login-form"
+
         id="loginForm"
+
       >
 
+
+
         <div class="field">
+
+
 
           <label for="loginEmail">
+
             Email
+
           </label>
 
+
+
           <input
+
             id="loginEmail"
+
             type="email"
+
             autocomplete="email"
+
             required
+
           >
 
+
+
         </div>
+
+
+
 
 
         <div class="field">
 
+
+
           <label for="loginPassword">
+
             Password
+
           </label>
 
+
+
           <input
+
             id="loginPassword"
+
             type="password"
+
             autocomplete="current-password"
+
             required
+
           >
 
+
+
         </div>
+
+
+
 
 
         <button
+
           type="submit"
+
           class="login-btn"
+
           id="loginButton"
+
         >
+
           LOGIN
+
         </button>
 
+
+
         <div
+
           class="login-message"
+
           id="loginMessage"
+
         ></div>
+
+
 
       </form>
 
+
+
     </div>
+
+
 
   </section>
 
 
+
+
+
   <!-- =========================
+
        DASHBOARD
+
   ========================= -->
 
+
+
   <main
+
     class="dashboard"
+
     id="dashboard"
+
   >
+
+
 
     <div class="page">
 
+
+
       <!-- =========================
+
            ADD BOOK
+
       ========================= -->
+
+
 
       <section class="section">
 
+
+
         <div class="section-heading">
+
+
 
           <h1>Add New Book</h1>
 
+
+
           <p>
+
             Upload a digital book and
+
             assign it to a category.
+
           </p>
+
+
 
         </div>
 
 
+
+
+
         <div class="card">
 
+
+
           <form
+
             class="book-form"
+
             id="bookForm"
+
           >
+
+
 
             <div class="form-grid">
 
+
+
               <!-- TITLE -->
+
+
 
               <div class="field">
 
+
+
                 <label for="title">
+
                   Book Title
+
                 </label>
 
+
+
                 <input
+
                   id="title"
+
                   name="title"
+
                   type="text"
+
                   placeholder="The Philosophy of a Great Man"
+
                   required
+
                 >
 
+
+
               </div>
+
+
+
 
 
               <!-- AUTHOR -->
 
+
+
               <div class="field">
 
+
+
                 <label for="author">
+
                   Author
+
                 </label>
 
+
+
                 <input
+
                   id="author"
+
                   name="author"
+
                   type="text"
+
                   value="Musibau Samad Eniola"
+
                   required
+
                 >
+
+
 
               </div>
 
+
+
+
+
+              <!-- PAGE COUNT -->
+              <div class="field">
+                <label for="pageCount">Number of Pages</label>
+                <input
+                  id="pageCount"
+                  name="page_count"
+                  type="number"
+                  min="1"
+                  step="1"
+                  placeholder="e.g. 180"
+                  required
+                >
+              </div>
 
               <!-- CATEGORY -->
 
+
+
               <div class="field">
 
+
+
                 <label for="category">
+
                   Category
+
                 </label>
 
+
+
                 <input
+
                   id="category"
+
                   name="category"
+
                   type="text"
+
                   list="categorySuggestions"
+
                   placeholder="Personal Development"
+
                   autocomplete="off"
+
                   required
+
                 >
 
+
+
                 <small>
+
                   This category will automatically
+
                   appear on the Books page after
+
                   the book is published.
+
                 </small>
+
+
 
                 <datalist id="categorySuggestions">
 
+
+
                   <option value="Motivation">
+
                   <option value="Personal Development">
+
                   <option value="Success">
+
                   <option value="Finance">
+
                   <option value="Business">
+
                   <option value="Inspiration">
+
                   <option value="Philosophy">
+
                   <option value="Education">
+
                   <option value="Leadership">
+
                   <option value="Entrepreneurship">
+
+
 
                 </datalist>
 
+
+
               </div>
+
+
+
 
 
               <!-- PRICE -->
 
+
+
               <div class="field">
 
+
+
                 <label for="priceNaira">
+
                   Price (₦)
+
                 </label>
 
+
+
                 <input
+
                   id="priceNaira"
+
                   name="priceNaira"
+
                   type="number"
+
                   min="1"
+
                   step="1"
+
                   placeholder="5000"
+
                   required
+
                 >
 
+
+
               </div>
+
+
+
 
 
               <!-- DESCRIPTION -->
 
+
+
               <div class="field full">
 
+
+
                 <label for="description">
+
                   Description
+
                 </label>
 
+
+
                 <textarea
+
                   id="description"
+
                   name="description"
+
                   placeholder="Write a short description of the book..."
+
                   required
+
                 ></textarea>
 
+
+
               </div>
+
+
+
 
 
               <!-- EBOOK -->
 
+
+
               <div class="field">
 
+
+
                 <label for="ebook">
+
                   eBook PDF
+
                 </label>
 
+
+
                 <input
+
                   id="ebook"
+
                   name="ebook"
+
                   class="file-input"
+
                   type="file"
+
                   accept="application/pdf,.pdf"
+
                   required
+
                 >
 
+
+
                 <small>
+
                   PDF only. Maximum size: 200MB.
+
                 </small>
 
+
+
               </div>
+
+
+
 
 
               <!-- COVER -->
 
+
+
               <div class="field">
 
+
+
                 <label for="cover">
+
                   Cover Image
+
                 </label>
 
+
+
                 <input
+
                   id="cover"
+
                   name="cover"
+
                   class="file-input"
+
                   type="file"
+
                   accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+
                 >
 
+
+
                 <small>
+
                   JPG, PNG or WebP.
+
                 </small>
+
+
 
               </div>
 
+
+
             </div>
+
+
+
 
 
             <div class="form-actions">
 
+
+
               <button
+
                 type="submit"
+
                 class="publish-btn"
+
                 id="publishButton"
+
               >
+
                 ADD BOOK
+
               </button>
 
+
+
               <div
+
                 class="form-message"
+
                 id="formMessage"
+
               ></div>
+
+
 
             </div>
 
+
+
           </form>
 
+
+
         </div>
+
+
 
       </section>
 
 
+
+
+
       <!-- =========================
+
            BOOKS
+
       ========================= -->
+
+
 
       <section class="section">
 
+
+
         <div class="section-heading">
+
+
 
           <h2>Your Books</h2>
 
+
+
           <p>
+
             Manage books already added
+
             to Santiano Books.
+
           </p>
 
+
+
         </div>
+
+
+
 
 
         <div class="card">
 
+
+
           <div
+
             class="books-list"
+
             id="booksList"
+
           ></div>
+
+
 
         </div>
 
+
+
       </section>
 
+
+
     </div>
+
+
 
   </main>
 
 
+
+
+
   <script>
+
     const API =
+
       "https://santiano-books.onrender.com/api";
 
+
+
     const ADMIN_TOKEN_KEY =
+
       "santiano_admin_token";
 
 
+
+
+
     /* =========================
+
        ELEMENTS
+
     ========================= */
+
+
 
     const loginScreen =
+
       document.getElementById(
+
         "loginScreen"
+
       );
+
+
 
     const dashboard =
+
       document.getElementById(
+
         "dashboard"
+
       );
+
+
 
     const loginForm =
+
       document.getElementById(
+
         "loginForm"
+
       );
+
+
 
     const loginEmail =
+
       document.getElementById(
+
         "loginEmail"
+
       );
+
+
 
     const loginPassword =
+
       document.getElementById(
+
         "loginPassword"
+
       );
+
+
 
     const loginButton =
+
       document.getElementById(
+
         "loginButton"
+
       );
+
+
 
     const loginMessage =
+
       document.getElementById(
+
         "loginMessage"
+
       );
+
+
 
     const logoutButton =
+
       document.getElementById(
+
         "logout"
+
       );
+
+
 
     const bookForm =
+
       document.getElementById(
+
         "bookForm"
+
       );
+
+
 
     const publishButton =
+
       document.getElementById(
+
         "publishButton"
+
       );
+
+
 
     const formMessage =
+
       document.getElementById(
+
         "formMessage"
+
       );
 
+
+
     const booksList =
+
       document.getElementById(
+
         "booksList"
+
       );
+
+
+
 
 
     /* =========================
+
        AUTH
+
     ========================= */
 
+
+
     function getAdminToken() {
+
       return localStorage.getItem(
+
         ADMIN_TOKEN_KEY
+
       );
+
     }
+
+
+
 
 
     function setAdminToken(token) {
+
       localStorage.setItem(
+
         ADMIN_TOKEN_KEY,
+
         token
+
       );
+
     }
+
+
+
 
 
     function clearAdminToken() {
+
       localStorage.removeItem(
+
         ADMIN_TOKEN_KEY
+
       );
+
     }
+
+
+
 
 
     function adminHeaders() {
+
       const token =
+
         getAdminToken();
 
+
+
       return {
+
         Authorization:
+
           `Bearer ${token}`
+
       };
+
     }
 
 
+
+
+
     /* =========================
+
        HTML ESCAPE
+
     ========================= */
+
+
 
     function escapeHTML(value) {
+
       return String(value ?? "")
+
         .replaceAll("&", "&amp;")
+
         .replaceAll("<", "&lt;")
+
         .replaceAll(">", "&gt;")
+
         .replaceAll('"', "&quot;")
+
         .replaceAll("'", "&#039;");
+
     }
+
+
+
 
 
     /* =========================
+
        LOGIN SCREEN
+
     ========================= */
 
+
+
     function showLogin() {
+
       loginScreen.style.display =
+
         "grid";
 
+
+
       dashboard.classList.remove(
+
         "visible"
+
       );
+
     }
+
+
+
 
 
     function showDashboard() {
+
       loginScreen.style.display =
+
         "none";
 
+
+
       dashboard.classList.add(
+
         "visible"
+
       );
 
+
+
       loadBooks();
+
     }
 
 
+
+
+
     /* =========================
+
        LOGIN
+
     ========================= */
 
+
+
     loginForm.addEventListener(
+
       "submit",
+
       async event => {
+
+
 
         event.preventDefault();
 
+
+
         const email =
+
           loginEmail.value.trim();
 
+
+
         const password =
+
           loginPassword.value;
 
+
+
         if (!email || !password) {
+
           loginMessage.textContent =
+
             "Enter your email and password.";
 
+
+
           return;
+
         }
+
+
 
         loginButton.disabled = true;
 
+
+
         loginButton.textContent =
+
           "LOGGING IN...";
+
+
 
         loginMessage.textContent = "";
 
+
+
         try {
 
+
+
           const response =
+
             await fetch(
+
               `${API}/auth/login`,
+
               {
+
                 method: "POST",
 
+
+
                 headers: {
+
                   "Content-Type":
+
                     "application/json"
+
                 },
 
+
+
                 body: JSON.stringify({
+
                   email,
+
                   password
+
                 })
+
               }
+
             );
+
+
 
           let data = {};
 
+
+
           try {
+
             data =
+
               await response.json();
+
           } catch {
+
             data = {};
+
           }
+
+
 
           if (!response.ok) {
+
             throw new Error(
+
               data.error ||
+
               "Unable to login."
+
             );
+
           }
+
+
 
           if (!data.token) {
+
             throw new Error(
+
               "Login succeeded, but no authentication token was returned."
+
             );
+
           }
 
+
+
           /*
+
            * The backend admin middleware
+
            * remains the final authority.
+
            */
+
           setAdminToken(
+
             data.token
+
           );
 
+
+
           loginEmail.value = "";
+
           loginPassword.value = "";
+
+
 
           showDashboard();
 
+
+
         } catch (error) {
 
+
+
           console.error(
+
             "Admin login error:",
+
             error
+
           );
+
+
 
           clearAdminToken();
 
+
+
           loginMessage.textContent =
+
             error.message ||
+
             "Unable to login.";
+
+
 
         } finally {
 
+
+
           loginButton.disabled =
+
             false;
 
+
+
           loginButton.textContent =
+
             "LOGIN";
+
         }
+
       }
+
     );
 
 
+
+
+
     /* =========================
+
        LOAD BOOKS
+
     ========================= */
+
+
 
     async function loadBooks() {
 
+
+
       booksList.innerHTML =
+
         `<div class="empty">
+
           Loading books...
+
         </div>`;
+
+
 
       try {
 
+
+
         const response =
+
           await fetch(
+
             `${API}/admin/books`,
+
             {
+
               headers:
+
                 adminHeaders()
+
             }
+
           );
+
+
 
         let data = {};
 
+
+
         try {
+
           data =
+
             await response.json();
+
         } catch {
+
           data = {};
+
         }
+
+
 
         if (response.status === 401 ||
+
             response.status === 403) {
 
+
+
           clearAdminToken();
+
           showLogin();
 
+
+
           loginMessage.textContent =
+
             "Your admin session has expired.";
 
+
+
           return;
+
         }
+
+
 
         if (!response.ok) {
+
           throw new Error(
+
             data.error ||
+
             "Unable to load books."
+
           );
+
         }
 
+
+
         renderBooks(
+
           Array.isArray(data.books)
+
             ? data.books
+
             : []
+
         );
+
+
 
       } catch (error) {
 
+
+
         console.error(
+
           "Load books error:",
+
           error
+
         );
 
+
+
         booksList.innerHTML =
+
           `<div class="empty">
+
             ${escapeHTML(
+
               error.message ||
+
               "Unable to load books."
+
             )}
+
           </div>`;
+
       }
+
     }
 
 
+
+
+
     /* =========================
+
        RENDER BOOKS
+
     ========================= */
+
+
 
     function renderBooks(books) {
 
+
+
       if (!books.length) {
 
+
+
         booksList.innerHTML =
+
           `<div class="empty">
+
             No books have been added yet.
+
           </div>`;
 
+
+
         return;
+
       }
 
+
+
       booksList.innerHTML =
+
         books
+
           .map(book => {
 
+
+
             const published =
+
               Boolean(
+
                 book.is_published
+
               );
 
+
+
             const priceNaira =
+
               Number(
+
                 book.price_kobo || 0
+
               ) / 100;
 
+
+
             return `
+
               <article class="book-row">
+
+
 
                 <div class="book-info">
 
+
+
                   <h3 class="book-title">
+
                     ${escapeHTML(
+
                       book.title
+
                     )}
+
                   </h3>
 
+
+
                   <div class="book-category">
+
                     ${escapeHTML(
+
                       book.category ||
+
                       "General"
+
                     )}
+
                   </div>
+
+
 
                   <div class="book-author">
+
                     ${escapeHTML(
+
                       book.author ||
+
                       "Musibau Samad Eniola"
+
                     )}
+
                   </div>
 
+
+
                 </div>
+
+
+
 
 
                 <div class="book-price">
+
                   ₦${priceNaira.toLocaleString(
+
                     "en-NG"
+
                   )}
+
                 </div>
+
+
+
 
 
                 <div>
 
+
+
                   <span
+
                     class="status ${
+
                       published
+
                         ? "published"
+
                         : "unpublished"
+
                     }"
+
                   >
+
                     ${
+
                       published
+
                         ? "Published"
+
                         : "Unpublished"
+
                     }
+
                   </span>
 
+
+
                 </div>
+
+
+
 
 
                 <div class="actions">
 
-                  <button
-                    type="button"
-                    class="action-btn"
-                    onclick="togglePublish(${Number(
-                      book.id
-                    )})"
-                  >
-                    ${
-                      published
-                        ? "Unpublish"
-                        : "Publish"
-                    }
-                  </button>
+
 
                   <button
+
                     type="button"
-                    class="action-btn delete"
-                    onclick="removeBook(${Number(
+
+                    class="action-btn"
+
+                    onclick="togglePublish(${Number(
+
                       book.id
+
                     )})"
+
                   >
-                    Remove
+
+                    ${
+
+                      published
+
+                        ? "Unpublish"
+
+                        : "Publish"
+
+                    }
+
                   </button>
+
+
+
+                  <button
+
+                    type="button"
+
+                    class="action-btn delete"
+
+                    onclick="removeBook(${Number(
+
+                      book.id
+
+                    )})"
+
+                  >
+
+                    Remove
+
+                  </button>
+
+
 
                 </div>
 
+
+
               </article>
+
             `;
+
           })
+
           .join("");
+
     }
 
 
+
+
+
     /* =========================
+
        ADD BOOK
+
     ========================= */
 
+
+
     bookForm.addEventListener(
+
       "submit",
+
       async event => {
+
+
 
         event.preventDefault();
 
+
+
         const title =
+
           document.getElementById(
+
             "title"
+
           ).value.trim();
+
+
 
         const author =
+
           document.getElementById(
+
             "author"
+
           ).value.trim();
 
-        const category =
-          document.getElementById(
-            "category"
-          ).value.trim();
 
-        const priceNaira =
+
+        const pageCount =
           Number(
-            document.getElementById(
-              "priceNaira"
-            ).value
+            document.getElementById("pageCount").value
           );
 
-        const description =
+        const category =
+
           document.getElementById(
-            "description"
+
+            "category"
+
           ).value.trim();
 
-        const ebook =
+
+
+        const priceNaira =
+
+          Number(
+
+            document.getElementById(
+
+              "priceNaira"
+
+            ).value
+
+          );
+
+
+
+        const description =
+
           document.getElementById(
+
+            "description"
+
+          ).value.trim();
+
+
+
+        const ebook =
+
+          document.getElementById(
+
             "ebook"
+
           ).files[0];
 
+
+
         const cover =
+
           document.getElementById(
+
             "cover"
+
           ).files[0];
+
+
+
 
 
         if (!title ||
+
             !author ||
+
+            (!Number.isInteger(pageCount) || pageCount < 1) ||
+
             !category ||
+
             !description ||
+
             !priceNaira ||
+
             !ebook) {
 
+
+
           formMessage.className =
+
             "form-message error";
 
+
+
           formMessage.textContent =
-            "Please complete all required fields.";
+
+            "Please complete all required fields and enter a valid page count.";
+
+
 
           return;
+
         }
+
+
+
 
 
         if (priceNaira <= 0) {
 
+
+
           formMessage.className =
+
             "form-message error";
 
+
+
           formMessage.textContent =
+
             "Price must be greater than zero.";
 
+
+
           return;
+
         }
 
 
+
+
+
         if (
+
           ebook.type !==
+
           "application/pdf"
+
         ) {
 
+
+
           formMessage.className =
+
             "form-message error";
 
+
+
           formMessage.textContent =
+
             "The eBook must be a PDF.";
 
+
+
           return;
+
         }
+
+
+
 
 
         if (
+
           ebook.size >
+
           200 * 1024 * 1024
+
         ) {
 
+
+
           formMessage.className =
+
             "form-message error";
 
+
+
           formMessage.textContent =
+
             "The eBook must be 200MB or smaller.";
 
+
+
           return;
+
         }
+
+
+
 
 
         if (cover) {
 
+
+
           const allowedCoverTypes = [
+
             "image/jpeg",
+
             "image/png",
+
             "image/webp"
+
           ];
 
+
+
           if (
+
             !allowedCoverTypes.includes(
+
               cover.type
+
             )
+
           ) {
 
+
+
             formMessage.className =
+
               "form-message error";
 
+
+
             formMessage.textContent =
+
               "Cover must be JPG, PNG or WebP.";
 
+
+
             return;
+
           }
+
         }
+
+
+
 
 
         const formData =
+
           new FormData();
 
+
+
         formData.append(
+
           "title",
+
           title
+
         );
 
+
+
         formData.append(
+
           "author",
+
           author
+
         );
 
+
+
         formData.append(
+          "page_count",
+          String(pageCount)
+        );
+
+
+        formData.append(
+
           "category",
+
           category
+
         );
 
+
+
         formData.append(
+
           "price_kobo",
+
           String(
+
             Math.round(
+
               priceNaira * 100
+
             )
+
           )
+
         );
 
+
+
         formData.append(
+
           "description",
+
           description
+
         );
 
+
+
         formData.append(
+
           "ebook",
+
           ebook
+
         );
+
+
 
         if (cover) {
+
           formData.append(
+
             "cover",
+
             cover
+
           );
+
         }
 
 
+
+
+
         publishButton.disabled =
+
           true;
 
+
+
         publishButton.textContent =
+
           "UPLOADING...";
 
+
+
         formMessage.className =
+
           "form-message";
 
+
+
         formMessage.textContent =
+
           "Uploading book and files. Please wait...";
+
+
+
 
 
         try {
 
+
+
           const response =
+
             await fetch(
+
               `${API}/admin/books`,
+
               {
+
                 method: "POST",
 
+
+
                 headers:
+
                   adminHeaders(),
 
+
+
                 body: formData
+
               }
+
             );
+
+
 
           let data = {};
 
+
+
           try {
+
             data =
+
               await response.json();
+
           } catch {
+
             data = {};
+
           }
+
+
+
 
 
           if (
+
             response.status === 401 ||
+
             response.status === 403
+
           ) {
 
+
+
             clearAdminToken();
+
             showLogin();
 
+
+
             loginMessage.textContent =
+
               "Your admin session has expired.";
 
+
+
             return;
+
           }
+
+
+
 
 
           if (!response.ok) {
+
             throw new Error(
+
               data.error ||
+
               "Unable to create book."
+
             );
+
           }
 
 
+
+
+
           formMessage.className =
+
             "form-message success";
 
+
+
           formMessage.textContent =
+
             "Book added successfully.";
+
+
+
 
 
           bookForm.reset();
 
 
+
+
+
           document.getElementById(
+
             "author"
+
           ).value =
+
             "Musibau Samad Eniola";
 
 
+
+
+
           setTimeout(
+
             () => {
+
               formMessage.textContent =
+
                 "";
+
             },
+
             3000
+
           );
+
+
+
 
 
           await loadBooks();
 
+
+
         } catch (error) {
 
+
+
           console.error(
+
             "Create book error:",
+
             error
+
           );
 
+
+
           formMessage.className =
+
             "form-message error";
 
+
+
           formMessage.textContent =
+
             error.message ||
+
             "Unable to create book.";
+
+
 
         } finally {
 
+
+
           publishButton.disabled =
+
             false;
 
+
+
           publishButton.textContent =
+
             "ADD BOOK";
+
         }
+
       }
+
     );
 
 
+
+
+
     /* =========================
+
        PUBLISH / UNPUBLISH
+
     ========================= */
+
+
 
     async function togglePublish(id) {
 
+
+
       if (!id) return;
+
+
 
       try {
 
+
+
         const response =
+
           await fetch(
+
             `${API}/admin/books/${id}/publish`,
+
             {
+
               method: "PATCH",
+
               headers:
+
                 adminHeaders()
+
             }
+
           );
+
+
 
         let data = {};
 
+
+
         try {
+
           data =
+
             await response.json();
+
         } catch {
+
           data = {};
+
         }
+
+
+
 
 
         if (
+
           response.status === 401 ||
+
           response.status === 403
+
         ) {
 
+
+
           clearAdminToken();
+
           showLogin();
 
+
+
           loginMessage.textContent =
+
             "Your admin session has expired.";
 
+
+
           return;
+
         }
+
+
+
 
 
         if (!response.ok) {
+
           throw new Error(
+
             data.error ||
+
             "Unable to update book."
+
           );
+
         }
+
+
+
 
 
         await loadBooks();
 
+
+
       } catch (error) {
 
+
+
         console.error(
+
           "Publish error:",
+
           error
+
         );
 
+
+
         alert(
+
           error.message ||
+
           "Unable to update book."
+
         );
+
       }
+
     }
 
 
+
+
+
     /* =========================
+
        REMOVE BOOK
+
     ========================= */
+
+
 
     async function removeBook(id) {
 
+
+
       if (!id) return;
 
+
+
       const confirmed =
+
         window.confirm(
+
           "Remove this book from the store?"
+
         );
 
+
+
       if (!confirmed) {
+
         return;
+
       }
+
+
+
 
 
       try {
 
+
+
         const response =
+
           await fetch(
+
             `${API}/admin/books/${id}`,
+
             {
+
               method: "DELETE",
+
               headers:
+
                 adminHeaders()
+
             }
+
           );
+
+
 
         let data = {};
 
+
+
         try {
+
           data =
+
             await response.json();
+
         } catch {
+
           data = {};
+
         }
+
+
+
 
 
         if (
+
           response.status === 401 ||
+
           response.status === 403
+
         ) {
 
+
+
           clearAdminToken();
+
           showLogin();
 
+
+
           loginMessage.textContent =
+
             "Your admin session has expired.";
 
+
+
           return;
+
         }
+
+
+
 
 
         if (!response.ok) {
+
           throw new Error(
+
             data.error ||
+
             "Unable to remove book."
+
           );
+
         }
+
+
+
 
 
         await loadBooks();
 
+
+
       } catch (error) {
 
+
+
         console.error(
+
           "Remove book error:",
+
           error
+
         );
 
+
+
         alert(
+
           error.message ||
+
           "Unable to remove book."
+
         );
+
       }
+
     }
 
 
+
+
+
     /* =========================
+
        LOGOUT
+
     ========================= */
 
+
+
     logoutButton.addEventListener(
+
       "click",
+
       () => {
+
+
 
         clearAdminToken();
 
+
+
         showLogin();
 
+
+
         loginMessage.textContent =
+
           "";
 
+
+
       }
+
     );
 
 
+
+
+
     /* =========================
+
        INITIALIZE
+
     ========================= */
 
+
+
     if (getAdminToken()) {
+
       showDashboard();
+
     } else {
+
       showLogin();
+
     }
+
   </script>
 
+
+
 </body>
+
 </html>

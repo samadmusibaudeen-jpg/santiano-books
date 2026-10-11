@@ -1,3 +1,4 @@
+
 const express = require("express");
 const multer = require("multer");
 const crypto = require("crypto");
@@ -20,7 +21,6 @@ const upload = multer({
   },
 
   fileFilter: (req, file, cb) => {
-
     if (
       file.fieldname === "ebook" &&
       file.mimetype !== "application/pdf"
@@ -40,9 +40,7 @@ const upload = multer({
       ].includes(file.mimetype)
     ) {
       return cb(
-        new Error(
-          "Cover must be JPG, PNG or WebP."
-        )
+        new Error("Cover must be JPG, PNG or WebP.")
       );
     }
 
@@ -50,33 +48,17 @@ const upload = multer({
   }
 });
 
-
 /* =========================
    CATEGORY
 ========================= */
 
-/*
- * Keep the category exactly as
- * the admin entered it, except:
- *
- * - remove unnecessary spaces
- * - collapse multiple spaces
- *
- * The Books page will later
- * deduplicate categories
- * case-insensitively.
- */
-
 function normalizeCategory(value) {
-
-  const category =
-    String(value || "")
-      .trim()
-      .replace(/\s+/g, " ");
+  const category = String(value || "")
+    .trim()
+    .replace(/\s+/g, " ");
 
   return category || "General";
 }
-
 
 /* =========================
    ADMIN AUTH
@@ -84,47 +66,37 @@ function normalizeCategory(value) {
 
 router.use(requireAdmin);
 
-
 /* =========================
    GET ALL BOOKS
 ========================= */
 
-router.get(
-  "/books",
-  async (req, res, next) => {
+router.get("/books", async (req, res, next) => {
+  try {
+    const result = await pool.query(`
+      SELECT
+        id,
+        title,
+        author,
+        slug,
+        description,
+        category,
+        price_kobo,
+        page_count,
+        file_key,
+        cover_key,
+        is_published,
+        created_at
+      FROM books
+      ORDER BY created_at DESC
+    `);
 
-    try {
-
-      const result =
-        await pool.query(`
-          SELECT
-            id,
-            title,
-            author,
-            slug,
-            description,
-            category,
-            price_kobo,
-            file_key,
-            cover_key,
-            is_published,
-            created_at
-          FROM books
-          ORDER BY created_at DESC
-        `);
-
-      res.json({
-        books: result.rows
-      });
-
-    } catch (error) {
-
-      next(error);
-
-    }
+    res.json({
+      books: result.rows
+    });
+  } catch (error) {
+    next(error);
   }
-);
-
+});
 
 /* =========================
    CREATE BOOK
@@ -145,130 +117,131 @@ router.post(
   ]),
 
   async (req, res, next) => {
-
     let uploadedEbookKey = null;
     let uploadedCoverKey = null;
 
     try {
-
       const {
         title,
         author,
         description,
         category,
         price_kobo,
+        page_count,
         isPublished
       } = req.body;
 
-
-      const ebook =
-        req.files?.ebook?.[0];
-
-      const cover =
-        req.files?.cover?.[0];
-
+      const ebook = req.files?.ebook?.[0];
+      const cover = req.files?.cover?.[0];
 
       /* =========================
-         VALIDATION
+         REQUIRED FIELDS
       ========================= */
 
       if (
         !title ||
         !description ||
-        !price_kobo ||
+        price_kobo === undefined ||
+        price_kobo === "" ||
+        page_count === undefined ||
+        page_count === "" ||
         !ebook
       ) {
-
         return res.status(400).json({
           error:
-            "Title, description, price and PDF eBook are required."
+            "Title, description, price, page count and PDF eBook are required."
         });
-
       }
 
+      /* =========================
+         CLEAN INPUTS
+      ========================= */
 
-      const cleanTitle =
-        String(title).trim();
+      const cleanTitle = String(title).trim();
 
-      const cleanAuthor =
-        String(
-          author ||
-          "Musibau Samad Eniola"
-        ).trim();
+      const cleanAuthor = String(
+        author || "Musibau Samad Eniola"
+      ).trim();
 
-      const cleanDescription =
-        String(description).trim();
+      const cleanDescription = String(
+        description
+      ).trim();
 
-      const cleanCategory =
-        normalizeCategory(category);
-
+      const cleanCategory = normalizeCategory(category);
 
       if (!cleanTitle) {
-
         return res.status(400).json({
-          error:
-            "Book title is required."
+          error: "Book title is required."
         });
-
       }
-
 
       if (!cleanDescription) {
-
         return res.status(400).json({
-          error:
-            "Book description is required."
+          error: "Book description is required."
         });
-
       }
 
+      /* =========================
+         VALIDATE PAGE COUNT
+      ========================= */
 
-      const priceKobo =
-        Number(price_kobo);
+      const pageCount = Number(page_count);
 
+      if (
+        !Number.isSafeInteger(pageCount) ||
+        pageCount <= 0
+      ) {
+        return res.status(400).json({
+          error:
+            "Page count must be a positive whole number."
+        });
+      }
+
+      /* =========================
+         VALIDATE PRICE
+      ========================= */
+
+      const priceKobo = Number(price_kobo);
 
       if (
         !Number.isFinite(priceKobo) ||
         priceKobo <= 0
       ) {
-
         return res.status(400).json({
-          error:
-            "Price must be greater than zero."
+          error: "Price must be greater than zero."
         });
-
       }
-
 
       if (
-        ebook.mimetype !==
-        "application/pdf"
+        !Number.isSafeInteger(Math.round(priceKobo))
       ) {
-
         return res.status(400).json({
-          error:
-            "The eBook must be a PDF."
+          error: "The price is invalid."
         });
-
       }
 
+      /* =========================
+         VALIDATE EBOOK
+      ========================= */
+
+      if (ebook.mimetype !== "application/pdf") {
+        return res.status(400).json({
+          error: "The eBook must be a PDF."
+        });
+      }
 
       /* =========================
          SLUG
       ========================= */
 
-      const slug =
-        (
-          cleanTitle +
-          "-" +
-          crypto
-            .randomBytes(4)
-            .toString("hex")
-        )
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/^-|-$/g, "");
-
+      const slug = (
+        cleanTitle +
+        "-" +
+        crypto.randomBytes(4).toString("hex")
+      )
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
 
       /* =========================
          STORAGE FILE NAMES
@@ -277,279 +250,201 @@ router.post(
       const ebookFilename =
         Date.now() +
         "-" +
-        crypto
-          .randomBytes(8)
-          .toString("hex") +
+        crypto.randomBytes(8).toString("hex") +
         ".pdf";
 
+      // Store the bucket-relative key in the database.
+      // The actual file inside the ebooks bucket uses
+      // only the filename.
 
-      /*
-       * The database stores the
-       * bucket-relative key.
-       *
-       * Example:
-       *
-       * ebooks/123-book.pdf
-       */
-
-      const ebookKey =
-        `ebooks/${ebookFilename}`;
-
+      const ebookKey = `ebooks/${ebookFilename}`;
 
       let coverKey = null;
-
+      let storageCoverKey = null;
 
       if (cover) {
+        const originalExtension = cover.originalname
+          .split(".")
+          .pop()
+          .toLowerCase();
 
-        const originalExtension =
-          cover.originalname
-            .split(".")
-            .pop()
-            .toLowerCase();
-
-
-        const safeExtension =
-          [
-            "jpg",
-            "jpeg",
-            "png",
-            "webp"
-          ].includes(
-            originalExtension
-          )
-            ? originalExtension
-            : "jpg";
-
+        const safeExtension = [
+          "jpg",
+          "jpeg",
+          "png",
+          "webp"
+        ].includes(originalExtension)
+          ? originalExtension
+          : "jpg";
 
         const coverFilename =
           Date.now() +
           "-" +
-          crypto
-            .randomBytes(8)
-            .toString("hex") +
+          crypto.randomBytes(8).toString("hex") +
           "." +
           safeExtension;
 
-
-        /*
-         * The database stores:
-         *
-         * covers/123-cover.jpg
-         */
-
-        coverKey =
-          `covers/${coverFilename}`;
+        coverKey = `covers/${coverFilename}`;
+        storageCoverKey = coverFilename;
       }
-
 
       /* =========================
          UPLOAD EBOOK
       ========================= */
 
-      const ebookUpload =
-        await supabase.storage
-          .from("ebooks")
-          .upload(
-            ebookKey.replace(
-              /^ebooks\//,
-              ""
-            ),
-            ebook.buffer,
-            {
-              contentType:
-                "application/pdf",
-
-              upsert: false
-            }
-          );
-
+      const ebookUpload = await supabase.storage
+        .from("ebooks")
+        .upload(
+          ebookFilename,
+          ebook.buffer,
+          {
+            contentType: "application/pdf",
+            upsert: false
+          }
+        );
 
       if (ebookUpload.error) {
-
         throw new Error(
           `eBook upload failed: ${ebookUpload.error.message}`
         );
-
       }
 
-
-      uploadedEbookKey =
-        ebookKey.replace(
-          /^ebooks\//,
-          ""
-        );
-
+      uploadedEbookKey = ebookFilename;
 
       /* =========================
          UPLOAD COVER
       ========================= */
 
-      if (
-        cover &&
-        coverKey
-      ) {
-
-        const storageCoverKey =
-          coverKey.replace(
-            /^covers\//,
-            ""
+      if (cover && coverKey && storageCoverKey) {
+        const coverUpload = await supabase.storage
+          .from("covers")
+          .upload(
+            storageCoverKey,
+            cover.buffer,
+            {
+              contentType: cover.mimetype,
+              upsert: false
+            }
           );
 
-
-        const coverUpload =
-          await supabase.storage
-            .from("covers")
-            .upload(
-              storageCoverKey,
-              cover.buffer,
-              {
-                contentType:
-                  cover.mimetype,
-
-                upsert: false
-              }
-            );
-
-
         if (coverUpload.error) {
-
           throw new Error(
             `Cover upload failed: ${coverUpload.error.message}`
           );
-
         }
 
-
-        uploadedCoverKey =
-          storageCoverKey;
+        uploadedCoverKey = storageCoverKey;
       }
 
-
       /* =========================
-         DATABASE
+         SAVE BOOK TO DATABASE
       ========================= */
 
-      const result =
-        await pool.query(
-          `
-          INSERT INTO books (
-            title,
-            author,
-            slug,
-            description,
-            category,
-            price_kobo,
-            file_key,
-            cover_key,
-            is_published
-          )
-          VALUES (
-            $1,
-            $2,
-            $3,
-            $4,
-            $5,
-            $6,
-            $7,
-            $8,
-            $9
-          )
-          RETURNING
-            id,
-            title,
-            author,
-            slug,
-            description,
-            category,
-            price_kobo,
-            file_key,
-            cover_key,
-            is_published,
-            created_at
-          `,
-          [
-            cleanTitle,
-
-            cleanAuthor,
-
-            slug,
-
-            cleanDescription,
-
-            cleanCategory,
-
-            Math.round(
-              priceKobo
-            ),
-
-            ebookKey,
-
-            coverKey,
-
-            isPublished !== "false"
-          ]
-        );
-
+      const result = await pool.query(
+        `
+        INSERT INTO books (
+          title,
+          author,
+          slug,
+          description,
+          category,
+          price_kobo,
+          page_count,
+          file_key,
+          cover_key,
+          is_published
+        )
+        VALUES (
+          $1,
+          $2,
+          $3,
+          $4,
+          $5,
+          $6,
+          $7,
+          $8,
+          $9,
+          $10
+        )
+        RETURNING
+          id,
+          title,
+          author,
+          slug,
+          description,
+          category,
+          price_kobo,
+          page_count,
+          file_key,
+          cover_key,
+          is_published,
+          created_at
+        `,
+        [
+          cleanTitle,
+          cleanAuthor,
+          slug,
+          cleanDescription,
+          cleanCategory,
+          Math.round(priceKobo),
+          pageCount,
+          ebookKey,
+          coverKey,
+          isPublished !== "false"
+        ]
+      );
 
       /* =========================
          SUCCESS
       ========================= */
 
       res.status(201).json({
-
-        message:
-          "Book created successfully.",
-
-        book:
-          result.rows[0]
-
+        message: "Book created successfully.",
+        book: result.rows[0]
       });
-
     } catch (error) {
-
-      console.error(
-        "Create book error:",
-        error
-      );
-
+      console.error("Create book error:", error);
 
       /* =========================
          CLEANUP EBOOK
       ========================= */
 
       if (uploadedEbookKey) {
+        const { error: cleanupError } =
+          await supabase.storage
+            .from("ebooks")
+            .remove([uploadedEbookKey]);
 
-        await supabase.storage
-          .from("ebooks")
-          .remove([
-            uploadedEbookKey
-          ])
-          .catch(() => {});
-
+        if (cleanupError) {
+          console.error(
+            "eBook cleanup failed:",
+            cleanupError.message
+          );
+        }
       }
-
 
       /* =========================
          CLEANUP COVER
       ========================= */
 
       if (uploadedCoverKey) {
+        const { error: cleanupError } =
+          await supabase.storage
+            .from("covers")
+            .remove([uploadedCoverKey]);
 
-        await supabase.storage
-          .from("covers")
-          .remove([
-            uploadedCoverKey
-          ])
-          .catch(() => {});
-
+        if (cleanupError) {
+          console.error(
+            "Cover cleanup failed:",
+            cleanupError.message
+          );
+        }
       }
-
 
       next(error);
     }
   }
 );
-
 
 /* =========================
    PUBLISH / UNPUBLISH
@@ -557,69 +452,48 @@ router.post(
 
 router.patch(
   "/books/:id/publish",
-
   async (req, res, next) => {
-
     try {
-
-      const bookId =
-        Number(req.params.id);
-
+      const bookId = Number(req.params.id);
 
       if (
         !Number.isInteger(bookId) ||
         bookId <= 0
       ) {
-
         return res.status(400).json({
-          error:
-            "Invalid book ID."
+          error: "Invalid book ID."
         });
-
       }
 
-
-      const result =
-        await pool.query(
-          `
-          UPDATE books
-          SET
-            is_published =
-              NOT is_published
-          WHERE id = $1
-          RETURNING
-            id,
-            title,
-            category,
-            is_published
-          `,
-          [bookId]
-        );
-
+      const result = await pool.query(
+        `
+        UPDATE books
+        SET is_published = NOT is_published
+        WHERE id = $1
+        RETURNING
+          id,
+          title,
+          category,
+          page_count,
+          is_published
+        `,
+        [bookId]
+      );
 
       if (!result.rowCount) {
-
         return res.status(404).json({
-          error:
-            "Book not found."
+          error: "Book not found."
         });
-
       }
 
-
       res.json({
-        book:
-          result.rows[0]
+        book: result.rows[0]
       });
-
     } catch (error) {
-
       next(error);
-
     }
   }
 );
-
 
 /* =========================
    REMOVE BOOK
@@ -627,72 +501,48 @@ router.patch(
 
 router.delete(
   "/books/:id",
-
   async (req, res, next) => {
-
     try {
-
-      const bookId =
-        Number(req.params.id);
-
+      const bookId = Number(req.params.id);
 
       if (
         !Number.isInteger(bookId) ||
         bookId <= 0
       ) {
-
         return res.status(400).json({
-          error:
-            "Invalid book ID."
+          error: "Invalid book ID."
         });
-
       }
 
-
-      const result =
-        await pool.query(
-          `
-          UPDATE books
-          SET
-            is_published = false
-          WHERE id = $1
-          RETURNING
-            id,
-            title,
-            category,
-            is_published
-          `,
-          [bookId]
-        );
-
+      const result = await pool.query(
+        `
+        UPDATE books
+        SET is_published = false
+        WHERE id = $1
+        RETURNING
+          id,
+          title,
+          category,
+          page_count,
+          is_published
+        `,
+        [bookId]
+      );
 
       if (!result.rowCount) {
-
         return res.status(404).json({
-          error:
-            "Book not found."
+          error: "Book not found."
         });
-
       }
 
-
       res.json({
-
-        message:
-          "Book removed from the store.",
-
-        book:
-          result.rows[0]
-
+        message: "Book removed from the store.",
+        book: result.rows[0]
       });
-
     } catch (error) {
-
       next(error);
-
     }
   }
 );
-
 
 module.exports = router;
