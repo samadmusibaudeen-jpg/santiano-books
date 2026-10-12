@@ -17,7 +17,7 @@ const upload = multer({
   storage: multer.memoryStorage(),
 
   limits: {
-    fileSize: 200 * 1024 * 1024
+    fileSize: 200 * 1024 * 1024,
   },
 
   fileFilter: (req, file, cb) => {
@@ -38,7 +38,7 @@ const upload = multer({
     }
 
     cb(null, true);
-  }
+  },
 });
 
 /* =========================
@@ -83,7 +83,7 @@ router.get("/books", async (req, res, next) => {
     `);
 
     return res.json({
-      books: result.rows
+      books: result.rows,
     });
   } catch (error) {
     return next(error);
@@ -96,12 +96,10 @@ router.get("/books", async (req, res, next) => {
 
 router.post(
   "/books",
-
   upload.fields([
     { name: "ebook", maxCount: 1 },
-    { name: "cover", maxCount: 1 }
+    { name: "cover", maxCount: 1 },
   ]),
-
   async (req, res, next) => {
     let uploadedEbookKey = null;
     let uploadedCoverKey = null;
@@ -113,7 +111,7 @@ router.post(
         description,
         category,
         price_kobo,
-        isPublished
+        isPublished,
       } = req.body;
 
       const ebook = req.files?.ebook?.[0];
@@ -131,8 +129,7 @@ router.post(
         !ebook
       ) {
         return res.status(400).json({
-          error:
-            "Title, description, price and PDF eBook are required."
+          error: "Title, description, price and PDF eBook are required.",
         });
       }
 
@@ -147,18 +144,17 @@ router.post(
       ).trim();
 
       const cleanDescription = String(description).trim();
-
       const cleanCategory = normalizeCategory(category);
 
       if (!cleanTitle) {
         return res.status(400).json({
-          error: "Book title is required."
+          error: "Book title is required.",
         });
       }
 
       if (!cleanDescription) {
         return res.status(400).json({
-          error: "Book description is required."
+          error: "Book description is required.",
         });
       }
 
@@ -173,15 +169,13 @@ router.post(
         priceKobo <= 0
       ) {
         return res.status(400).json({
-          error: "Price must be greater than zero."
+          error: "Price must be greater than zero.",
         });
       }
 
-      if (
-        !Number.isSafeInteger(Math.round(priceKobo))
-      ) {
+      if (!Number.isSafeInteger(Math.round(priceKobo))) {
         return res.status(400).json({
-          error: "The price is invalid."
+          error: "The price is invalid.",
         });
       }
 
@@ -191,7 +185,7 @@ router.post(
 
       if (ebook.mimetype !== "application/pdf") {
         return res.status(400).json({
-          error: "The eBook must be a PDF."
+          error: "The eBook must be a PDF.",
         });
       }
 
@@ -218,8 +212,11 @@ router.post(
         crypto.randomBytes(8).toString("hex") +
         ".pdf";
 
-      // Keep the database key convention unchanged.
-      const ebookKey = `ebooks/${ebookFilename}`;
+      // Actual path inside the ebooks bucket.
+      const ebookStoragePath = `ebooks/${ebookFilename}`;
+
+      // Store the same bucket-relative object path in the database.
+      const ebookKey = ebookStoragePath;
 
       let coverKey = null;
       let storageCoverKey = null;
@@ -234,7 +231,7 @@ router.post(
           "jpg",
           "jpeg",
           "png",
-          "webp"
+          "webp",
         ].includes(originalExtension)
           ? originalExtension
           : "jpg";
@@ -252,16 +249,18 @@ router.post(
 
       /* =========================
          UPLOAD EBOOK
+         Bucket: ebooks
+         Folder: ebooks/
       ========================= */
 
       const ebookUpload = await supabase.storage
         .from("ebooks")
         .upload(
-          ebookFilename,
+          ebookStoragePath,
           ebook.buffer,
           {
             contentType: "application/pdf",
-            upsert: false
+            upsert: false,
           }
         );
 
@@ -271,10 +270,11 @@ router.post(
         );
       }
 
-      uploadedEbookKey = ebookFilename;
+      uploadedEbookKey = ebookStoragePath;
 
       /* =========================
          UPLOAD COVER
+         Bucket: covers
       ========================= */
 
       if (cover && coverKey && storageCoverKey) {
@@ -285,7 +285,7 @@ router.post(
             cover.buffer,
             {
               contentType: cover.mimetype,
-              upsert: false
+              upsert: false,
             }
           );
 
@@ -340,13 +340,13 @@ router.post(
           Math.round(priceKobo),
           ebookKey,
           coverKey,
-          isPublished !== "false"
+          isPublished !== "false",
         ]
       );
 
       return res.status(201).json({
         message: "Book created successfully.",
-        book: result.rows[0]
+        book: result.rows[0],
       });
     } catch (error) {
       console.error("Create book error:", error);
@@ -356,10 +356,9 @@ router.post(
       ========================= */
 
       if (uploadedEbookKey) {
-        const { error: cleanupError } =
-          await supabase.storage
-            .from("ebooks")
-            .remove([uploadedEbookKey]);
+        const { error: cleanupError } = await supabase.storage
+          .from("ebooks")
+          .remove([uploadedEbookKey]);
 
         if (cleanupError) {
           console.error(
@@ -374,10 +373,9 @@ router.post(
       ========================= */
 
       if (uploadedCoverKey) {
-        const { error: cleanupError } =
-          await supabase.storage
-            .from("covers")
-            .remove([uploadedCoverKey]);
+        const { error: cleanupError } = await supabase.storage
+          .from("covers")
+          .remove([uploadedCoverKey]);
 
         if (cleanupError) {
           console.error(
@@ -402,12 +400,9 @@ router.patch(
     try {
       const bookId = Number(req.params.id);
 
-      if (
-        !Number.isInteger(bookId) ||
-        bookId <= 0
-      ) {
+      if (!Number.isInteger(bookId) || bookId <= 0) {
         return res.status(400).json({
-          error: "Invalid book ID."
+          error: "Invalid book ID.",
         });
       }
 
@@ -427,12 +422,12 @@ router.patch(
 
       if (!result.rowCount) {
         return res.status(404).json({
-          error: "Book not found."
+          error: "Book not found.",
         });
       }
 
       return res.json({
-        book: result.rows[0]
+        book: result.rows[0],
       });
     } catch (error) {
       return next(error);
@@ -450,12 +445,9 @@ router.delete(
     try {
       const bookId = Number(req.params.id);
 
-      if (
-        !Number.isInteger(bookId) ||
-        bookId <= 0
-      ) {
+      if (!Number.isInteger(bookId) || bookId <= 0) {
         return res.status(400).json({
-          error: "Invalid book ID."
+          error: "Invalid book ID.",
         });
       }
 
@@ -475,13 +467,13 @@ router.delete(
 
       if (!result.rowCount) {
         return res.status(404).json({
-          error: "Book not found."
+          error: "Book not found.",
         });
       }
 
       return res.json({
         message: "Book removed from the store.",
-        book: result.rows[0]
+        book: result.rows[0],
       });
     } catch (error) {
       return next(error);
