@@ -1,14 +1,16 @@
+
 <!doctype html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Login — Santiano Books</title>
+
     <link rel="stylesheet" href="css/style.css">
 
     <style>
-        /* Password toggle styles */
         .password-wrapper {
             position: relative;
             display: flex;
@@ -17,7 +19,7 @@
 
         .password-wrapper input {
             width: 100%;
-            padding-right: 44px; /* space for the eye button */
+            padding-right: 44px;
         }
 
         .toggle-password {
@@ -41,8 +43,20 @@
             color: #d0a45c;
         }
 
-        .toggle-password:focus {
-            outline: none;
+        .toggle-password:focus-visible {
+            outline: 2px solid #d0a45c;
+            outline-offset: 3px;
+        }
+
+        .forgot-password {
+            display: inline-block;
+            color: #d0a45c;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -59,7 +73,11 @@
             </span>
         </a>
 
-        <a class="outline-btn" style="color:#d0a45c" href="index.html">
+        <a
+            class="outline-btn"
+            style="color:#d0a45c"
+            href="index.html"
+        >
             Back Home
         </a>
     </div>
@@ -67,12 +85,12 @@
 
 <main class="page">
     <div class="form-wrap">
+
         <div class="eyebrow" style="text-align:center">
             SANTIANO BOOKS
         </div>
-        
+
         <h3 style="text-align:center; margin-bottom:10px;">
-            
             Welcome Back
         </h3>
 
@@ -84,6 +102,7 @@
 
             <div class="field">
                 <label for="loginEmail">EMAIL ADDRESS</label>
+
                 <input
                     id="loginEmail"
                     name="email"
@@ -96,6 +115,7 @@
 
             <div class="field">
                 <label for="loginPassword">PASSWORD</label>
+
                 <div class="password-wrapper">
                     <input
                         id="loginPassword"
@@ -105,6 +125,7 @@
                         autocomplete="current-password"
                         required
                     >
+
                     <button
                         type="button"
                         class="toggle-password"
@@ -116,27 +137,38 @@
                 </div>
 
                 <div style="text-align:right; margin-top:8px;">
-                    <!-- You can add "Forgot password?" link here later -->
+                    <a
+                        class="forgot-password"
+                        href="forgot-password.html"
+                    >
+                        Forgot password?
+                    </a>
                 </div>
             </div>
 
-            <button type="submit" class="gold-btn full" id="loginButton">
+            <button
+                type="submit"
+                class="gold-btn full"
+                id="loginButton"
+            >
                 LOGIN
             </button>
+
         </form>
 
-        <p id="loginMessage" class="muted" style="text-align:center; margin-top:15px; min-height:20px;"></p>
+        <p
+            id="loginMessage"
+            class="muted"
+            role="status"
+            aria-live="polite"
+            style="text-align:center; margin-top:15px; min-height:20px;"
+        ></p>
 
         <div class="form-foot">
             Don't have an account?
             <a href="register.html">Create one</a>
-        
-    </div>
-    <div style="text-align:right;color: #d0a45c;">
-        <a href="forgot-password.html">
-          
-       </a>
-        
+        </div>
+
     </div>
 </main>
 
@@ -145,13 +177,14 @@
 <script>
     function togglePassword(inputId, btn) {
         const input = document.getElementById(inputId);
+
         if (input.type === "password") {
             input.type = "text";
-            btn.textContent = "🙈";          // hide icon
+            btn.textContent = "🙈";
             btn.setAttribute("aria-label", "Hide password");
         } else {
             input.type = "password";
-            btn.textContent = "👁️";          // show icon
+            btn.textContent = "👁️";
             btn.setAttribute("aria-label", "Show password");
         }
     }
