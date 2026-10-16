@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>My Account — Santiano Books</title>
+    <title>My Account — Santiano</title>
 
     <link rel="stylesheet" href="css/style.css">
 
@@ -617,7 +617,10 @@
             });
         });
 
-        const ACCOUNT_API = "http://localhost:3000/api";
+        const ACCOUNT_API = (
+    window.SANTIANO_API ||
+    "https://santiano-books.onrender.com/api"
+).replace(/\/+$/, "");
         const token = getAuthToken();
 
         if (!token) {
