@@ -431,7 +431,7 @@ router.post(
         await ensureBookFileExists(item);
       }
 
-      const reference = `SANTIANO-${order.id}-${Date.now()}`;
+      const reference = `ENT-${order.id}-${Date.now()}`;
 
       const payment = await paystackRequest(
         "/transaction/initialize",
