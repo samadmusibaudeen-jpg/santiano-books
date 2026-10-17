@@ -260,11 +260,11 @@ router.post("/forgot-password", async (req, res, next) => {
         const { error } = await resend.emails.send({
             from: process.env.RESEND_FROM,
             to: [user.email],
-            subject: "Reset your Santiano Books password",
+            subject: "Reset your ENT Books password",
             html: `
                 <div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;line-height:1.6">
                     <h2>Reset your password</h2>
-                    <p>We received a request to reset your Santiano Books password.</p>
+                    <p>We received a request to reset your ENT Books password.</p>
                     <p>
                         <a href="${resetUrl}"
                            style="display:inline-block;padding:12px 20px;background:#c49a45;color:#111;text-decoration:none;border-radius:5px">
@@ -273,7 +273,7 @@ router.post("/forgot-password", async (req, res, next) => {
                     </p>
                     <p>This link expires in 30 minutes and can only be used once.</p>
                     <p>If you did not request this, you can ignore this email.</p>
-                    <p>Santiano Books</p>
+                    <p>ENT Books</p>
                 </div>
             `
         });
