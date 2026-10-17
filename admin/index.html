@@ -1,1844 +1,293 @@
 <!doctype html>
-
 <html lang="en">
-
 <head>
-
-  <meta charset="utf-8">
-
-  <meta
-
-    name="viewport"
-
-    content="width=device-width, initial-scale=1"
-
-  >
-
-
-
-  <title>Santiano Books — Admin</title>
-
-
-
-  <style>
-
-    :root {
-
-      --black: #111111;
-
-      --gold: #c7a45a;
-
-      --cream: #f7f1e5;
-
-      --white: #ffffff;
-
-      --line: #ded7ca;
-
-      --muted: #77716a;
-
-      --danger: #a9473c;
-
-      --success: #39734a;
-
-    }
-
-
-
-    * {
-
-      box-sizing: border-box;
-
-    }
-
-
-
-    body {
-
-      margin: 0;
-
-      font-family:
-
-        Arial,
-
-        Helvetica,
-
-        sans-serif;
-
-      background: var(--cream);
-
-      color: var(--black);
-
-    }
-
-
-
-    button,
-
-    input,
-
-    textarea {
-
-      font: inherit;
-
-    }
-
-
-
-    button {
-
-      cursor: pointer;
-
-    }
-
-
-
-    /* =========================
-
-       TOP BAR
-
-    ========================= */
-
-
-
-    .topbar {
-
-      min-height: 70px;
-
-      padding: 0 28px;
-
-
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: space-between;
-
-
-
-      background: var(--black);
-
-      color: var(--white);
-
-    }
-
-
-
-    .brand {
-
-      display: flex;
-
-      align-items: center;
-
-      gap: 12px;
-
-    }
-
-
-
-    .brand-mark {
-
-      width: 40px;
-
-      height: 40px;
-
-
-
-      display: grid;
-
-      place-items: center;
-
-
-
-      border: 1px solid var(--gold);
-
-      border-radius: 8px;
-
-
-
-      color: var(--gold);
-
-      font-size: 20px;
-
-      font-weight: 700;
-
-    }
-
-
-
-    .brand-text strong {
-
-      display: block;
-
-      font-size: 17px;
-
-      letter-spacing: 1px;
-
-    }
-
-
-
-    .brand-text small {
-
-      color: var(--gold);
-
-      font-size: 10px;
-
-      letter-spacing: 2px;
-
-    }
-
-
-
-    .logout-btn {
-
-      border: 1px solid #555;
-
-      background: transparent;
-
-      color: #fff;
-
-
-
-      padding: 9px 16px;
-
-      border-radius: 7px;
-
-
-
-      transition:
-
-        background .2s,
-
-        border-color .2s;
-
-    }
-
-
-
-    .logout-btn:hover {
-
-      background: #242424;
-
-      border-color: var(--gold);
-
-    }
-
-
-
-    /* =========================
-
-       LAYOUT
-
-    ========================= */
-
-
-
-    .page {
-
-      width: min(1180px, calc(100% - 32px));
-
-      margin: 0 auto;
-
-      padding: 40px 0 70px;
-
-    }
-
-
-
-    .dashboard {
-
-      display: none;
-
-    }
-
-
-
-    .dashboard.visible {
-
-      display: block;
-
-    }
-
-
-
-    .section {
-
-      margin-bottom: 35px;
-
-    }
-
-
-
-    .section-heading {
-
-      margin-bottom: 18px;
-
-    }
-
-
-
-    .section-heading h1,
-
-    .section-heading h2 {
-
-      margin: 0 0 7px;
-
-    }
-
-
-
-    .section-heading h1 {
-
-      font-size: 30px;
-
-    }
-
-
-
-    .section-heading h2 {
-
-      font-size: 22px;
-
-    }
-
-
-
-    .section-heading p {
-
-      margin: 0;
-
-      color: var(--muted);
-
-      font-size: 14px;
-
-    }
-
-
-
-    /* =========================
-
-       CARDS
-
-    ========================= */
-
-
-
-    .card {
-
-      background: var(--white);
-
-      border: 1px solid var(--line);
-
-      border-radius: 12px;
-
-      padding: 24px;
-
-      box-shadow:
-
-        0 5px 20px rgba(40, 30, 15, .04);
-
-    }
-
-
-
-    /* =========================
-
-       FORM
-
-    ========================= */
-
-
-
-    .book-form {
-
-      display: grid;
-
-      gap: 18px;
-
-    }
-
-
-
-    .form-grid {
-
-      display: grid;
-
-      grid-template-columns:
-
-        repeat(2, minmax(0, 1fr));
-
-      gap: 18px;
-
-    }
-
-
-
-    .field {
-
-      display: flex;
-
-      flex-direction: column;
-
-      gap: 7px;
-
-    }
-
-
-
-    .field.full {
-
-      grid-column: 1 / -1;
-
-    }
-
-
-
-    .field label {
-
-      font-size: 13px;
-
-      font-weight: 700;
-
-      color: #37322d;
-
-    }
-
-
-
-    .field input,
-
-    .field textarea {
-
-      width: 100%;
-
-
-
-      border: 1px solid #cec6b9;
-
-      border-radius: 8px;
-
-
-
-      background: #fff;
-
-      color: #1b1815;
-
-
-
-      padding: 12px 13px;
-
-      outline: none;
-
-
-
-      transition:
-
-        border-color .2s,
-
-        box-shadow .2s;
-
-    }
-
-
-
-    .field input {
-
-      min-height: 45px;
-
-    }
-
-
-
-    .field textarea {
-
-      min-height: 130px;
-
-      resize: vertical;
-
-      line-height: 1.55;
-
-    }
-
-
-
-    .field input:focus,
-
-    .field textarea:focus {
-
-      border-color: var(--gold);
-
-
-
-      box-shadow:
-
-        0 0 0 3px rgba(199, 164, 90, .13);
-
-    }
-
-
-
-    .field small {
-
-      color: var(--muted);
-
-      font-size: 12px;
-
-    }
-
-
-
-    .file-input {
-
-      padding: 10px !important;
-
-    }
-
-
-
-    .form-actions {
-
-      display: flex;
-
-      align-items: center;
-
-      gap: 14px;
-
-      flex-wrap: wrap;
-
-      padding-top: 5px;
-
-    }
-
-
-
-    .publish-btn {
-
-      border: none;
-
-      border-radius: 8px;
-
-
-
-      background: var(--black);
-
-      color: #fff;
-
-
-
-      padding: 12px 20px;
-
-
-
-      font-weight: 700;
-
-      letter-spacing: .4px;
-
-
-
-      transition:
-
-        background .2s,
-
-        transform .2s;
-
-    }
-
-
-
-    .publish-btn:hover {
-
-      background: #292929;
-
-      transform: translateY(-1px);
-
-    }
-
-
-
-    .publish-btn:disabled {
-
-      opacity: .55;
-
-      cursor: not-allowed;
-
-      transform: none;
-
-    }
-
-
-
-    .form-message {
-
-      min-height: 20px;
-
-      font-size: 13px;
-
-      color: var(--muted);
-
-    }
-
-
-
-    .form-message.error {
-
-      color: var(--danger);
-
-    }
-
-
-
-    .form-message.success {
-
-      color: var(--success);
-
-    }
-
-
-
-    /* =========================
-
-       BOOK LIST
-
-    ========================= */
-
-
-
-    .books-list {
-
-      display: grid;
-
-      gap: 12px;
-
-    }
-
-
-
-    .book-row {
-
-      display: grid;
-
-
-
-      grid-template-columns:
-
-        minmax(0, 2fr)
-
-        130px
-
-        120px
-
-        210px;
-
-
-
-      gap: 18px;
-
-      align-items: center;
-
-
-
-      padding: 16px;
-
-
-
-      border: 1px solid var(--line);
-
-      border-radius: 10px;
-
-
-
-      background: #fff;
-
-    }
-
-
-
-    .book-info {
-
-      min-width: 0;
-
-    }
-
-
-
-    .book-title {
-
-      margin: 0 0 5px;
-
-
-
-      font-size: 15px;
-
-      font-weight: 700;
-
-
-
-      overflow: hidden;
-
-      text-overflow: ellipsis;
-
-      white-space: nowrap;
-
-    }
-
-
-
-    .book-category {
-
-      color: var(--gold);
-
-      font-size: 12px;
-
-      font-weight: 700;
-
-      letter-spacing: .4px;
-
-    }
-
-
-
-    .book-author {
-
-      margin-top: 3px;
-
-      color: var(--muted);
-
-      font-size: 12px;
-
-    }
-
-
-
-    .book-price {
-
-      font-size: 14px;
-
-      font-weight: 700;
-
-    }
-
-
-
-    .status {
-
-      display: inline-flex;
-
-      width: fit-content;
-
-
-
-      padding: 5px 9px;
-
-      border-radius: 999px;
-
-
-
-      font-size: 11px;
-
-      font-weight: 700;
-
-    }
-
-
-
-    .status.published {
-
-      background: #e8f4eb;
-
-      color: var(--success);
-
-    }
-
-
-
-    .status.unpublished {
-
-      background: #f3eee7;
-
-      color: #766b5f;
-
-    }
-
-
-
-    .actions {
-
-      display: flex;
-
-      justify-content: flex-end;
-
-      gap: 7px;
-
-      flex-wrap: wrap;
-
-    }
-
-
-
-    .action-btn {
-
-      border: 1px solid var(--line);
-
-      background: #fff;
-
-
-
-      padding: 7px 10px;
-
-      border-radius: 7px;
-
-
-
-      font-size: 12px;
-
-
-
-      transition:
-
-        background .2s,
-
-        border-color .2s;
-
-    }
-
-
-
-    .action-btn:hover {
-
-      background: var(--cream);
-
-      border-color: var(--gold);
-
-    }
-
-
-
-    .action-btn.delete {
-
-      color: var(--danger);
-
-    }
-
-
-
-    .empty {
-
-      padding: 35px 20px;
-
-
-
-      border: 1px dashed #cfc6b8;
-
-      border-radius: 10px;
-
-
-
-      color: var(--muted);
-
-      text-align: center;
-
-      font-size: 14px;
-
-    }
-
-
-
-    /* =========================
-
-       LOGIN
-
-    ========================= */
-
-
-
-    .login-screen {
-
-      min-height: calc(100vh - 70px);
-
-
-
-      display: grid;
-
-      place-items: center;
-
-
-
-      padding: 30px 16px;
-
-    }
-
-
-
-    .login-card {
-
-      width: min(430px, 100%);
-
-
-
-      background: #fff;
-
-      border: 1px solid var(--line);
-
-      border-radius: 13px;
-
-
-
-      padding: 30px;
-
-
-
-      box-shadow:
-
-        0 12px 40px rgba(40, 30, 15, .08);
-
-    }
-
-
-
-    .login-card h1 {
-
-      margin: 0 0 7px;
-
-      font-size: 25px;
-
-    }
-
-
-
-    .login-card p {
-
-      margin: 0 0 24px;
-
-      color: var(--muted);
-
-      font-size: 14px;
-
-      line-height: 1.5;
-
-    }
-
-
-
-    .login-form {
-
-      display: grid;
-
-      gap: 17px;
-
-    }
-
-
-
-    .login-btn {
-
-      width: 100%;
-
-
-
-      border: none;
-
-      border-radius: 8px;
-
-
-
-      background: var(--black);
-
-      color: #fff;
-
-
-
-      padding: 13px;
-
-
-
-      font-weight: 700;
-
-      letter-spacing: .5px;
-
-    }
-
-
-
-    .login-btn:hover {
-
-      background: #292929;
-
-    }
-
-
-
-    .login-btn:disabled {
-
-      opacity: .55;
-
-      cursor: not-allowed;
-
-    }
-
-
-
-    .login-message {
-
-      min-height: 20px;
-
-      color: var(--danger);
-
-      font-size: 13px;
-
-    }
-
-
-
-    /* =========================
-
-       RESPONSIVE
-
-    ========================= */
-
-
-
-    @media (max-width: 850px) {
-
-      .book-row {
-
-        grid-template-columns: 1fr;
-
-        gap: 10px;
-
-      }
-
-
-
-      .actions {
-
-        justify-content: flex-start;
-
-      }
-
-
-
-      .book-title {
-
-        white-space: normal;
-
-      }
-
-    }
-
-
-
-    @media (max-width: 700px) {
-
-      .topbar {
-
-        padding: 0 16px;
-
-      }
-
-
-
-      .page {
-
-        width: min(
-
-          100% - 24px,
-
-          1180px
-
-        );
-
-
-
-        padding-top: 25px;
-
-      }
-
-
-
-      .form-grid {
-
-        grid-template-columns: 1fr;
-
-      }
-
-
-
-      .field.full {
-
-        grid-column: auto;
-
-      }
-
-
-
-      .section-heading h1 {
-
-        font-size: 25px;
-
-      }
-
-
-
-      .card {
-
-        padding: 18px;
-
-      }
-
-    }
-
-  </style>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Admin — ENT Books</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f8f9fb;--surface:#fff;--ink:#0b1324;--muted:#5d6678;--line:#e1e5ec;--brand:#12295c;--brand-ink:#fff;--accent:#a9792b;--soft:#f0f3f9;--nav-bg:rgba(255,255,255,.92);--grid:rgba(18,41,92,.06);--danger:#b42318;--ok:#067647;--glow:#3d6bff;--hh:68px;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0f1c;--surface:#111827;--ink:#eef1f7;--muted:#9aa3b5;--line:#1f2a3d;--brand:#8aa4ff;--brand-ink:#0a0f1c;--accent:#d9b068;--soft:#0f1729;--nav-bg:rgba(10,15,28,.92);--grid:rgba(138,164,255,.07);--danger:#f97066;--ok:#47cd89;--glow:#7d9bff;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a0f1c;--surface:#111827;--ink:#eef1f7;--muted:#9aa3b5;--line:#1f2a3d;--brand:#8aa4ff;--brand-ink:#0a0f1c;--accent:#d9b068;--soft:#0f1729;--nav-bg:rgba(10,15,28,.92);--grid:rgba(138,164,255,.07);--danger:#f97066;--ok:#47cd89;--glow:#7d9bff;color-scheme:dark}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;font-size:16px;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;font-weight:600;letter-spacing:-.015em;line-height:1.15}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--glow);outline-offset:2px}
+.wrap{width:min(1120px,90%);margin-inline:auto}
+.eyebrow{display:flex;align-items:center;gap:12px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.eyebrow::before{content:"";width:28px;height:1px;background:currentColor}
+
+/* top bar */
+.topbar{position:sticky;top:0;z-index:50;padding-top:env(safe-area-inset-top,0px);background:var(--nav-bg);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.topbar .wrap{height:var(--hh);display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:inline-flex;align-items:center;gap:10px;font-family:"Source Serif 4",Georgia,serif;font-weight:600;font-size:19px;letter-spacing:-.01em}
+.brand-mark{width:32px;height:32px;display:grid;place-items:center;background:var(--brand);color:var(--brand-ink);border-radius:7px;font-size:17px}
+.brand-tag{padding:3px 10px;border:1px solid var(--line);border-radius:99px;background:var(--soft);color:var(--muted);font:500 12px Inter,sans-serif;letter-spacing:0}
+.logout-btn{height:38px;padding:0 16px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-size:14px;transition:.2s}
+.logout-btn:hover{border-color:var(--brand)}
+
+/* dark band */
+.band{position:relative;overflow:hidden;isolation:isolate;color:#eef1f7;background:linear-gradient(135deg,#071027 0%,#0e2150 55%,#16358a 100%);border-bottom:1px solid rgba(138,164,255,.28)}
+.band::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(rgba(138,164,255,.09) 1px,transparent 1px) 0 0/44px 44px,linear-gradient(90deg,rgba(138,164,255,.09) 1px,transparent 1px) 0 0/44px 44px;-webkit-mask-image:radial-gradient(ellipse at 75% 0,#000 15%,transparent 75%);mask-image:radial-gradient(ellipse at 75% 0,#000 15%,transparent 75%)}
+.band::after{content:"";position:absolute;z-index:-1;right:-140px;top:-280px;width:580px;height:580px;border-radius:50%;background:radial-gradient(circle,rgba(61,107,255,.5),transparent 65%)}
+.band .eyebrow{color:#e3c585}
+.band h1{margin-top:16px;color:#fff;font-size:clamp(32px,4.6vw,48px);line-height:1.08}
+.band .lead{margin-top:14px;max-width:520px;font-size:16px;color:#b5bfd6}
+.band .wrap{padding-top:52px;padding-bottom:48px}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;max-width:640px;margin-top:30px}
+.kpi{padding:16px 18px;border:1px solid rgba(138,164,255,.28);border-radius:12px;background:rgba(138,164,255,.08)}
+.kpi span{display:block;font-size:13px;color:#b5bfd6}
+.kpi b{display:block;margin-top:4px;font:600 32px/1 "Source Serif 4",Georgia,serif;color:#fff;font-variant-numeric:tabular-nums}
+
+/* layout */
+.dashboard{display:none}
+.dashboard.visible{display:block}
+.page{padding:40px 0 80px}
+.section{margin-bottom:32px}
+.section-heading{margin-bottom:16px}
+.section-heading h2{font-size:24px}
+.section-heading p{margin-top:4px;color:var(--muted);font-size:14px}
+.card{padding:28px;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+
+/* form */
+.book-form{display:grid;gap:20px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:1/-1}
+.field label{font-size:13px;font-weight:600}
+.field input,.field textarea{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);outline:0;transition:border-color .2s,box-shadow .2s}
+.field input{min-height:46px}
+.field textarea{min-height:140px;resize:vertical;line-height:1.6}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted);opacity:.7}
+.field input:focus,.field textarea:focus{border-color:var(--glow);box-shadow:0 0 0 4px rgba(61,107,255,.14)}
+.field small{color:var(--muted);font-size:12px;line-height:1.5}
+.file-input{padding:8px !important;font-size:14px;color:var(--muted)}
+.file-input::file-selector-button{margin-right:12px;padding:8px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font:500 13px Inter,sans-serif;cursor:pointer;transition:.2s}
+.file-input::file-selector-button:hover{border-color:var(--brand)}
+.form-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-top:4px}
+.publish-btn,.login-btn{min-height:48px;padding:0 26px;border:0;border-radius:10px;background:var(--brand);color:var(--brand-ink);font-size:14px;font-weight:600;transition:filter .2s,transform .2s}
+.publish-btn:hover,.login-btn:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.publish-btn:disabled,.login-btn:disabled{opacity:.55;cursor:not-allowed;transform:none;filter:none}
+.form-message{min-height:20px;font-size:13px;color:var(--muted)}
+.form-message.error{color:var(--danger)}
+.form-message.success{color:var(--ok)}
+
+/* books list */
+.books-head{display:grid;grid-template-columns:minmax(0,2fr) 120px 130px 190px;gap:18px;padding:0 16px 12px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.books-head span:last-child{text-align:right}
+.books-list{display:grid;gap:10px}
+.book-row{display:grid;grid-template-columns:minmax(0,2fr) 120px 130px 190px;gap:18px;align-items:center;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);transition:border-color .2s,box-shadow .2s}
+.book-row:hover{border-color:var(--glow);box-shadow:0 14px 30px -18px rgba(18,41,92,.4)}
+.book-info{min-width:0}
+.book-title{margin:0 0 4px;font:600 16px/1.3 Inter,system-ui,sans-serif;letter-spacing:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.book-category{display:inline-block;padding:1px 9px;border:1px solid var(--line);border-radius:99px;background:var(--soft);color:var(--accent);font-size:11px;font-weight:600}
+.book-author{margin-top:4px;color:var(--muted);font-size:13px}
+.book-price{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+.status{display:inline-flex;align-items:center;gap:7px;width:fit-content;padding:4px 11px;border-radius:99px;font-size:12px;font-weight:600}
+.status::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.status.published{background:rgba(6,118,71,.12);color:var(--ok)}
+.status.unpublished{background:var(--soft);color:var(--muted)}
+.actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.action-btn{padding:8px 13px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-size:13px;font-weight:500;transition:.2s}
+.action-btn:hover{border-color:var(--brand)}
+.action-btn.delete{color:var(--danger)}
+.action-btn.delete:hover{border-color:var(--danger)}
+.empty{padding:40px 20px;border:1px dashed var(--line);border-radius:12px;background:var(--bg);color:var(--muted);text-align:center;font-size:14px}
+
+/* login */
+.login-screen{min-height:calc(100vh - var(--hh));display:grid;place-items:center;padding:32px 16px;background:linear-gradient(var(--grid) 1px,transparent 1px) 0 0/48px 48px,linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/48px 48px,var(--bg)}
+.login-card{position:relative;overflow:hidden;width:min(440px,100%);padding:36px 32px 32px;background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:0 34px 80px -34px rgba(18,41,92,.4)}
+.login-card::before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,var(--brand),var(--glow),var(--accent))}
+.login-card h1{font-size:28px}
+.login-card p{margin:8px 0 26px;color:var(--muted);font-size:14px;line-height:1.6}
+.login-form{display:grid;gap:18px}
+.login-btn{width:100%}
+.login-message{min-height:20px;color:var(--danger);font-size:13px}
+
+@media (max-width:850px){
+.books-head{display:none}
+.book-row{grid-template-columns:1fr;gap:10px}
+.actions{justify-content:flex-start}
+.book-title{white-space:normal}
+}
+@media (max-width:700px){
+:root{--hh:60px}
+.form-grid{grid-template-columns:1fr}
+.field.full{grid-column:auto}
+.card{padding:20px}
+.kpis{gap:8px}
+.kpi{padding:12px}
+.kpi b{font-size:26px}
+.band .wrap{padding-top:40px;padding-bottom:36px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms !important}}
+</style>
 </head>
-
-
 
 <body>
 
-
-
-  <!-- =========================
-
-       TOP BAR
-
-  ========================= -->
-
-
-
-  <header class="topbar">
-
-
-
-    <div class="brand">
-
-
-
-      <div class="brand-mark">
-
-        S
-
-      </div>
-
-
-
-      <div class="brand-text">
-
-        <strong>SANTIANO</strong>
-
-        <small>BOOKS ADMIN</small>
-
-      </div>
-
-
-
-    </div>
-
-
-
-    <button
-
-      type="button"
-
-      class="logout-btn"
-
-      id="logout"
-
-    >
-
-      Logout
-
-    </button>
-
-
-
-  </header>
-
-
-
-
-
-  <!-- =========================
-
-       LOGIN
-
-  ========================= -->
-
-
-
-  <section
-
-    class="login-screen"
-
-    id="loginScreen"
-
-  >
-
-
-
-    <div class="login-card">
-
-
-
-      <h1>Admin Login</h1>
-
-
-
-      <p>
-
-        Sign in to manage books,
-
-        categories and your Santiano
-
-        Books collection.
-
-      </p>
-
-
-
-      <form
-
-        class="login-form"
-
-        id="loginForm"
-
-      >
-
-
-
-        <div class="field">
-
-
-
-          <label for="loginEmail">
-
-            Email
-
-          </label>
-
-
-
-          <input
-
-            id="loginEmail"
-
-            type="email"
-
-            autocomplete="email"
-
-            required
-
-          >
-
-
-
-        </div>
-
-
-
-
-
-        <div class="field">
-
-
-
-          <label for="loginPassword">
-
-            Password
-
-          </label>
-
-
-
-          <input
-
-            id="loginPassword"
-
-            type="password"
-
-            autocomplete="current-password"
-
-            required
-
-          >
-
-
-
-        </div>
-
-
-
-
-
-        <button
-
-          type="submit"
-
-          class="login-btn"
-
-          id="loginButton"
-
-        >
-
-          LOGIN
-
-        </button>
-
-
-
-        <div
-
-          class="login-message"
-
-          id="loginMessage"
-
-        ></div>
-
-
-
-      </form>
-
-
-
-    </div>
-
-
-
-  </section>
-
-
-
-
-
-  <!-- =========================
-
-       DASHBOARD
-
-  ========================= -->
-
-
-
-  <main
-
-    class="dashboard"
-
-    id="dashboard"
-
-  >
-
-
-
-    <div class="page">
-
-
-
-      <!-- =========================
-
-           ADD BOOK
-
-      ========================= -->
-
-
-
-      <section class="section">
-
-
-
-        <div class="section-heading">
-
-
-
-          <h1>Add New Book</h1>
-
-
-
-          <p>
-
-            Upload a digital book and
-
-            assign it to a category.
-
-          </p>
-
-
-
-        </div>
-
-
-
-
-
-        <div class="card">
-
-
-
-          <form
-
-            class="book-form"
-
-            id="bookForm"
-
-          >
-
-
-
-            <div class="form-grid">
-
-
-
-              <!-- TITLE -->
-
-
-
-              <div class="field">
-
-
-
-                <label for="title">
-
-                  Book Title
-
-                </label>
-
-
-
-                <input
-
-                  id="title"
-
-                  name="title"
-
-                  type="text"
-
-                  placeholder="The Philosophy of a Great Man"
-
-                  required
-
-                >
-
-
-
-              </div>
-
-
-
-
-
-              <!-- AUTHOR -->
-
-
-
-              <div class="field">
-
-
-
-                <label for="author">
-
-                  Author
-
-                </label>
-
-
-
-                <input
-
-                  id="author"
-
-                  name="author"
-
-                  type="text"
-
-                  value="Musibau Samad Eniola"
-
-                  required
-
-                >
-
-
-
-              </div>
-
-
-
-
-
-              <!-- CATEGORY -->
-
-
-
-              <div class="field">
-
-
-
-                <label for="category">
-
-                  Category
-
-                </label>
-
-
-
-                <input
-
-                  id="category"
-
-                  name="category"
-
-                  type="text"
-
-                  list="categorySuggestions"
-
-                  placeholder="Personal Development"
-
-                  autocomplete="off"
-
-                  required
-
-                >
-
-
-
-                <small>
-
-                  This category will automatically
-
-                  appear on the Books page after
-
-                  the book is published.
-
-                </small>
-
-
-
-                <datalist id="categorySuggestions">
-
-
-
-                  <option value="Motivation">
-
-                  <option value="Personal Development">
-
-                  <option value="Success">
-
-                  <option value="Finance">
-
-                  <option value="Business">
-
-                  <option value="Inspiration">
-
-                  <option value="Philosophy">
-
-                  <option value="Education">
-
-                  <option value="Leadership">
-
-                  <option value="Entrepreneurship">
-
-
-
-                </datalist>
-
-
-
-              </div>
-
-
-
-
-
-              <!-- PRICE -->
-
-
-
-              <div class="field">
-
-
-
-                <label for="priceNaira">
-
-                  Price (₦)
-
-                </label>
-
-
-
-                <input
-
-                  id="priceNaira"
-
-                  name="priceNaira"
-
-                  type="number"
-
-                  min="1"
-
-                  step="1"
-
-                  placeholder="5000"
-
-                  required
-
-                >
-
-
-
-              </div>
-
-
-
-
-
-              <!-- DESCRIPTION -->
-
-
-
-              <div class="field full">
-
-
-
-                <label for="description">
-
-                  Description
-
-                </label>
-
-
-
-                <textarea
-
-                  id="description"
-
-                  name="description"
-
-                  placeholder="Write a short description of the book..."
-
-                  required
-
-                ></textarea>
-
-
-
-              </div>
-
-
-
-
-
-              <!-- EBOOK -->
-
-
-
-              <div class="field">
-
-
-
-                <label for="ebook">
-
-                  eBook PDF
-
-                </label>
-
-
-
-                <input
-
-                  id="ebook"
-
-                  name="ebook"
-
-                  class="file-input"
-
-                  type="file"
-
-                  accept="application/pdf,.pdf"
-
-                  required
-
-                >
-
-
-
-                <small>
-
-                  PDF only. Maximum size: 200MB.
-
-                </small>
-
-
-
-              </div>
-
-
-
-
-
-              <!-- COVER -->
-
-
-
-              <div class="field">
-
-
-
-                <label for="cover">
-
-                  Cover Image
-
-                </label>
-
-
-
-                <input
-
-                  id="cover"
-
-                  name="cover"
-
-                  class="file-input"
-
-                  type="file"
-
-                  accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
-
-                >
-
-
-
-                <small>
-
-                  JPG, PNG or WebP.
-
-                </small>
-
-
-
-              </div>
-
-
-
-            </div>
-
-
-
-
-
-            <div class="form-actions">
-
-
-
-              <button
-
-                type="submit"
-
-                class="publish-btn"
-
-                id="publishButton"
-
-              >
-
-                ADD BOOK
-
-              </button>
-
-
-
-              <div
-
-                class="form-message"
-
-                id="formMessage"
-
-              ></div>
-
-
-
-            </div>
-
-
-
-          </form>
-
-
-
-        </div>
-
-
-
-      </section>
-
-
-
-
-
-      <!-- =========================
-
-           BOOKS
-
-      ========================= -->
-
-
-
-      <section class="section">
-
-
-
-        <div class="section-heading">
-
-
-
-          <h2>Your Books</h2>
-
-
-
-          <p>
-
-            Manage books already added
-
-            to Santiano Books.
-
-          </p>
-
-
-
-        </div>
-
-
-
-
-
-        <div class="card">
-
-
-
-          <div
-
-            class="books-list"
-
-            id="booksList"
-
-          ></div>
-
-
-
-        </div>
-
-
-
-      </section>
-
-
-
-    </div>
-
-
-
-  </main>
-
-
-
-
-
-  <script>
+<!-- TOP BAR -->
+<header class="topbar">
+<div class="wrap">
+<div class="brand">
+<span class="brand-mark">E</span>
+<span>ENT Books</span>
+<span class="brand-tag">Admin</span>
+</div>
+<button type="button" class="logout-btn" id="logout">Logout</button>
+</div>
+</header>
+
+<!-- LOGIN -->
+<section class="login-screen" id="loginScreen">
+<div class="login-card">
+<h1>Admin login</h1>
+<p>Sign in to manage books, categories and your ENT Books collection.</p>
+
+<form class="login-form" id="loginForm">
+<div class="field">
+<label for="loginEmail">Email</label>
+<input id="loginEmail" type="email" autocomplete="email" required>
+</div>
+
+<div class="field">
+<label for="loginPassword">Password</label>
+<input id="loginPassword" type="password" autocomplete="current-password" required>
+</div>
+
+<button type="submit" class="login-btn" id="loginButton">LOGIN</button>
+
+<div class="login-message" id="loginMessage"></div>
+</form>
+</div>
+</section>
+
+<!-- DASHBOARD -->
+<main class="dashboard" id="dashboard">
+
+<section class="band">
+<div class="wrap">
+<span class="eyebrow">Admin dashboard</span>
+<h1>Manage your books</h1>
+<p class="lead">Add new titles, publish them to the store and keep your collection up to date.</p>
+
+<div class="kpis">
+<div class="kpi"><span>Total books</span><b id="statTotal">–</b></div>
+<div class="kpi"><span>Published</span><b id="statPublished">–</b></div>
+<div class="kpi"><span>Unpublished</span><b id="statDraft">–</b></div>
+</div>
+</div>
+</section>
+
+<div class="wrap page">
+
+<!-- ADD BOOK -->
+<section class="section">
+<div class="section-heading">
+<h2>Add new book</h2>
+<p>Upload a digital book and assign it to a category.</p>
+</div>
+
+<div class="card">
+<form class="book-form" id="bookForm">
+
+<div class="form-grid">
+
+<div class="field">
+<label for="title">Book title</label>
+<input id="title" name="title" type="text" placeholder="The Philosophy of a Great Man" required>
+</div>
+
+<div class="field">
+<label for="author">Author</label>
+<input id="author" name="author" type="text" value="Musibau Samad Eniola" required>
+</div>
+
+<div class="field">
+<label for="category">Category</label>
+<input id="category" name="category" type="text" list="categorySuggestions" placeholder="Personal Development" autocomplete="off" required>
+<small>This category appears automatically on the Books page once the book is published.</small>
+
+<datalist id="categorySuggestions">
+<option value="Motivation">
+<option value="Personal Development">
+<option value="Success">
+<option value="Finance">
+<option value="Business">
+<option value="Inspiration">
+<option value="Philosophy">
+<option value="Education">
+<option value="Leadership">
+<option value="Entrepreneurship">
+</datalist>
+</div>
+
+<div class="field">
+<label for="priceNaira">Price (₦)</label>
+<input id="priceNaira" name="priceNaira" type="number" min="1" step="1" placeholder="5000" required>
+</div>
+
+<div class="field full">
+<label for="description">Description</label>
+<textarea id="description" name="description" placeholder="Write a short description of the book..." required></textarea>
+</div>
+
+<div class="field">
+<label for="ebook">eBook PDF</label>
+<input id="ebook" name="ebook" class="file-input" type="file" accept="application/pdf,.pdf" required>
+<small>PDF only. Maximum size: 200MB.</small>
+</div>
+
+<div class="field">
+<label for="cover">Cover image</label>
+<input id="cover" name="cover" class="file-input" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp">
+<small>JPG, PNG or WebP.</small>
+</div>
+
+</div>
+
+<div class="form-actions">
+<button type="submit" class="publish-btn" id="publishButton">ADD BOOK</button>
+<div class="form-message" id="formMessage"></div>
+</div>
+
+</form>
+</div>
+</section>
+
+<!-- BOOKS -->
+<section class="section">
+<div class="section-heading">
+<h2>Your books</h2>
+<p>Manage the books already added to ENT Books.</p>
+</div>
+
+<div class="card">
+<div class="books-head" aria-hidden="true"><span>Book</span><span>Price</span><span>Status</span><span>Actions</span></div>
+<div class="books-list" id="booksList"></div>
+</div>
+</section>
+
+</div>
+
+</main>
+
+<!-- Counts shown in the dashboard band; called by renderBooks() below -->
+<script>
+function updateStats(books) {
+  var published = books.filter(function (b) { return Boolean(b.is_published); }).length;
+  document.getElementById("statTotal").textContent = books.length;
+  document.getElementById("statPublished").textContent = published;
+  document.getElementById("statDraft").textContent = books.length - published;
+}
+</script>
+
+<script>
 
     const API =
 
@@ -2515,6 +964,7 @@
 
 
     function renderBooks(books) {
+      updateStats(books);
 
 
 
@@ -3684,8 +2134,5 @@
 
   </script>
 
-
-
 </body>
-
 </html>

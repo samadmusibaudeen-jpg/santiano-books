@@ -1,434 +1,260 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Santiano Books</title>
-    <link rel="stylesheet" href="css/style.css">
-
-    <style>
-        /* =====================================================
-           PUBLIC LANDING PAGE – MOBILE MENU
-        ===================================================== */
-
-        .landing-mobile-header {
-            display: none;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 16px;
-            background: #ffffff;
-            border-bottom: 1px solid #ebe4d9;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .landing-mobile-logo {
-            font-size: 18px;
-            font-weight: 700;
-            color: #1e1a16;
-            text-decoration: none;
-            letter-spacing: -0.5px;
-        }
-
-        .landing-hamburger {
-            background: none;
-            border: 1px solid #ebe4d9;
-            border-radius: 9px;
-            width: 42px;
-            height: 42px;
-            display: grid;
-            place-items: center;
-            font-size: 22px;
-            color: #2c3e6b;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .landing-hamburger:hover {
-            background: #f5efe6;
-        }
-
-        .landing-mobile-nav {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 280px;
-            height: 100vh;
-            background: #ffffff;
-            border-left: 1px solid #ebe4d9;
-            box-shadow: -8px 0 30px rgba(40, 30, 15, 0.08);
-            z-index: 1100;
-            padding: 24px 20px;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            overflow-y: auto;
-        }
-
-        .landing-mobile-nav.open {
-            transform: translateX(0);
-        }
-
-        .landing-mobile-nav-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 28px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #ebe4d9;
-        }
-
-        .landing-mobile-nav-header span {
-            font-size: 13px;
-            letter-spacing: 1.5px;
-            color: #6b645c;
-            font-weight: 600;
-        }
-
-        .landing-close-btn {
-            background: none;
-            border: 1px solid #ebe4d9;
-            border-radius: 8px;
-            width: 36px;
-            height: 36px;
-            display: grid;
-            place-items: center;
-            font-size: 18px;
-            cursor: pointer;
-            color: #2c3e6b;
-        }
-
-        .landing-mobile-nav a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 12px;
-            margin: 4px 0;
-            border-radius: 10px;
-            color: #6b645c;
-            text-decoration: none;
-            font-size: 15px;
-            transition: background 0.2s, color 0.2s;
-        }
-
-        .landing-mobile-nav a:hover,
-        .landing-mobile-nav a.active {
-            background: #f5efe6;
-            color: #b8893d;
-            font-weight: 600;
-        }
-
-        .landing-mobile-nav .mobile-login {
-            margin-top: 20px;
-            border-top: 1px solid #ebe4d9;
-            padding-top: 16px;
-            background: #f5efe6;
-            color: #b8893d !important;
-            font-weight: 700;
-            justify-content: center;
-        }
-
-        .landing-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(30, 26, 22, 0.45);
-            z-index: 1050;
-        }
-
-        .landing-overlay.show {
-            display: block;
-        }
-
-        /* Hide desktop nav links on small screens */
-        @media (max-width: 768px) {
-            .navbar .nav-links,
-            .navbar .nav-actions {
-                display: none;
-            }
-
-            .landing-mobile-header {
-                display: flex;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ENT Books — Discover. Learn. Understand. Grow.</title>
+<meta name="description" content="ENT Books — a digital reading platform built around ideas, discipline, growth and purposeful living.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f8f9fb;--surface:#fff;--ink:#0b1324;--muted:#5d6678;--line:#e3e6ec;--brand:#12295c;--brand-ink:#fff;--accent:#a9792b;--soft:#f0f3f9;--nav-bg:rgba(255,255,255,.92);--grid:rgba(18,41,92,.06);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0f1c;--surface:#111827;--ink:#eef1f7;--muted:#9aa3b5;--line:#1f2a3d;--brand:#8aa4ff;--brand-ink:#0a0f1c;--accent:#d9b068;--soft:#0f1729;--nav-bg:rgba(10,15,28,.92);--grid:rgba(138,164,255,.07);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a0f1c;--surface:#111827;--ink:#eef1f7;--muted:#9aa3b5;--line:#1f2a3d;--brand:#8aa4ff;--brand-ink:#0a0f1c;--accent:#d9b068;--soft:#0f1729;--nav-bg:rgba(10,15,28,.92);--grid:rgba(138,164,255,.07);color-scheme:dark}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(84px + env(safe-area-inset-top,0px))}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;font-size:16px;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--nav-bg);backdrop-filter:blur(12px)}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(1120px,90%);margin-inline:auto}
+h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;font-weight:600;letter-spacing:-.015em;line-height:1.15}
+.eyebrow{display:flex;align-items:center;gap:12px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.eyebrow::before{content:"";width:28px;height:1px;background:currentColor}
+.sec{padding:104px 0}
+.head{max-width:640px;margin-bottom:56px}
+.head h2{margin-top:16px;font-size:clamp(28px,3.4vw,38px)}
+.head p{margin-top:14px;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 24px;border-radius:8px;font-size:14px;font-weight:500;border:1px solid transparent;cursor:pointer;transition:.2s}
+.btn-p{background:var(--brand);color:var(--brand-ink)}
+.btn-p:hover{filter:brightness(1.12)}
+.btn-o{border-color:var(--line);background:var(--surface);color:var(--ink)}
+.btn-o:hover{border-color:var(--brand)}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{height:68px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.logo{display:flex;align-items:center;gap:10px;font-family:"Source Serif 4",Georgia,serif;font-weight:600;font-size:19px;letter-spacing:-.01em}
+.logo i{width:32px;height:32px;display:grid;place-items:center;background:var(--brand);color:var(--brand-ink);border-radius:7px;font-style:normal;font-size:17px}
+.links{display:flex;gap:32px}
+.links a{font-size:14px;color:var(--muted);transition:.2s}
+.links a:hover{color:var(--ink)}
+.actions{display:flex;gap:10px}
+.actions .btn{min-height:38px;padding:0 18px}
+.burger{display:none;width:40px;height:40px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-size:18px;cursor:pointer}
+.mm{display:none;padding:8px 5% 20px;background:var(--surface);border-bottom:1px solid var(--line)}
+.mm.open{display:grid}
+.mm a{padding:14px 2px;border-bottom:1px solid var(--line);font-size:15px}
+.mm .btn{margin-top:12px}
+.mm .btn-p{border-color:transparent}
+.hero{position:relative;border-bottom:1px solid var(--line);background:linear-gradient(var(--grid) 1px,transparent 1px) 0 0/48px 48px,linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/48px 48px}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0,transparent 30%,var(--bg) 90%);pointer-events:none}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.2fr .8fr;gap:72px;align-items:center;padding-top:96px;padding-bottom:96px}
+.hero h1{margin-top:22px;font-size:clamp(40px,5.4vw,64px);line-height:1.06}
+.hero h1 em{font-style:italic;color:var(--brand);font-weight:500}
+.lead{margin-top:24px;max-width:500px;font-size:17px;color:var(--muted)}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+.note{margin-top:24px;padding-top:20px;border-top:1px solid var(--line);max-width:500px;font-size:13px;color:var(--muted)}
+.shelf{position:relative;height:380px}
+.cover{position:absolute;width:210px;aspect-ratio:3/4;padding:26px 22px;display:flex;flex-direction:column;justify-content:space-between;border-radius:4px 10px 10px 4px;color:#fff;box-shadow:inset 5px 0 0 rgba(255,255,255,.1),0 24px 48px rgba(10,20,50,.28)}
+.cover.a{left:0;top:40px;background:linear-gradient(150deg,#2a4a94,#12295c);transform:rotate(-5deg)}
+.cover.b{right:0;top:0;background:linear-gradient(150deg,#1a2f63,#0a1633);transform:rotate(4deg)}
+.cover small{font-size:10px;letter-spacing:.22em;color:#e3c585;font-weight:600}
+.cover h3{font-size:28px;line-height:1.15}
+.cover h3 span{color:#e3c585}
+.cover p{font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.7}
+.feats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+.feat{padding:28px 24px;border-right:1px solid var(--line)}
+.feat:last-child{border-right:0}
+.feat svg{color:var(--brand)}
+.feat b{display:block;margin-top:16px;font-size:15px;font-weight:600}
+.feat span{font-size:14px;color:var(--muted)}
+.about{display:grid;grid-template-columns:.75fr 1.25fr;gap:64px;align-items:center}
+.mark{aspect-ratio:1;max-width:320px;display:grid;place-items:center;border-radius:14px;background:var(--brand);color:var(--brand-ink);font-family:"Source Serif 4",Georgia,serif;font-size:clamp(64px,9vw,96px);font-weight:600;letter-spacing:-.03em}
+.about h2{margin:16px 0 18px;font-size:clamp(28px,3.4vw,38px)}
+.about p{color:var(--muted);margin-top:12px}
+.about blockquote{margin-top:26px;padding-left:18px;border-left:2px solid var(--accent);font-family:"Source Serif 4",Georgia,serif;font-size:19px;font-style:italic}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.card{padding:36px 32px;background:var(--surface);border:1px solid var(--line);border-radius:12px;transition:border-color .2s}
+.card:hover{border-color:var(--brand)}
+.num{font-family:"Source Serif 4",Georgia,serif;font-size:15px;font-weight:600;color:var(--accent);letter-spacing:.06em}
+.card h3{margin:20px 0 12px;font-size:23px}
+.card p{color:var(--muted);font-size:15px}
+.alt{background:var(--surface);border-block:1px solid var(--line)}
+.alt .card{background:var(--bg)}
+.quote{text-align:center;max-width:780px;margin-inline:auto}
+.quote .eyebrow{justify-content:center}
+.quote h2{margin-top:20px;font-size:clamp(30px,4.2vw,46px);line-height:1.25;font-style:italic;font-weight:500}
+.quote p{margin:22px auto 0;max-width:580px;color:var(--muted)}
+.cta-box{padding:76px 28px;text-align:center;border-radius:16px;background:var(--brand);color:var(--brand-ink)}
+.cta-box h2{margin:0 auto;max-width:620px;font-size:clamp(30px,4.4vw,44px)}
+.cta-box p{max-width:500px;margin:18px auto 30px;opacity:.8}
+.cta-box .btn{background:var(--brand-ink);color:var(--brand)}
+.ft{padding:64px 0 28px;background:var(--surface);border-top:1px solid var(--line)}
+.fg{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:48px;padding-bottom:40px}
+.fg p{max-width:310px;margin-top:16px;font-size:14px;color:var(--muted)}
+.fg h4{margin-bottom:16px;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+.fg nav{display:grid;gap:11px}
+.fg nav a{font-size:14px;color:var(--muted);width:fit-content}
+.fg nav a:hover{color:var(--ink)}
+.fb{display:flex;justify-content:space-between;gap:16px;padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+@media (max-width:960px){.feats{grid-template-columns:repeat(2,1fr)}.feat:nth-child(2){border-right:0}.feat:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+@media (max-width:800px){
+.links,.actions{display:none}
+.burger{display:block}
+.nav{height:60px}
+.hero .wrap{grid-template-columns:1fr;gap:56px;padding-top:60px;padding-bottom:72px}
+.shelf{height:330px;max-width:380px;margin-inline:auto;width:100%}
+.cover{width:180px}
+.about{grid-template-columns:1fr;gap:36px}
+.mark{max-width:200px}
+.grid3{grid-template-columns:1fr}
+.sec{padding:72px 0}
+.fg{grid-template-columns:1fr 1fr}
+.fg>div:first-child{grid-column:1/-1}
+}
+@media (max-width:520px){
+.feats{grid-template-columns:1fr}
+.feat{border-right:0;border-bottom:1px solid var(--line)}
+.feat:last-child{border-bottom:0}
+.cta-row .btn{flex:1 1 100%}
+.fb{flex-direction:column;text-align:center}
+.fg{grid-template-columns:1fr}
+}
+</style>
 </head>
-
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="bolt" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></symbol>
+<symbol id="shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+<symbol id="device" viewBox="0 0 24 24"><rect x="3" y="4" width="14" height="11" rx="2"/><rect x="15" y="9" width="6" height="11" rx="1.5"/><path d="M7 19h5"/></symbol>
+<symbol id="book" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/></symbol>
+<symbol id="bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0 0 12 2z"/></symbol>
+<symbol id="trend" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></symbol>
+<symbol id="target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></symbol>
+</svg>
 
-    <!-- =========================
-         DESKTOP NAVBAR
-    ========================= -->
-    <nav class="navbar">
-        <div class="container nav-inner">
-            <a class="logo" href="index.html">
-                <span class="logo-mark">S</span>
-                <span class="logo-text">
-                    <h2>Santiano</h2>
-                    <small>BOOKS</small>
-                </span>
-            </a>
+<header>
+<div class="wrap nav">
+<a href="index.html" class="logo"><i>E</i>ENT Books</a>
+<nav class="links">
+<a href="index.html">Home</a><a href="#about">About</a><a href="#how">How It Works</a><a href="#contact">Contact</a>
+</nav>
+<div class="actions">
+<a href="login.html" class="btn btn-o">Login</a>
+<a href="register.html" class="btn btn-p">Sign Up</a>
+</div>
+<button class="burger" id="burger" aria-label="Toggle menu" aria-expanded="false">☰</button>
+</div>
+<div class="mm" id="mm">
+<a href="index.html">Home</a><a href="#about">About</a><a href="#how">How It Works</a><a href="#contact">Contact</a>
+<a href="login.html" class="btn btn-o">Login</a>
+<a href="register.html" class="btn btn-p">Sign Up</a>
+</div>
+</header>
 
-            <div class="nav-links">
-                <a class="active" href="index.html">Home</a>
-                <a href="#about">About</a>
-                <a href="#how">How It Works</a>
-                <a href="#contact">Contact</a>
-            </div>
+<section class="hero">
+<div class="wrap">
+<div>
+<span class="eyebrow">Digital Books • Read Anywhere</span>
+<h1>Knowledge <em>Transforms.</em><br>ENT Books</h1>
+<p class="lead">A digital reading platform built around ideas, discipline, growth and purposeful living.</p>
+<div class="cta-row">
+<a href="login.html" class="btn btn-p">Login / Sign Up</a>
+<a href="#how" class="btn btn-o">How It Works</a>
+</div>
+<p class="note">Read anywhere. Grow everywhere.</p>
+</div>
+<div class="shelf" aria-hidden="true">
+<div class="cover a"><small>ENT BOOKS</small><h3>Open<br><span>Minds</span></h3><p>Enlighten</p></div>
+<div class="cover b"><small>ENT BOOKS</small><h3>Quiet<br><span>Focus</span></h3><p>Nurture · Transform</p></div>
+</div>
+</div>
+</section>
 
-            <div class="nav-actions">
-                <a class="account-btn" href="login.html">Login / Sign Up</a>
-            </div>
-        </div>
-    </nav>
+<section class="sec" style="padding-bottom:0">
+<div class="wrap">
+<div class="feats">
+<div class="feat"><svg class="i"><use href="#bolt"/></svg><b>Instant Access</b><span>Access your purchased books.</span></div>
+<div class="feat"><svg class="i"><use href="#shield"/></svg><b>Secure Account</b><span>Keep your reading collection protected.</span></div>
+<div class="feat"><svg class="i"><use href="#device"/></svg><b>Read Anywhere</b><span>Phone, tablet or computer.</span></div>
+<div class="feat"><svg class="i"><use href="#book"/></svg><b>Personal Library</b><span>Keep your purchased books together.</span></div>
+</div>
+</div>
+</section>
 
-    <!-- =========================
-         MOBILE HEADER
-    ========================= -->
-    <header class="landing-mobile-header">
-        <a href="index.html" class="landing-mobile-logo">Santiano</a>
-        <button class="landing-hamburger" onclick="toggleLandingMenu()" aria-label="Open menu">☰</button>
-    </header>
+<section class="sec" id="about">
+<div class="wrap about">
+<div class="mark">ENT</div>
+<div>
+<span class="eyebrow">About ENT Books</span>
+<h2>Books with purpose.</h2>
+<p>ENT Books is a digital reading platform created for people who want to learn, grow and build.</p>
+<p>The platform brings together meaningful books and a personal digital library where readers can access their purchases.</p>
+<div class="cta-row"><a href="register.html" class="btn btn-p">Create Your Account</a></div>
+</div>
+</div>
+</section>
 
-    <!-- Overlay -->
-    <div class="landing-overlay" id="landingOverlay" onclick="closeLandingMenu()"></div>
+<section class="sec alt">
+<div class="wrap">
+<div class="head"><span class="eyebrow">Why ENT Books</span><h2>A place for ideas that matter.</h2></div>
+<div class="grid3">
+<article class="card"><span class="num" style="color:var(--brand)"><svg class="i"><use href="#bulb"/></svg></span><h3>Learn</h3><p>Discover ideas that expand your understanding.</p></article>
+<article class="card"><span class="num" style="color:var(--brand)"><svg class="i"><use href="#trend"/></svg></span><h3>Grow</h3><p>Develop better habits and a stronger mindset.</p></article>
+<article class="card"><span class="num" style="color:var(--brand)"><svg class="i"><use href="#target"/></svg></span><h3>Build</h3><p>Turn knowledge into purposeful action.</p></article>
+</div>
+</div>
+</section>
 
-    <!-- Mobile Navigation Panel -->
-    <div class="landing-mobile-nav" id="landingMobileNav">
-        <div class="landing-mobile-nav-header">
-            <span>MENU</span>
-            <button class="landing-close-btn" onclick="closeLandingMenu()">✕</button>
-        </div>
+<section class="sec" id="how">
+<div class="wrap">
+<div class="head"><span class="eyebrow">Simple and Convenient</span><h2>How ENT Books works</h2><p>Three steps between you and your digital library.</p></div>
+<div class="grid3">
+<article class="card"><span class="num">STEP 01</span><h3>Create your account</h3><p>Sign up and sign in to your personal space.</p></article>
+<article class="card"><span class="num">STEP 02</span><h3>Explore and purchase</h3><p>Explore available books and complete your purchase.</p></article>
+<article class="card"><span class="num">STEP 03</span><h3>Read anywhere</h3><p>Access your digital library on your phone, tablet or computer.</p></article>
+</div>
+</div>
+</section>
 
-        <a class="active" href="index.html">Home</a>
-        <a href="#about" onclick="closeLandingMenu()">About</a>
-        <a href="#how" onclick="closeLandingMenu()">How It Works</a>
-        <a href="#contact" onclick="closeLandingMenu()">Contact</a>
+<section class="sec alt" id="contact">
+<div class="wrap quote">
+<span class="eyebrow">Contact</span>
+<h2>Have a question?</h2>
+<p>Sign in to your account or contact ENT Books for more information.</p>
+<div class="cta-row" style="justify-content:center"><a href="login.html" class="btn btn-o">Login / Sign Up</a></div>
+</div>
+</section>
 
-        <a href="login.html" class="mobile-login">Login / Sign Up</a>
-    </div>
+<section id="cta" style="padding:104px 0">
+<div class="wrap">
+<div class="cta-box">
+<h2>Start your reading journey.</h2>
+<p>Create your account, sign in to your personal space, explore available books, complete your purchase and access your digital library.</p>
+<a href="login.html" class="btn">Get Started</a>
+</div>
+</div>
+</section>
 
-    <!-- =========================
-         HERO
-    ========================= -->
-    <section class="hero">
-        <div class="container hero-copy">
-            <div class="eyebrow">Digital Books • Read Anywhere</div>
+<footer class="ft">
+<div class="wrap">
+<div class="fg">
+<div>
+<a href="index.html" class="logo"><i>E</i>ENT Books</a>
+<p>Digital books for people who want to learn, grow and build.</p>
+</div>
+<div><h4>Explore</h4><nav><a href="index.html">Home</a><a href="#about">About</a><a href="#how">How It Works</a><a href="#contact">Contact</a></nav></div>
+<div><h4>Account</h4><nav><a href="login.html">Login</a><a href="register.html">Sign Up</a></nav></div>
+</div>
+<div class="fb"><p>© 2026 ENT Books. All rights reserved.</p><p>Enlighten · Nurture · Transform</p></div>
+</div>
+</footer>
 
-            <h1>
-                Knowledge
-                <span>Transforms.</span>
-                <br>
-                Santiano Books
-            </h1>
-
-            <p>
-                A digital reading platform built
-                around ideas, discipline, growth
-                and purposeful living.
-                <br><br>
-                Read anywhere. Grow everywhere.
-            </p>
-
-            <div class="hero-buttons">
-                <a class="gold-btn" href="login.html">LOGIN / SIGN UP</a>
-                <a class="outline-btn" style="color:#d0a45c" href="#how">HOW IT WORKS</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- =========================
-         BENEFITS
-    ========================= -->
-    <div class="container benefits">
-        <div class="benefit-bar">
-            <div class="benefit">
-                <div class="benefit-icon">⚡</div>
-                <div>
-                    <b>Instant Access</b>
-                    <span>Access your purchased books.</span>
-                </div>
-            </div>
-
-            <div class="benefit">
-                <div class="benefit-icon">✓</div>
-                <div>
-                    <b>Secure Account</b>
-                    <span>Keep your reading collection protected.</span>
-                </div>
-            </div>
-
-            <div class="benefit">
-                <div class="benefit-icon">▤</div>
-                <div>
-                    <b>Read Anywhere</b>
-                    <span>Phone, tablet or computer.</span>
-                </div>
-            </div>
-
-            <div class="benefit">
-                <div class="benefit-icon">∞</div>
-                <div>
-                    <b>Personal Library</b>
-                    <span>Keep your purchased books together.</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- =========================
-         ABOUT
-    ========================= -->
-    <section class="section" id="about">
-        <div class="container author">
-            <div>
-                <div class="eyebrow">About Santiano Books</div>
-                <h2>Books with purpose.</h2>
-
-                <p>
-                    Santiano Books is a digital
-                    reading platform created for
-                    people who want to learn,
-                    grow and build.
-                </p>
-
-                <p>
-                    The platform brings together
-                    meaningful books and a personal
-                    digital library where readers
-                    can access their purchases.
-                </p>
-
-                <a class="gold-btn" href="login.html">CREATE YOUR ACCOUNT</a>
-            </div>
-
-            <div class="author-photo">S</div>
-        </div>
-    </section>
-
-    <!-- =========================
-         WHY USE
-    ========================= -->
-    <section class="section">
-        <div class="container">
-            <div class="section-head">
-                <div>
-                    <div class="eyebrow">Why Santiano Books</div>
-                    <h2>A place for ideas that matter.</h2>
-                </div>
-            </div>
-
-            <div class="benefit-bar">
-                <div class="benefit">
-                    <div class="benefit-icon">✦</div>
-                    <div>
-                        <b>Learn</b>
-                        <span>Discover ideas that expand your understanding.</span>
-                    </div>
-                </div>
-
-                <div class="benefit">
-                    <div class="benefit-icon">◈</div>
-                    <div>
-                        <b>Grow</b>
-                        <span>Develop better habits and a stronger mindset.</span>
-                    </div>
-                </div>
-
-                <div class="benefit">
-                    <div class="benefit-icon">◎</div>
-                    <div>
-                        <b>Build</b>
-                        <span>Turn knowledge into purposeful action.</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- =========================
-         HOW IT WORKS
-    ========================= -->
-    <section class="section" id="how">
-        <div class="container cta">
-            <div class="eyebrow">Simple and Convenient</div>
-            <h2>Start your reading journey.</h2>
-
-            <p>
-                Create your account,
-                sign in to your personal space,
-                explore available books,
-                complete your purchase
-                and access your digital library.
-            </p>
-
-            <div class="hero-buttons">
-                <a class="dark-btn" href="login.html">GET STARTED</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- =========================
-         CONTACT
-    ========================= -->
-    <section class="section" id="contact">
-        <div class="container">
-            <div class="eyebrow">Contact</div>
-            <h2>Have a question?</h2>
-
-            <p>
-                Sign in to your account or
-                contact Santiano Books for
-                more information.
-            </p>
-
-            <a class="outline-btn" href="login.html">LOGIN / SIGN UP</a>
-        </div>
-    </section>
-
-    <!-- =========================
-         FOOTER
-    ========================= -->
-    <footer>
-        <div class="container footer-grid">
-            <div>
-                <div class="logo">
-                    <span class="logo-mark">S</span>
-                    <span class="logo-text">
-                        SANTIANO
-                        <small>BOOKS</small>
-                    </span>
-                </div>
-
-                <p style="margin-top:15px">
-                    Digital books for people who
-                    want to learn, grow and build.
-                </p>
-            </div>
-        </div>
-
-        <div class="container copyright">
-            © 2026 Santiano Books. All rights reserved.
-        </div>
-    </footer>
-
-    <script src="js/auth.js"></script>
-
-    <script>
-        const mobileNav = document.getElementById('landingMobileNav');
-        const overlay = document.getElementById('landingOverlay');
-
-        function toggleLandingMenu() {
-            mobileNav.classList.toggle('open');
-            overlay.classList.toggle('show');
-        }
-
-        function closeLandingMenu() {
-            mobileNav.classList.remove('open');
-            overlay.classList.remove('show');
-        }
-    </script>
-
+<script src="js/auth.js"></script>
+<script>
+var b=document.getElementById('burger'),m=document.getElementById('mm');
+b.addEventListener('click',function(){var o=m.classList.toggle('open');b.setAttribute('aria-expanded',o)});
+m.addEventListener('click',function(e){if(e.target.tagName==='A'){m.classList.remove('open');b.setAttribute('aria-expanded',false)}});
+</script>
 </body>
 </html>

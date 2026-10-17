@@ -1,796 +1,596 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>My Account — Santiano</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Account — ENT Books</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8f9fb;
+  --surface: #fff;
+  --ink: #0b1324;
+  --muted: #5d6678;
+  --line: #e1e5ec;
+  --brand: #12295c;
+  --brand-ink: #fff;
+  --accent: #a9792b;
+  --soft: #f0f3f9;
+  --nav-bg: rgba(255, 255, 255, .92);
+  --grid: rgba(18, 41, 92, .06);
+  --danger: #b42318;
+  --ok: #067647;
+  --glow: #3d6bff;
+  --hh: 68px;
+  color-scheme: light;
+}
 
-    <link rel="stylesheet" href="css/style.css">
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a0f1c; --surface: #111827; --ink: #eef1f7; --muted: #9aa3b5; --line: #1f2a3d;
+    --brand: #8aa4ff; --brand-ink: #0a0f1c; --accent: #d9b068; --soft: #0f1729;
+    --nav-bg: rgba(10, 15, 28, .92); --grid: rgba(138, 164, 255, .07);
+    --danger: #f97066; --ok: #47cd89; --glow: #7d9bff; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0a0f1c; --surface: #111827; --ink: #eef1f7; --muted: #9aa3b5; --line: #1f2a3d;
+  --brand: #8aa4ff; --brand-ink: #0a0f1c; --accent: #d9b068; --soft: #0f1729;
+  --nav-bg: rgba(10, 15, 28, .92); --grid: rgba(138, 164, 255, .07);
+  --danger: #f97066; --ok: #47cd89; --glow: #7d9bff; color-scheme: dark;
+}
 
-    <style>
-        .account-page {
-            --account-bg: #faf6f0;
-            --account-paper: #ffffff;
-            --account-cream: #f5efe6;
-            --account-line: #ebe4d9;
-            --account-text: #1e1a16;
-            --account-muted: #6b645c;
-            --account-gold: #b8893d;
-            --account-dark: #2c3e6b;
+/* ---------- base ---------- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--hh) + 24px + env(safe-area-inset-top, 0px)); }
+body {
+  font-family: Inter, system-ui, sans-serif; background: var(--bg); color: var(--ink);
+  line-height: 1.65; font-size: 16px; overflow-x: hidden; -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; }
+button, input { font: inherit; color: inherit; }
+h1, h2, h3 { font-family: "Source Serif 4", Georgia, serif; font-weight: 600; letter-spacing: -.015em; line-height: 1.15; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--glow); outline-offset: 2px; }
+.wrap { width: min(1120px, 90%); margin-inline: auto; }
+.muted { color: var(--muted); }
+.sec { padding: 72px 0; }
+.eyebrow { display: flex; align-items: center; gap: 12px; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+.eyebrow::before { content: ""; width: 28px; height: 1px; background: currentColor; }
+svg.i { width: 19px; height: 19px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
-            background: var(--account-bg);
-        }
+/* ---------- buttons ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 0 24px; border-radius: 8px; font-size: 14px; font-weight: 500; border: 1px solid transparent; cursor: pointer; transition: .2s; }
+.btn-p { background: var(--brand); color: var(--brand-ink); }
+.btn-p:hover { filter: brightness(1.12); }
+.btn-o { border-color: var(--line); background: var(--surface); color: var(--ink); }
+.btn-o:hover { border-color: var(--brand); }
 
-        .account-page .account-sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 260px;
-            height: 100vh;
-            padding: 28px 18px;
-            background: var(--account-paper);
-            border-right: 1px solid var(--account-line);
-            box-shadow: 4px 0 24px rgba(40, 30, 15, 0.04);
-            z-index: 1000;
-            overflow-y: auto;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-        }
+/* ---------- header ---------- */
+header.site { position: sticky; top: 0; z-index: 50; padding-top: env(safe-area-inset-top, 0px); background: var(--nav-bg); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+.nav { height: var(--hh); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.logo { display: inline-flex; align-items: center; gap: 10px; font-family: "Source Serif 4", Georgia, serif; font-weight: 600; font-size: 19px; letter-spacing: -.01em; }
+.logo i { width: 32px; height: 32px; display: grid; place-items: center; background: var(--brand); color: var(--brand-ink); border-radius: 7px; font-style: normal; font-size: 17px; }
+.links { display: flex; gap: 32px; }
+.links a { font-size: 14px; color: var(--muted); transition: .2s; }
+.links a:hover, .links a.active { color: var(--ink); }
+.links a.active { box-shadow: 0 8px 0 -6px var(--accent); }
+.actions { display: flex; align-items: center; gap: 10px; }
+.ib { display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 13px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); font-size: 14px; transition: .2s; }
+.ib:hover { border-color: var(--brand); }
+sup[data-cart-count] { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 99px; background: var(--brand); color: var(--brand-ink); font-size: 11px; font-weight: 600; line-height: 1; vertical-align: baseline; top: 0; }
+.acct { display: inline-flex; align-items: center; height: 38px; padding: 0 18px; border-radius: 8px; background: var(--brand); color: var(--brand-ink); font-size: 14px; font-weight: 500; }
+.acct:hover { filter: brightness(1.12); }
+.burger { display: none; width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); font-size: 18px; cursor: pointer; }
+.mm { display: none; padding: 8px 5% 20px; background: var(--surface); border-bottom: 1px solid var(--line); }
+.mm.open { display: grid; }
+.mm a { padding: 14px 2px; border-bottom: 1px solid var(--line); font-size: 15px; }
+.mm a.out { color: var(--danger); border-bottom: 0; }
 
-        .account-page .account-sidebar.open {
-            transform: translateX(0);
-        }
+/* ---------- dark hero band (store, library, account) ---------- */
+.band { position: relative; overflow: hidden; isolation: isolate; color: #eef1f7; background: linear-gradient(135deg, #071027 0%, #0e2150 55%, #16358a 100%); border-bottom: 1px solid rgba(138, 164, 255, .28); }
+.band::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(rgba(138, 164, 255, .09) 1px, transparent 1px) 0 0/44px 44px, linear-gradient(90deg, rgba(138, 164, 255, .09) 1px, transparent 1px) 0 0/44px 44px; -webkit-mask-image: radial-gradient(ellipse at 75% 0, #000 15%, transparent 75%); mask-image: radial-gradient(ellipse at 75% 0, #000 15%, transparent 75%); }
+.band::after { content: ""; position: absolute; z-index: -1; right: -140px; top: -280px; width: 580px; height: 580px; border-radius: 50%; background: radial-gradient(circle, rgba(61, 107, 255, .5), transparent 65%); }
+.band .eyebrow { color: #e3c585; }
+.band h1 { color: #fff; font-size: clamp(34px, 5vw, 56px); line-height: 1.06; }
+.band .lead { margin-top: 16px; max-width: 520px; font-size: 17px; color: #b5bfd6; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; padding: 7px 13px; border: 1px solid rgba(138, 164, 255, .28); border-radius: 99px; background: rgba(138, 164, 255, .08); font-size: 13px; color: #cdd5e8; }
+.chip svg { width: 15px; height: 15px; color: #e3c585; }
 
-        .account-sidebar-title {
-            display: block;
-            margin-bottom: 14px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--account-line);
-            color: var(--account-text);
-            font-size: 12px;
-            letter-spacing: 1.5px;
-        }
+/* ---------- panels, feature strip ---------- */
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+.feats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.feat { padding: 24px; background: var(--surface); }
+.feat svg { color: var(--brand); }
+.feat b { display: block; margin-top: 12px; font-size: 15px; font-weight: 600; }
+.feat span { font-size: 14px; color: var(--muted); }
+.head { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; margin-bottom: 28px; }
+.head h2 { margin-top: 12px; font-size: clamp(24px, 3vw, 32px); }
+.head .btn { min-height: 40px; padding: 0 16px; white-space: nowrap; }
 
-        .account-page .account-sidebar a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 3px 0;
-            padding: 12px;
-            border-radius: 10px;
-            color: var(--account-muted);
-            font-size: 14px;
-            text-decoration: none;
-            transition: background 0.2s, color 0.2s;
-        }
+/* ---------- book grid + cards (markup rendered by js/app.js and js/library.js) ---------- */
+.books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 22px; }
+.books-grid > p { grid-column: 1 / -1; padding: 48px 20px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 14px; background: var(--surface); }
+.book-card { position: relative; display: flex; flex-direction: column; padding: 14px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; transition: transform .3s, border-color .3s, box-shadow .3s; }
+.book-card::before { content: ""; position: absolute; inset: 0; z-index: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .3s; background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), rgba(61, 107, 255, .16), transparent 62%); }
+.book-card > * { position: relative; z-index: 1; }
+.book-card:hover { transform: translateY(-5px); border-color: var(--glow); box-shadow: 0 22px 44px -16px rgba(18, 41, 92, .38), 0 0 0 1px rgba(61, 107, 255, .22); }
+.book-card:hover::before { opacity: 1; }
+.book-card .cover, .book-card .book-cover { position: relative; width: 100%; height: 245px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 3px 8px 8px 3px; background: var(--soft); color: var(--muted); font-size: 13px; text-align: center; box-shadow: 0 10px 24px -10px rgba(10, 20, 50, .45); transition: transform .5s cubic-bezier(.2, .7, .2, 1), box-shadow .5s; }
+.book-card .cover::before, .book-card .book-cover::before { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(90deg, rgba(0, 0, 0, .3), rgba(255, 255, 255, .16) 4%, rgba(0, 0, 0, .06) 8%, transparent 16%); }
+.book-card .cover::after, .book-card .book-cover::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, .22) 50%, transparent 62%); transform: translateX(-120%); transition: transform .8s; }
+.book-card:hover .cover, .book-card:hover .book-cover { transform: perspective(700px) rotateY(-7deg) scale(1.03); box-shadow: 14px 18px 30px -12px rgba(10, 20, 50, .55), 0 0 34px rgba(61, 107, 255, .28); }
+.book-card:hover .cover::after, .book-card:hover .book-cover::after { transform: translateX(120%); }
+.book-card img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 6px; }
+.book-card .cover img, .book-card .book-cover img { height: 100%; aspect-ratio: auto; border-radius: 0; }
+.book-card h3 { margin-top: 16px; font-size: 17px; line-height: 1.3; }
+.book-card h3 a:hover { color: var(--brand); }
+.book-card p, .book-card span, .book-card small { color: var(--muted); font-size: 14px; }
+.book-card .price, .book-card .book-price, .book-card strong { color: var(--ink); font-size: 15px; font-weight: 600; }
+.book-card .category, .book-card .badge, .book-card .tag { display: inline-block; width: fit-content; margin-top: 12px; padding: 2px 9px; border: 1px solid var(--line); border-radius: 99px; background: var(--soft); font-size: 11px; font-weight: 500; }
+.book-card a.btn, .book-card .gold-btn, .book-card button { display: inline-flex; align-items: center; justify-content: center; width: 100%; min-height: 42px; margin-top: auto; padding: 0 14px; border: 0; border-radius: 8px; background: var(--brand); color: var(--brand-ink); font-size: 13px; font-weight: 500; cursor: pointer; transition: .2s; }
+.book-card h3 + *, .book-card p + a.btn, .book-card p + .gold-btn, .book-card p + button { margin-top: 10px; }
+.book-card a.btn:hover, .book-card .gold-btn:hover, .book-card button:hover { filter: brightness(1.12); }
 
-        .account-page .account-sidebar a:hover {
-            background: var(--account-cream);
-            color: var(--account-text);
-        }
+/* ---------- footer ---------- */
+.ft { padding: 64px 0 28px; background: var(--surface); border-top: 1px solid var(--line); }
+.fg { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 40px; }
+.fg p { max-width: 290px; margin-top: 16px; font-size: 14px; color: var(--muted); }
+.fg h4 { margin-bottom: 16px; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.fg nav { display: grid; gap: 11px; }
+.fg nav a { font-size: 14px; color: var(--muted); width: fit-content; }
+.fg nav a:hover { color: var(--ink); }
+.fb { padding-top: 24px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
 
-        .account-page .account-sidebar a.active {
-            background: var(--account-cream);
-            color: var(--account-gold);
-            font-weight: 700;
-        }
+/* ---------- responsive ---------- */
+@media (max-width: 960px) {
+  .feats { grid-template-columns: repeat(2, 1fr); }
+  .fg { grid-template-columns: 1fr 1fr; }
+  .fg > div:first-child { grid-column: 1 / -1; }
+}
+@media (max-width: 800px) {
+  :root { --hh: 60px; }
+  .links, .actions { display: none; }
+  .burger { display: block; }
+  .sec { padding: 56px 0; }
+}
+@media (max-width: 600px) {
+  .feats { grid-template-columns: 1fr; }
+  .books-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .book-card { padding: 10px; }
+  .book-card .cover, .book-card .book-cover { height: 190px; }
+  .head { flex-direction: column; align-items: flex-start; }
+  .fg { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+<style>
+.acct-band .wrap { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; padding-top: 60px; padding-bottom: 52px; }
+.acct-band h1 { margin-top: 18px; }
+.acct-band .btn { background: rgba(138, 164, 255, .12); border-color: rgba(138, 164, 255, .35); color: #eef1f7; white-space: nowrap; }
+.acct-band .btn:hover { border-color: #8aa4ff; }
 
-        .account-sidebar-logout {
-            margin-top: 10px !important;
-            border-top: 1px solid var(--account-line);
-            border-radius: 0 0 10px 10px !important;
-            color: #9a5d4a !important;
-        }
+.acct-layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 40px; align-items: start; padding: 44px 0 88px; }
 
-        .account-sidebar-logout:hover {
-            background: #fff3ef !important;
-        }
+/* side navigation */
+.rail { position: sticky; top: calc(var(--hh) + 24px + env(safe-area-inset-top, 0px)); padding: 18px 12px; }
+.me { display: flex; align-items: center; gap: 12px; padding: 4px 12px 18px; margin-bottom: 10px; border-bottom: 1px solid var(--line); }
+.avatar { display: grid; place-items: center; flex: 0 0 42px; width: 42px; height: 42px; border-radius: 50%; background: var(--brand); color: var(--brand-ink); font: 600 17px "Source Serif 4", Georgia, serif; }
+.me b { display: block; overflow: hidden; font-size: 14px; line-height: 1.3; text-overflow: ellipsis; white-space: nowrap; }
+.me small { display: block; color: var(--muted); font-size: 12px; }
+.rail-nav { display: grid; gap: 2px; }
+.rail-nav a, .rail-nav button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); font-size: 14px; text-align: left; cursor: pointer; transition: background .2s, color .2s; }
+.rail-nav a:hover, .rail-nav button:hover { background: var(--soft); color: var(--ink); }
+.rail-nav a.active { background: var(--soft); color: var(--brand); font-weight: 600; box-shadow: inset 2px 0 0 var(--glow); }
+.rail-nav .out { margin-top: 8px; color: var(--danger); }
 
-        .account-section {
-            margin-top: 28px;
-        }
+/* cards */
+.card { margin-bottom: 22px; padding: 28px; }
+.card h2 { font-size: 22px; }
+.info { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 22px; }
+.info div { padding: 16px 18px; background: var(--soft); border: 1px solid var(--line); border-radius: 10px; }
+.info span { display: block; margin-bottom: 4px; color: var(--muted); font-size: 12px; font-weight: 500; }
+.info strong { display: block; overflow-wrap: anywhere; font-size: 15px; font-weight: 600; }
 
-        .account-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(30, 26, 22, 0.45);
-            z-index: 999;
-        }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 22px; }
+.stat { padding: 22px; }
+.stat-icon { display: grid; place-items: center; width: 40px; height: 40px; margin-bottom: 18px; border: 1px solid var(--line); border-radius: 10px; background: var(--soft); color: var(--brand); }
+.stat-label { display: block; margin-bottom: 6px; color: var(--muted); font-size: 13px; }
+.stat-value { display: block; font: 600 36px/1 "Source Serif 4", Georgia, serif; }
 
-        .account-overlay.show {
-            display: block;
-        }
+/* purchases */
+.purchase-list { margin-top: 18px; }
+.purchase-item { display: flex; align-items: center; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.purchase-item:last-child { border-bottom: 0; padding-bottom: 0; }
+.purchase-cover { display: grid; place-items: center; flex: 0 0 62px; width: 62px; height: 84px; overflow: hidden; border: 1px solid var(--line); border-radius: 3px 8px 8px 3px; background: var(--soft); color: var(--muted); font-size: 11px; text-align: center; box-shadow: 0 8px 18px -8px rgba(10, 20, 50, .4); }
+.purchase-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.purchase-details { flex: 1; min-width: 0; }
+.purchase-title { display: block; overflow: hidden; font-size: 15px; font-weight: 600; line-height: 1.4; text-overflow: ellipsis; white-space: nowrap; }
+.purchase-author { margin-top: 2px; color: var(--muted); font-size: 13px; }
+.purchase-read { display: inline-flex; align-items: center; flex-shrink: 0; min-height: 38px; padding: 0 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font-size: 13px; font-weight: 500; transition: .2s; }
+.purchase-read:hover { border-color: var(--brand); }
+.account-empty { padding: 22px 0 4px; color: var(--muted); font-size: 14px; }
 
-        .account-mobile-header {
-            display: none;
-            align-items: center;
-            gap: 14px;
-            padding: 14px 16px;
-            background: var(--account-paper);
-            border-bottom: 1px solid var(--account-line);
-            position: sticky;
-            top: 0;
-            z-index: 900;
-        }
-
-        .account-hamburger {
-            background: none;
-            border: 1px solid var(--account-line);
-            border-radius: 9px;
-            width: 40px;
-            height: 40px;
-            display: grid;
-            place-items: center;
-            font-size: 20px;
-            color: var(--account-dark);
-            cursor: pointer;
-        }
-
-        .account-mobile-header h1 {
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--account-text);
-        }
-
-        .account-page .dash-main {
-            padding: 30px 20px 60px;
-        }
-
-        .account-page .account-heading {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            gap: 20px;
-            margin-bottom: 28px;
-        }
-
-        .account-page .account-card {
-            padding: 26px;
-            background: var(--account-paper);
-            border: 1px solid var(--account-line);
-            border-radius: 18px;
-            box-shadow: 0 4px 20px rgba(40, 30, 15, 0.045);
-            margin-bottom: 22px;
-        }
-
-        .account-page .account-card h2 {
-            color: var(--account-text);
-            font-size: 23px;
-            line-height: 1.3;
-        }
-
-        .account-information {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 20px;
-            margin-top: 22px;
-        }
-
-        .account-information-item {
-            padding: 16px;
-            background: var(--account-cream);
-            border: 1px solid var(--account-line);
-            border-radius: 12px;
-        }
-
-        .account-information-item span {
-            display: block;
-            margin-bottom: 5px;
-            color: var(--account-muted);
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .account-information-item strong {
-            display: block;
-            overflow-wrap: anywhere;
-            color: var(--account-text);
-            font-size: 15px;
-        }
-
-        .account-stats {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 15px;
-            margin-bottom: 22px;
-        }
-
-        .account-stat {
-            position: relative;
-            padding: 22px;
-            overflow: hidden;
-            background: var(--account-paper);
-            border: 1px solid var(--account-line);
-            border-radius: 16px;
-            box-shadow: 0 4px 18px rgba(40, 30, 15, 0.04);
-        }
-
-        .account-stat-icon {
-            display: grid;
-            place-items: center;
-            width: 40px;
-            height: 40px;
-            margin-bottom: 18px;
-            background: var(--account-cream);
-            border: 1px solid var(--account-line);
-            border-radius: 11px;
-            color: var(--account-gold);
-            font-size: 18px;
-        }
-
-        .account-stat-label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--account-muted);
-            font-size: 13px;
-        }
-
-        .account-stat-value {
-            display: block;
-            color: var(--account-dark);
-            font: 34px Georgia, serif;
-            line-height: 1;
-        }
-
-        .purchase-list {
-            display: grid;
-            gap: 0;
-            margin-top: 20px;
-        }
-
-        .purchase-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 18px 0;
-            border-bottom: 1px solid var(--account-line);
-        }
-
-        .purchase-item:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .purchase-cover {
-            display: grid;
-            place-items: center;
-            flex: 0 0 65px;
-            width: 65px;
-            height: 85px;
-            overflow: hidden;
-            background: var(--account-cream);
-            border: 1px solid var(--account-line);
-            border-radius: 8px;
-            color: var(--account-gold);
-            font: 11px Georgia, serif;
-            text-align: center;
-        }
-
-        .purchase-cover img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .purchase-details {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .purchase-title {
-            display: block;
-            overflow: hidden;
-            color: var(--account-text);
-            font-size: 15px;
-            font-weight: 700;
-            line-height: 1.4;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .purchase-author {
-            margin-top: 5px;
-            color: var(--account-muted);
-            font-size: 13px;
-        }
-
-        .purchase-read {
-            flex-shrink: 0;
-            min-height: 38px;
-            padding: 9px 14px;
-            border: 1px solid var(--account-line);
-            border-radius: 9px;
-            background: transparent;
-            color: var(--account-dark);
-            font-size: 12px;
-            font-weight: 700;
-            text-decoration: none;
-        }
-
-        .purchase-read:hover {
-            background: var(--account-cream);
-            border-color: var(--account-gold);
-        }
-
-        .account-empty {
-            padding: 25px 0 5px;
-            color: var(--account-muted);
-            font-size: 14px;
-        }
-
-        @media (min-width: 900px) {
-            .account-page .account-sidebar {
-                transform: translateX(0);
-            }
-
-            .account-page .dashboard {
-                display: grid;
-                grid-template-columns: 260px 1fr;
-            }
-
-            .account-page .dash-main {
-                margin-left: 260px;
-                padding: 40px 40px 80px;
-            }
-
-            .account-mobile-header {
-                display: none !important;
-            }
-
-            .account-overlay {
-                display: none !important;
-            }
-        }
-
-        @media (max-width: 899px) {
-            .account-mobile-header {
-                display: flex;
-            }
-
-            .account-page .account-heading {
-                align-items: flex-start;
-                flex-direction: column;
-                gap: 14px;
-            }
-
-            .account-page .account-card {
-                padding: 22px;
-            }
-        }
-
-        @media (max-width: 650px) {
-            .account-information {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
-            .account-stats {
-                gap: 9px;
-            }
-
-            .account-stat {
-                padding: 14px 10px;
-                border-radius: 12px;
-            }
-
-            .account-stat-icon {
-                width: 32px;
-                height: 32px;
-                margin-bottom: 12px;
-                font-size: 14px;
-            }
-
-            .account-stat-label {
-                font-size: 10px;
-            }
-
-            .account-stat-value {
-                font-size: 27px;
-            }
-
-            .purchase-item {
-                align-items: flex-start;
-                gap: 12px;
-            }
-
-            .purchase-cover {
-                flex-basis: 58px;
-                width: 58px;
-                height: 78px;
-            }
-
-            .purchase-title {
-                font-size: 14px;
-                white-space: normal;
-            }
-
-            .purchase-read {
-                padding: 8px 11px;
-                font-size: 11px;
-            }
-        }
-    </style>
+@media (max-width: 899px) {
+  .acct-band .wrap { flex-direction: column; align-items: flex-start; gap: 22px; padding-top: 44px; padding-bottom: 40px; }
+  .acct-layout { grid-template-columns: 1fr; gap: 24px; padding-top: 28px; }
+  .rail { position: static; padding: 10px; }
+  .me { display: none; }
+  .rail-nav { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+  .rail-nav::-webkit-scrollbar { display: none; }
+  .rail-nav a, .rail-nav button { flex-shrink: 0; width: auto; white-space: nowrap; }
+  .rail-nav a.active { box-shadow: none; }
+  .rail-nav .out { margin-top: 0; }
+}
+@media (max-width: 650px) {
+  .info { grid-template-columns: 1fr; gap: 12px; }
+  .stats { gap: 10px; }
+  .stat { padding: 14px 12px; }
+  .stat-icon { width: 32px; height: 32px; margin-bottom: 12px; }
+  .stat-label { font-size: 11px; }
+  .stat-value { font-size: 28px; }
+  .card { padding: 22px; }
+  .purchase-item { align-items: flex-start; gap: 12px; }
+  .purchase-cover { flex-basis: 56px; width: 56px; height: 76px; }
+  .purchase-title { font-size: 14px; white-space: normal; }
+  .purchase-read { min-height: 34px; padding: 0 12px; font-size: 12px; }
+}
+</style>
 </head>
+<body>
 
-<body class="account-page">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></symbol>
+<symbol id="cart" viewBox="0 0 24 24"><path d="M3 4h2l2.5 11h10l2-8H6.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></symbol>
+<symbol id="lib" viewBox="0 0 24 24"><rect x="3" y="4" width="4" height="16" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><path d="M17 5l3 1-4 14-3-1z"/></symbol>
+<symbol id="receipt" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></symbol>
+<symbol id="heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></symbol>
+<symbol id="user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></symbol>
+<symbol id="out" viewBox="0 0 24 24"><path d="M9 4H5v16h4"/><path d="M16 8l4 4-4 4M20 12H9"/></symbol>
+</svg>
 
-    <div class="account-overlay" id="accountOverlay" onclick="closeAccountMenu()"></div>
+<header class="site">
+<div class="wrap nav">
+<a href="home.html" class="logo"><i>E</i>ENT Books</a>
+<nav class="links">
+<a href="home.html">Home</a><a href="books.html">Books</a><a href="library.html">My Library</a>
+</nav>
+<div class="actions">
+<a class="ib" href="books.html" aria-label="Search books"><svg class="i"><use href="#search"/></svg></a>
+<a class="ib" href="cart.html" aria-label="Shopping cart"><svg class="i"><use href="#cart"/></svg><sup data-cart-count>0</sup></a>
+<a class="acct" href="account.html">My Account</a>
+</div>
+<button class="burger" id="burger" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
+</div>
+<div class="mm" id="mm">
+<a href="home.html">Home</a><a href="books.html">Books</a><a href="library.html">My Library</a><a href="cart.html">Cart</a><a href="account.html">My Account</a>
+<a href="#" class="out" data-logout>Logout</a>
+</div>
+</header>
 
-    <nav class="navbar">
-        <div class="container nav-inner">
-            <a class="logo" href="home.html">
-                <span class="logo-mark">S</span>
-                <span class="logo-text">
-                    <h2>Santiano</h2>
-                    <small>BOOKS</small>
-                </span>
-            </a>
+<main>
 
-            <div class="nav-links">
-                <a href="books.html">Books</a>
-                <a href="library.html">My Library</a>
-                <a class="active" href="account.html">Account</a>
-            </div>
+<section class="band acct-band">
+<div class="wrap">
+<div>
+<span class="eyebrow">Dashboard</span>
+<h1>Welcome back, <span data-user-name>Reader</span>.</h1>
+<p class="lead">Manage your ENT Books account and your reading library.</p>
+</div>
+<a class="btn" href="books.html">Explore Books →</a>
+</div>
+</section>
 
-            <div class="nav-actions">
-                <a class="icon-btn" href="cart.html" aria-label="Shopping cart">
-                    🛒
-                    <sup data-cart-count>0</sup>
-                </a>
+<div class="wrap acct-layout">
 
-                <button class="outline-btn" id="logoutButton" type="button">
-                    Logout
-                </button>
-            </div>
-        </div>
-    </nav>
+<aside class="panel rail" aria-label="Account navigation">
+<div class="me">
+<span class="avatar" id="avatar">R</span>
+<div><b data-rail-name>Reader</b><small>ENT Books member</small></div>
+</div>
+<nav class="rail-nav">
+<a class="active" href="#top"><svg class="i"><use href="#user"/></svg>Overview</a>
+<a href="#profile"><svg class="i"><use href="#user"/></svg>Profile</a>
+<a href="#orders"><svg class="i"><use href="#receipt"/></svg>Purchases</a>
+<a href="library.html"><svg class="i"><use href="#lib"/></svg>My Library</a>
+<button type="button" class="out" id="sidebarLogout" data-logout><svg class="i"><use href="#out"/></svg>Logout</button>
+</nav>
+</aside>
 
-    <header class="account-mobile-header">
-        <button class="account-hamburger" onclick="toggleAccountMenu()" aria-label="Open menu">☰</button>
-        <h1>My Account</h1>
-    </header>
+<section id="top">
 
-    <aside class="account-sidebar" id="accountSidebar">
+<div class="panel card" id="profile">
+<h2>Account Information</h2>
+<div class="info">
+<div><span>Full Name</span><strong data-account-name>Loading...</strong></div>
+<div><span>Email Address</span><strong data-account-email>Loading...</strong></div>
+</div>
+</div>
 
-        <!-- MAIN MENU -->
-        <b class="account-sidebar-title">MENU</b>
+<div class="stats">
+<div class="panel stat">
+<div class="stat-icon"><svg class="i"><use href="#lib"/></svg></div>
+<span class="stat-label">Books Owned</span>
+<b class="stat-value" data-books-owned>0</b>
+</div>
+<div class="panel stat">
+<div class="stat-icon"><svg class="i"><use href="#receipt"/></svg></div>
+<span class="stat-label">Orders</span>
+<b class="stat-value" data-orders-count>0</b>
+</div>
+<div class="panel stat">
+<div class="stat-icon"><svg class="i"><use href="#heart"/></svg></div>
+<span class="stat-label">Wishlist</span>
+<b class="stat-value" data-wishlist-count>0</b>
+</div>
+</div>
 
-        <a href="home.html">
-            <span>⌂</span>
-            <span>Home</span>
-        </a>
+<div class="panel card" id="orders">
+<h2>Recent Purchases</h2>
+<p class="muted" id="accountMessage" style="margin-top:8px">Loading your purchases...</p>
+<div class="purchase-list" id="recentPurchases"></div>
+</div>
 
-        <a href="books.html">
-            <span>▤</span>
-            <span>Books</span>
-        </a>
+</section>
 
-        <a href="library.html">
-            <span>▦</span>
-            <span>My Library</span>
-        </a>
+</div>
 
-        <a class="active" href="account.html">
-            <span>♙</span>
-            <span>My Account</span>
-        </a>
+</main>
 
-        <a href="cart.html">
-            <span>🛒</span>
-            <span>Cart</span>
-        </a>
+<footer class="ft">
+<div class="wrap">
+<div class="fg">
+<div>
+<a href="home.html" class="logo"><i>E</i>ENT Books</a>
+<p>Digital books for people who want to learn, grow and build.</p>
+</div>
+<div><h4>Explore</h4><nav><a href="home.html">Home</a><a href="books.html">Books</a><a href="library.html">My Library</a><a href="cart.html">Cart</a></nav></div>
+<div><h4>Account</h4><nav><a href="account.html">My Account</a><a href="login.html" id="logoutButton" data-logout>Logout</a></nav></div>
+<div><h4>ENT Books</h4><nav><a href="#">About</a><a href="#">Contact</a></nav></div>
+</div>
+<div class="fb">© 2026 ENT Books. All rights reserved.</div>
+</div>
+</footer>
 
-        <a href="#" class="account-sidebar-logout" id="sidebarLogout">
-            <span>↪</span>
-            <span>Logout</span>
-        </a>
+<script src="js/auth.js"></script>
+<script>
+/* ENT Books — menu, card glow, logout (inline, no external file needed) */
+(function () {
+  "use strict";
 
-        <!-- ACCOUNT SECTION -->
-        <div class="account-section">
-            <b class="account-sidebar-title">ACCOUNT</b>
+  function menuEls() {
+    return { burger: document.getElementById("burger"), menu: document.getElementById("mm") };
+  }
 
-            <a href="account.html">
-                <span>▦</span>
-                <span>Dashboard</span>
-            </a>
+  function setMenu(open) {
+    var el = menuEls();
+    if (!el.burger || !el.menu) return;
+    el.menu.classList.toggle("open", open);
+    el.burger.setAttribute("aria-expanded", String(open));
+  }
 
-            <a href="#orders">
-                <span>◷</span>
-                <span>My Orders</span>
-            </a>
+  /* One delegated click handler, so the menu works however the page loads */
+  document.addEventListener("click", function (e) {
+    var t = e.target;
+    if (!t || !t.closest) return;
 
-            <a href="#wishlist">
-                <span>♡</span>
-                <span>Wishlist</span>
-            </a>
+    var el = menuEls();
 
-            <a href="#profile">
-                <span>♙</span>
-                <span>Profile</span>
-            </a>
+    if (t.closest("#burger")) {
+      setMenu(!(el.menu && el.menu.classList.contains("open")));
+      return;
+    }
 
-            <a href="#settings">
-                <span>⚙</span>
-                <span>Settings</span>
-            </a>
-        </div>
+    if (el.menu && t.closest("#mm a")) {
+      setMenu(false);
+    }
 
-    </aside>
+    var out = t.closest("[data-logout]");
+    if (out) {
+      e.preventDefault();
 
-    <main class="page">
-        <div class="container dashboard">
-            <section class="dash-main">
+      if (typeof logout === "function") {
+        logout();
+        return;
+      }
 
-                <div class="account-heading">
-                    <div>
-                        <div class="eyebrow">Dashboard</div>
+      try {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        sessionStorage.clear();
+      } catch (err) { /* storage unavailable */ }
+      window.location.href = "index.html";
+    }
+  });
 
-                        <h1 class="page-title">
-                            Welcome back,
-                            <span data-user-name>Reader</span>.
-                        </h1>
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") setMenu(false);
+  });
 
-                        <p class="muted">
-                            Manage your Santiano Books account and reading library.
-                        </p>
-                    </div>
+  /* Pointer glow on book cards (cards are rendered by JS, so delegate) */
+  document.addEventListener("pointermove", function (e) {
+    var card = e.target.closest && e.target.closest(".book-card");
+    if (!card) return;
+    var r = card.getBoundingClientRect();
+    card.style.setProperty("--mx", (e.clientX - r.left) + "px");
+    card.style.setProperty("--my", (e.clientY - r.top) + "px");
+  }, { passive: true });
+})();
+</script>
 
-                    <a href="books.html" class="outline-btn">
-                        Explore Books →
-                    </a>
-                </div>
-
-                <div class="account-card" id="profile">
-                    <h2>Account Information</h2>
-
-                    <div class="account-information">
-                        <div class="account-information-item">
-                            <span>Full Name</span>
-                            <strong data-account-name>Loading...</strong>
-                        </div>
-
-                        <div class="account-information-item">
-                            <span>Email Address</span>
-                            <strong data-account-email>Loading...</strong>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="account-stats">
-                    <div class="account-stat">
-                        <div class="account-stat-icon">▤</div>
-                        <span class="account-stat-label">Books Owned</span>
-                        <b class="account-stat-value" data-books-owned>0</b>
-                    </div>
-
-                    <div class="account-stat">
-                        <div class="account-stat-icon">◷</div>
-                        <span class="account-stat-label">Orders</span>
-                        <b class="account-stat-value" data-orders-count>0</b>
-                    </div>
-
-                    <div class="account-stat">
-                        <div class="account-stat-icon">♡</div>
-                        <span class="account-stat-label">Wishlist</span>
-                        <b class="account-stat-value" data-wishlist-count>0</b>
-                    </div>
-                </div>
-
-                <div class="account-card" id="orders">
-                    <h2>Recent Purchases</h2>
-
-                    <p class="muted" id="accountMessage" style="margin-top:8px">
-                        Loading your purchases...
-                    </p>
-
-                    <div class="purchase-list" id="recentPurchases"></div>
-                </div>
-
-            </section>
-        </div>
-    </main>
-
-    <script src="js/auth.js"></script>
-
-    <script>
-        const sidebar = document.getElementById("accountSidebar");
-        const overlay = document.getElementById("accountOverlay");
-
-        function toggleAccountMenu() {
-            sidebar.classList.toggle("open");
-            overlay.classList.toggle("show");
-        }
-
-        function closeAccountMenu() {
-            sidebar.classList.remove("open");
-            overlay.classList.remove("show");
-        }
-
-        document.querySelectorAll(".account-sidebar a").forEach(link => {
-            link.addEventListener("click", () => {
-                if (window.innerWidth < 900) {
-                    closeAccountMenu();
-                }
-            });
-        });
-
-        const ACCOUNT_API = (
+<script>
+const ACCOUNT_API = (
     window.SANTIANO_API ||
     "https://santiano-books.onrender.com/api"
 ).replace(/\/+$/, "");
-        const token = getAuthToken();
+const token = getAuthToken();
 
-        if (!token) {
-            window.location.href = "index.html";
+if (!token) {
+    window.location.href = "index.html";
+}
+
+function displayUserDetails() {
+    const user = getCurrentUser();
+
+    const nameElement = document.querySelector("[data-account-name]");
+    const emailElement = document.querySelector("[data-account-email]");
+    const railName = document.querySelector("[data-rail-name]");
+    const avatar = document.getElementById("avatar");
+
+    let userName = "Reader";
+    let userEmail = "No email";
+
+    if (user) {
+        userName = user.name || user.full_name || user.fullName || user.username || "Reader";
+        userEmail = user.email || "No email";
+    }
+
+    nameElement.textContent = userName;
+    emailElement.textContent = userEmail;
+    railName.textContent = userName;
+    avatar.textContent = userName.trim().charAt(0).toUpperCase() || "R";
+
+    document.querySelectorAll("[data-user-name]").forEach(el => {
+        el.textContent = userName;
+    });
+}
+
+async function apiRequest(url, options = {}) {
+    const response = await fetch(url, options);
+    let data = {};
+
+    try {
+        data = await response.json();
+    } catch {
+        data = {};
+    }
+
+    if (!response.ok) {
+        throw new Error(data.error || `Request failed with status ${response.status}`);
+    }
+
+    return data;
+}
+
+function createCoverUrl(coverKey) {
+    if (!coverKey) return "";
+
+    let cleanKey = String(coverKey).trim();
+
+    if (cleanKey.startsWith("http://") || cleanKey.startsWith("https://")) {
+        return cleanKey;
+    }
+
+    cleanKey = cleanKey.replace(/^\/+/, "");
+    cleanKey = cleanKey.replace(/^api\/files\//, "");
+    cleanKey = cleanKey.replace(/^uploads\//, "");
+
+    return `${ACCOUNT_API}/files/${cleanKey}`;
+}
+
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+async function loadAccountData() {
+    const message = document.getElementById("accountMessage");
+    const container = document.getElementById("recentPurchases");
+
+    try {
+        const headers = { Authorization: `Bearer ${token}` };
+
+        const ordersData = await apiRequest(`${ACCOUNT_API}/orders`, { headers });
+        const orders = ordersData.orders || [];
+
+        const libraryData = await apiRequest(`${ACCOUNT_API}/library`, { headers });
+        const books = libraryData.books || [];
+
+        document.querySelector("[data-books-owned]").textContent = books.length;
+        document.querySelector("[data-orders-count]").textContent = orders.length;
+        document.querySelector("[data-wishlist-count]").textContent = "0";
+
+        if (!orders.length) {
+            message.textContent = "You haven't made any purchases yet.";
+            container.innerHTML = "";
+            return;
         }
 
-        function displayUserDetails() {
-            const user = getCurrentUser();
+        message.textContent = "";
 
-            const nameElement = document.querySelector("[data-account-name]");
-            const emailElement = document.querySelector("[data-account-email]");
-            const welcomeElement = document.querySelector("[data-user-name]");
-
-            if (!user) {
-                nameElement.textContent = "Reader";
-                emailElement.textContent = "No email";
-                welcomeElement.textContent = "Reader";
-                return;
-            }
-
-            const userName = user.name || user.full_name || user.fullName || user.username || "Reader";
-            const userEmail = user.email || "No email";
-
-            nameElement.textContent = userName;
-            emailElement.textContent = userEmail;
-            welcomeElement.textContent = userName;
-        }
-
-        async function apiRequest(url, options = {}) {
-            const response = await fetch(url, options);
-            let data = {};
-
-            try {
-                data = await response.json();
-            } catch {
-                data = {};
-            }
-
-            if (!response.ok) {
-                throw new Error(data.error || `Request failed with status ${response.status}`);
-            }
-
-            return data;
-        }
-
-        function createCoverUrl(coverKey) {
-            if (!coverKey) return "";
-
-            let cleanKey = String(coverKey).trim();
-
-            if (cleanKey.startsWith("http://") || cleanKey.startsWith("https://")) {
-                return cleanKey;
-            }
-
-            cleanKey = cleanKey.replace(/^\/+/, "");
-            cleanKey = cleanKey.replace(/^api\/files\//, "");
-            cleanKey = cleanKey.replace(/^uploads\//, "");
-
-            return `${ACCOUNT_API}/files/${cleanKey}`;
-        }
-
-        async function loadAccountData() {
-            const message = document.getElementById("accountMessage");
-            const container = document.getElementById("recentPurchases");
-
-            try {
-                const headers = { Authorization: `Bearer ${token}` };
-
-                const ordersData = await apiRequest(`${ACCOUNT_API}/orders`, { headers });
-                const orders = ordersData.orders || [];
-
-                const libraryData = await apiRequest(`${ACCOUNT_API}/library`, { headers });
-                const books = libraryData.books || [];
-
-                document.querySelector("[data-books-owned]").textContent = books.length;
-                document.querySelector("[data-orders-count]").textContent = orders.length;
-                document.querySelector("[data-wishlist-count]").textContent = "0";
-
-                if (!orders.length) {
-                    message.textContent = "You haven't made any purchases yet.";
-                    container.innerHTML = "";
-                    return;
-                }
-
-                message.textContent = "";
-
-                const purchasedBookIds = new Set();
-                orders.forEach(order => {
-                    (order.items || []).forEach(item => {
-                        purchasedBookIds.add(Number(item.book_id));
-                    });
-                });
-
-                const recentBooks = books.filter(book =>
-                    purchasedBookIds.has(Number(book.id))
-                );
-
-                if (!recentBooks.length) {
-                    container.innerHTML = `
-                        <p class="account-empty">
-                            Your orders are recorded, but your library is empty.
-                        </p>
-                    `;
-                    return;
-                }
-
-                container.innerHTML = recentBooks.slice(0, 5).map(book => {
-                    const cover = createCoverUrl(book.cover_key);
-
-                    return `
-                        <div class="purchase-item">
-                            <div class="purchase-cover">
-                                ${
-                                    cover
-                                        ? `<img src="${cover}" alt="${escapeHtml(book.title)}"
-                                               onerror="this.style.display='none'; this.parentElement.textContent='BOOK';">`
-                                        : "BOOK"
-                                }
-                            </div>
-
-                            <div class="purchase-details">
-                                <strong class="purchase-title">${escapeHtml(book.title)}</strong>
-                                <div class="purchase-author">
-                                    ${escapeHtml(book.author || "Santiano Books")}
-                                </div>
-                            </div>
-
-                            <a href="library.html" class="purchase-read">READ</a>
-                        </div>
-                    `;
-                }).join("");
-
-            } catch (error) {
-                console.error("Account loading error:", error);
-                message.textContent = error.message || "Unable to load account data.";
-            }
-        }
-
-        function escapeHtml(value) {
-            return String(value ?? "")
-                .replaceAll("&", "&amp;")
-                .replaceAll("<", "&lt;")
-                .replaceAll(">", "&gt;")
-                .replaceAll('"', "&quot;")
-                .replaceAll("'", "&#039;");
-        }
-
-        // Safe logout
-        function safeLogout() {
-            if (typeof logout === "function") {
-                logout();
-            } else if (typeof window.logout === "function") {
-                window.logout();
-            } else {
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
-                sessionStorage.clear();
-                window.location.href = "index.html";
-            }
-        }
-
-        document.getElementById("logoutButton").addEventListener("click", safeLogout);
-        document.getElementById("sidebarLogout").addEventListener("click", function (e) {
-            e.preventDefault();
-            safeLogout();
+        const purchasedBookIds = new Set();
+        orders.forEach(order => {
+            (order.items || []).forEach(item => {
+                purchasedBookIds.add(Number(item.book_id));
+            });
         });
 
-        displayUserDetails();
-        loadAccountData();
-    </script>
+        const recentBooks = books.filter(book =>
+            purchasedBookIds.has(Number(book.id))
+        );
+
+        if (!recentBooks.length) {
+            container.innerHTML = `
+                <p class="account-empty">
+                    Your orders are recorded, but your library is empty.
+                </p>
+            `;
+            return;
+        }
+
+        container.innerHTML = recentBooks.slice(0, 5).map(book => {
+            const cover = createCoverUrl(book.cover_key);
+
+            return `
+                <div class="purchase-item">
+                    <div class="purchase-cover">
+                        ${
+                            cover
+                                ? `<img src="${cover}" alt="${escapeHtml(book.title)}"
+                                       onerror="this.style.display='none'; this.parentElement.textContent='BOOK';">`
+                                : "BOOK"
+                        }
+                    </div>
+
+                    <div class="purchase-details">
+                        <strong class="purchase-title">${escapeHtml(book.title)}</strong>
+                        <div class="purchase-author">
+                            ${escapeHtml(book.author || "ENT Books")}
+                        </div>
+                    </div>
+
+                    <a href="library.html" class="purchase-read">Read</a>
+                </div>
+            `;
+        }).join("");
+
+    } catch (error) {
+        console.error("Account loading error:", error);
+        message.textContent = error.message || "Unable to load account data.";
+    }
+}
+
+/* Highlight the side navigation item for the section in view */
+document.querySelectorAll(".rail-nav a[href^='#']").forEach(link => {
+    link.addEventListener("click", () => {
+        document.querySelectorAll(".rail-nav a").forEach(a => a.classList.remove("active"));
+        link.classList.add("active");
+    });
+});
+
+displayUserDetails();
+loadAccountData();
+</script>
 
 </body>
 </html>

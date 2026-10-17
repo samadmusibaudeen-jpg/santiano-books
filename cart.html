@@ -1,472 +1,187 @@
-```html
 <!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cart — Santiano Books</title>
-
-  <link rel="stylesheet" href="css/style.css">
-
-  <style>
-    /* =====================================================
-       CART PAGE – RESPONSIVE SIDEBAR
-    ===================================================== */
-
-    :root {
-      --cart-bg: #faf6f0;
-      --cart-paper: #ffffff;
-      --cart-cream: #f5efe6;
-      --cart-line: #ebe4d9;
-      --cart-text: #1e1a16;
-      --cart-muted: #6b645c;
-      --cart-gold: #b8893d;
-      --cart-dark: #2c3e6b;
-    }
-
-    body {
-      background: var(--cart-bg);
-    }
-
-    /* ---------- SIDEBAR ---------- */
-
-    .cart-sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 260px;
-      height: 100vh;
-      padding: 28px 18px;
-      background: var(--cart-paper);
-      border-right: 1px solid var(--cart-line);
-      box-shadow: 4px 0 24px rgba(40, 30, 15, 0.04);
-      z-index: 1000;
-      overflow-y: auto;
-      transform: translateX(-100%);
-      transition: transform 0.3s ease;
-    }
-
-    .cart-sidebar.open {
-      transform: translateX(0);
-    }
-
-    .cart-sidebar-title {
-      display: block;
-      margin-bottom: 18px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--cart-line);
-      color: var(--cart-text);
-      font-size: 12px;
-      letter-spacing: 1.5px;
-    }
-
-    .cart-sidebar a {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 3px 0;
-      padding: 12px;
-      border-radius: 10px;
-      color: var(--cart-muted);
-      font-size: 14px;
-      text-decoration: none;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .cart-sidebar a:hover {
-      background: var(--cart-cream);
-      color: var(--cart-text);
-    }
-
-    .cart-sidebar a.active {
-      background: var(--cart-cream);
-      color: var(--cart-gold);
-      font-weight: 700;
-    }
-
-    .cart-sidebar a.cart-sidebar-logout {
-      margin-top: 18px;
-      border-top: 1px solid var(--cart-line);
-      border-radius: 0 0 10px 10px;
-      color: #9a5d4a;
-    }
-
-    .cart-sidebar a.cart-sidebar-logout:hover {
-      background: #fff3ef;
-    }
-
-    /* ---------- OVERLAY ---------- */
-
-    .cart-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(30, 26, 22, 0.45);
-      z-index: 999;
-    }
-
-    .cart-overlay.show {
-      display: block;
-    }
-
-    /* ---------- MOBILE HEADER ---------- */
-
-    .cart-mobile-header {
-      display: none;
-      align-items: center;
-      gap: 14px;
-      padding: 14px 16px;
-      background: var(--cart-paper);
-      border-bottom: 1px solid var(--cart-line);
-      position: sticky;
-      top: 0;
-      z-index: 900;
-    }
-
-    .cart-hamburger {
-      background: none;
-      border: 1px solid var(--cart-line);
-      border-radius: 9px;
-      width: 40px;
-      height: 40px;
-      display: grid;
-      place-items: center;
-      font-size: 20px;
-      color: var(--cart-dark);
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .cart-hamburger:hover {
-      background: var(--cart-cream);
-    }
-
-    .cart-mobile-header h1 {
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--cart-text);
-    }
-
-    /* ---------- MAIN CONTENT ---------- */
-
-    .cart-main {
-      padding: 30px 20px 60px;
-    }
-
-    .cart-card {
-      background: var(--cart-paper);
-      border: 1px solid var(--cart-line);
-      border-radius: 18px;
-      box-shadow: 0 4px 20px rgba(40, 30, 15, 0.045);
-      padding: 26px;
-      margin-bottom: 22px;
-    }
-
-    .cart-empty {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--cart-muted);
-    }
-
-    .cart-empty h2 {
-      color: var(--cart-text);
-      margin-bottom: 12px;
-    }
-
-    /* ---------- CART ITEMS ---------- */
-
-    .cart-row {
-      display: grid;
-      grid-template-columns: 70px 1fr auto auto;
-      align-items: center;
-      gap: 18px;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--cart-line);
-    }
-
-    .mini-cover {
-      width: 70px;
-      height: 90px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      border-radius: 8px;
-      background: var(--cart-cream);
-      color: var(--cart-muted);
-      font-size: 11px;
-      text-align: center;
-    }
-
-    .cart-row b {
-      color: var(--cart-text);
-    }
-
-    .cart-row button {
-      border: 0;
-      background: none;
-      color: #9a5d4a;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    .cart-row button:hover {
-      text-decoration: underline;
-    }
-
-    .cart-total {
-      margin-top: 22px;
-      padding-top: 20px;
-      border-top: 1px solid var(--cart-line);
-      text-align: right;
-      color: var(--cart-text);
-      font-size: 18px;
-    }
-
-    .cart-total b {
-      color: var(--cart-gold);
-    }
-
-    /* ---------- DESKTOP ---------- */
-
-    @media (min-width: 900px) {
-      .cart-mobile-header {
-        display: none !important;
-      }
-
-      .cart-sidebar {
-        transform: translateX(0);
-      }
-
-      .cart-main {
-        margin-left: 260px;
-        padding: 40px 40px 80px;
-      }
-
-      .cart-overlay {
-        display: none !important;
-      }
-    }
-
-    /* ---------- TABLET & MOBILE ---------- */
-
-    @media (max-width: 899px) {
-      .cart-mobile-header {
-        display: flex;
-      }
-
-      .cart-row {
-        grid-template-columns: 60px 1fr;
-        gap: 12px;
-      }
-
-      .mini-cover {
-        width: 60px;
-        height: 80px;
-      }
-
-      .cart-row > div:nth-child(3),
-      .cart-row > button {
-        grid-column: 2;
-      }
-
-      .cart-row > button {
-        justify-self: start;
-      }
-
-      .cart-card {
-        padding: 18px;
-      }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cart — ENT Books</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f8f9fb;--surface:#fff;--ink:#0b1324;--muted:#5d6678;--line:#e1e5ec;--brand:#12295c;--brand-ink:#fff;--accent:#a9792b;--soft:#f0f3f9;--nav-bg:rgba(255,255,255,.92);--danger:#b42318;--navh:68px;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0f1c;--surface:#111827;--ink:#eef1f7;--muted:#9aa3b5;--line:#1f2a3d;--brand:#8aa4ff;--brand-ink:#0a0f1c;--accent:#d9b068;--soft:#0f1729;--nav-bg:rgba(10,15,28,.92);--danger:#f97066;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a0f1c;--surface:#111827;--ink:#eef1f7;--muted:#9aa3b5;--line:#1f2a3d;--brand:#8aa4ff;--brand-ink:#0a0f1c;--accent:#d9b068;--soft:#0f1729;--nav-bg:rgba(10,15,28,.92);--danger:#f97066;color-scheme:dark}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;font-size:16px;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:1200;background:var(--nav-bg);backdrop-filter:blur(12px)}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;font-weight:600;letter-spacing:-.015em;line-height:1.15}
+.container{width:min(1120px,90%);margin-inline:auto}
+.eyebrow{display:flex;align-items:center;gap:12px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.eyebrow::before{content:"";width:28px;height:1px;background:currentColor}
+.gold-btn,.outline-btn,.dark-btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 24px;border-radius:8px;border:1px solid transparent;font:inherit;font-size:14px;font-weight:500;cursor:pointer;transition:.2s}
+.gold-btn,.dark-btn{background:var(--brand);color:var(--brand-ink)}
+.gold-btn:hover,.dark-btn:hover{filter:brightness(1.12)}
+.outline-btn{border-color:var(--line);background:var(--surface);color:var(--ink)}
+.outline-btn:hover{border-color:var(--brand)}
+svg.i{width:19px;height:19px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+/* top navbar */
+.navbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:1100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav-inner{height:var(--navh);display:flex;align-items:center;justify-content:space-between;gap:24px}
+.logo{display:inline-flex;align-items:center;gap:10px;font-family:"Source Serif 4",Georgia,serif;font-weight:600;font-size:19px;letter-spacing:-.01em}
+.logo-mark{width:32px;height:32px;display:grid;place-items:center;background:var(--brand);color:var(--brand-ink);border-radius:7px;font-size:17px}
+.nav-links{display:flex;gap:32px}
+.nav-links a{font-size:14px;color:var(--muted);transition:.2s}
+.nav-links a:hover{color:var(--ink)}
+.nav-actions{display:flex;align-items:center;gap:10px}
+.icon-btn{position:relative;display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-size:14px}
+.icon-btn.active,.icon-btn:hover{border-color:var(--brand)}
+sup[data-cart-count]{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;border-radius:99px;background:var(--brand);color:var(--brand-ink);font-size:11px;font-weight:600;line-height:1;vertical-align:baseline;top:0}
+.account-btn{display:inline-flex;align-items:center;min-height:38px;padding:0 18px;border-radius:8px;background:var(--brand);color:var(--brand-ink);font-size:14px;font-weight:500}
+.account-btn:hover{filter:brightness(1.12)}
+/* sidebar */
+.cart-sidebar{position:fixed;top:calc(var(--navh) + env(safe-area-inset-top,0px));left:0;width:260px;height:calc(100% - var(--navh) - env(safe-area-inset-top,0px));padding:24px 16px;background:var(--surface);border-right:1px solid var(--line);z-index:1000;overflow-y:auto;transition:transform .3s ease}
+.cart-sidebar-title{display:block;margin-bottom:14px;padding:0 12px 14px;border-bottom:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.14em}
+.cart-sidebar a{display:flex;align-items:center;gap:12px;margin:2px 0;padding:11px 12px;border-radius:8px;color:var(--muted);font-size:14px;transition:.2s}
+.cart-sidebar a:hover{background:var(--soft);color:var(--ink)}
+.cart-sidebar a.active{background:var(--soft);color:var(--brand);font-weight:600}
+.cart-sidebar a.cart-sidebar-logout{margin-top:16px;border-top:1px solid var(--line);border-radius:0 0 8px 8px;color:var(--danger)}
+.cart-sidebar a.cart-sidebar-logout:hover{background:var(--soft)}
+.cart-overlay{display:none;position:fixed;inset:0;background:rgba(10,15,28,.5);z-index:999}
+.cart-overlay.show{display:block}
+/* mobile header */
+.cart-mobile-header{display:none;align-items:center;gap:14px;padding:12px 5%;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:900}
+.cart-hamburger{width:40px;height:40px;display:grid;place-items:center;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-size:18px;cursor:pointer}
+.cart-mobile-header h1{font-size:18px}
+/* main */
+.cart-main{padding:48px 0 96px}
+.page-title{margin:14px 0 28px;font-size:clamp(30px,3.6vw,40px)}
+.cart-card{padding:28px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.cart-empty{text-align:center;padding:56px 20px;color:var(--muted)}
+.cart-empty h2{margin-bottom:10px;font-size:26px;color:var(--ink)}
+.cart-empty .gold-btn{margin-top:26px}
+/* cart items (rendered by renderCart() in app.js) */
+.cart-row{display:grid;grid-template-columns:70px 1fr auto auto;align-items:center;gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}
+.cart-row:first-child{padding-top:0}
+.mini-cover{width:70px;height:90px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:6px;background:var(--soft);border:1px solid var(--line);color:var(--muted);font-size:11px;text-align:center}
+.mini-cover img{width:100%;height:100%;object-fit:cover}
+.cart-row b{font-family:"Source Serif 4",Georgia,serif;font-size:17px;font-weight:600;color:var(--ink)}
+.cart-row small,.cart-row span{color:var(--muted);font-size:14px}
+.cart-row button{border:0;background:none;color:var(--danger);font:inherit;font-size:14px;font-weight:500;cursor:pointer}
+.cart-row button:hover{text-decoration:underline}
+.cart-total{margin-top:24px;padding-top:22px;border-top:1px solid var(--line);text-align:right;color:var(--muted);font-size:17px}
+.cart-total b{margin-left:8px;font-family:"Source Serif 4",Georgia,serif;font-size:24px;color:var(--ink)}
+.cart-card .gold-btn,.cart-card .dark-btn{margin-top:18px}
+/* layout */
+@media (min-width:900px){
+.cart-mobile-header,.cart-overlay{display:none!important}
+.cart-main{margin-left:260px;padding:48px 40px 96px;width:auto}
+.cart-sidebar{transform:none}
+}
+@media (max-width:899px){
+.navbar{display:none}
+.cart-mobile-header{display:flex}
+.cart-sidebar{top:env(safe-area-inset-top,0px);height:calc(100% - env(safe-area-inset-top,0px));z-index:1000;transform:translateX(-100%);box-shadow:8px 0 30px rgba(0,0,0,.12)}
+.cart-sidebar.open{transform:none}
+.cart-main{padding:32px 0 72px}
+.cart-card{padding:18px}
+.cart-row{grid-template-columns:60px 1fr;gap:12px}
+.mini-cover{width:60px;height:80px}
+.cart-row>div:nth-child(3),.cart-row>button{grid-column:2}
+.cart-row>button{justify-self:start}
+}
+</style>
 </head>
-
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></symbol>
+<symbol id="book" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/></symbol>
+<symbol id="lib" viewBox="0 0 24 24"><rect x="3" y="4" width="4" height="16" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><path d="M17 5l3 1-4 14-3-1z"/></symbol>
+<symbol id="user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></symbol>
+<symbol id="cart" viewBox="0 0 24 24"><path d="M3 4h2l2.5 11h10l2-8H6.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></symbol>
+<symbol id="out" viewBox="0 0 24 24"><path d="M9 4H5v16h4"/><path d="M16 8l4 4-4 4M20 12H9"/></symbol>
+</svg>
 
-  <!-- Overlay -->
-  <div
-    class="cart-overlay"
-    id="cartOverlay"
-    onclick="closeCartMenu()">
+<div class="cart-overlay" id="cartOverlay" onclick="closeCartMenu()"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="container nav-inner">
+    <a class="logo" href="home.html"><span class="logo-mark">E</span><span class="logo-text">ENT Books</span></a>
+    <div class="nav-links">
+      <a href="home.html">Home</a>
+      <a href="books.html">Books</a>
+      <a href="library.html">My Library</a>
+    </div>
+    <div class="nav-actions">
+      <a class="icon-btn active" href="cart.html" aria-label="Shopping cart"><svg class="i"><use href="#cart"/></svg><sup data-cart-count>0</sup></a>
+      <a class="account-btn" href="account.html">My account</a>
+    </div>
   </div>
+</nav>
 
-  <!-- =========================
-       NAVBAR
-  ========================= -->
+<!-- MOBILE HEADER -->
+<header class="cart-mobile-header">
+  <button class="cart-hamburger" onclick="toggleCartMenu()" aria-label="Open menu">☰</button>
+  <h1>Shopping Cart</h1>
+</header>
 
-  <nav class="navbar">
-    <div class="container nav-inner">
+<!-- SIDEBAR -->
+<aside class="cart-sidebar" id="cartSidebar">
+  <b class="cart-sidebar-title">MENU</b>
+  <a href="home.html"><svg class="i"><use href="#home"/></svg><span>Home</span></a>
+  <a href="books.html"><svg class="i"><use href="#book"/></svg><span>Books</span></a>
+  <a href="library.html"><svg class="i"><use href="#lib"/></svg><span>My Library</span></a>
+  <a href="account.html"><svg class="i"><use href="#user"/></svg><span>My Account</span></a>
+  <a class="active" href="cart.html"><svg class="i"><use href="#cart"/></svg><span>Cart</span></a>
+  <a href="login.html" class="cart-sidebar-logout" id="sidebarLogout"><svg class="i"><use href="#out"/></svg><span>Logout</span></a>
+</aside>
 
-      <a class="logo" href="home.html">
-        <span class="logo-mark">S</span>
+<!-- MAIN -->
+<main class="page">
+  <div class="container cart-main">
+    <div class="eyebrow">Your Cart</div>
+    <h1 class="page-title">Shopping Cart</h1>
 
-        <span class="logo-text">
-          <h2>Santiano</h2>
-          <small>BOOKS</small>
-        </span>
-      </a>
-
-      <div class="nav-links">
-        <a href="home.html">Home</a>
-        <a href="books.html">Books</a>
-        <a href="library.html">My Library</a>
+    <!-- IMPORTANT: data-cart is required by renderCart() in app.js. -->
+    <div class="cart-card" id="cartContent" data-cart>
+      <div class="cart-empty">
+        <h2>Your cart is empty</h2>
+        <p>Browse our collection and add some books.</p>
+        <a href="books.html" class="gold-btn">Explore Books</a>
       </div>
-
-      <div class="nav-actions">
-        <a
-          class="icon-btn active"
-          href="cart.html"
-          aria-label="Shopping cart">
-          🛒 <sup data-cart-count>0</sup>
-        </a>
-
-        <a class="account-btn" href="account.html">
-          My account
-        </a>
-      </div>
-
     </div>
-  </nav>
+  </div>
+</main>
 
-  <!-- =========================
-       MOBILE HEADER
-  ========================= -->
+<script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  const sidebar = document.getElementById("cartSidebar");
+  const overlay = document.getElementById("cartOverlay");
 
-  <header class="cart-mobile-header">
-    <button
-      class="cart-hamburger"
-      onclick="toggleCartMenu()"
-      aria-label="Open menu">
-      ☰
-    </button>
+  function toggleCartMenu() {
+    sidebar.classList.toggle("open");
+    overlay.classList.toggle("show");
+  }
 
-    <h1>Shopping Cart</h1>
-  </header>
+  function closeCartMenu() {
+    sidebar.classList.remove("open");
+    overlay.classList.remove("show");
+  }
 
-  <!-- =========================
-       SIDEBAR
-  ========================= -->
-
-  <aside class="cart-sidebar" id="cartSidebar">
-
-    <b class="cart-sidebar-title">MENU</b>
-
-    <a href="home.html">
-      <span>⌂</span>
-      <span>Home</span>
-    </a>
-
-    <a href="books.html">
-      <span>▤</span>
-      <span>Books</span>
-    </a>
-
-    <a href="library.html">
-      <span>▦</span>
-      <span>My Library</span>
-    </a>
-
-    <a href="account.html">
-      <span>♙</span>
-      <span>My Account</span>
-    </a>
-
-    <a class="active" href="cart.html">
-      <span>🛒</span>
-      <span>Cart</span>
-    </a>
-
-    <a
-      href="login.html"
-      class="cart-sidebar-logout"
-      id="sidebarLogout">
-      <span>↪</span>
-      <span>Logout</span>
-    </a>
-
-  </aside>
-
-  <!-- =========================
-       MAIN CONTENT
-  ========================= -->
-
-  <main class="page">
-
-    <div class="container cart-main">
-
-      <div class="eyebrow">Your Cart</div>
-
-      <h1 class="page-title">Shopping Cart</h1>
-
-      <!-- IMPORTANT:
-           data-cart is required by renderCart() in app.js.
-      -->
-
-      <div
-        class="cart-card"
-        id="cartContent"
-        data-cart>
-
-        <div class="cart-empty">
-          <h2>Your cart is empty</h2>
-
-          <p>
-            Browse our collection and add some books.
-          </p>
-
-          <br>
-
-          <a href="books.html" class="gold-btn">
-            Explore Books
-          </a>
-        </div>
-
-      </div>
-
-    </div>
-
-  </main>
-
-  <script src="js/app.js"></script>
-  <script src="js/auth.js"></script>
-
-  <script>
-    /* =========================
-       MENU TOGGLE
-    ========================= */
-
-    const sidebar = document.getElementById("cartSidebar");
-    const overlay = document.getElementById("cartOverlay");
-
-    function toggleCartMenu() {
-      sidebar.classList.toggle("open");
-      overlay.classList.toggle("show");
-    }
-
-    function closeCartMenu() {
-      sidebar.classList.remove("open");
-      overlay.classList.remove("show");
-    }
-
-    // Close menu when clicking a link on mobile
-    document.querySelectorAll(".cart-sidebar a").forEach(link => {
-      link.addEventListener("click", () => {
-        if (window.innerWidth < 900) {
-          closeCartMenu();
-        }
-      });
+  // Close menu when clicking a link on mobile
+  document.querySelectorAll(".cart-sidebar a").forEach(link => {
+    link.addEventListener("click", () => {
+      if (window.innerWidth < 900) closeCartMenu();
     });
+  });
 
-    // Logout
-    document
-      .getElementById("sidebarLogout")
-      .addEventListener("click", function (event) {
-        event.preventDefault();
-        logout();
-      });
-  </script>
-
+  // Logout
+  document.getElementById("sidebarLogout").addEventListener("click", function (event) {
+    event.preventDefault();
+    logout();
+  });
+</script>
 </body>
 </html>
-```

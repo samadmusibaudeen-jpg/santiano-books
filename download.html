@@ -1,456 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Santiano Books — Download</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
-    }
-
-    body {
-      min-height: 100vh;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      padding: 24px;
-
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-      background:
-        #f4f1e8;
-
-      color: #151515;
-    }
-
-
-    /* =================================================
-       MAIN CARD
-    ================================================= */
-
-    .download-container {
-      width: 100%;
-      max-width: 560px;
-
-      background: #ffffff;
-
-      border-radius: 22px;
-
-      padding: 42px 30px;
-
-      text-align: center;
-
-      box-shadow:
-        0 25px 70px rgba(0, 0, 0, 0.12);
-    }
-
-
-    /* =================================================
-       BRAND
-    ================================================= */
-
-    .brand {
-      margin-bottom: 35px;
-
-      font-size: 14px;
-      font-weight: 900;
-
-      letter-spacing: 5px;
-    }
-
-
-    /* =================================================
-       STATUS
-    ================================================= */
-
-    .status {
-      margin-bottom: 12px;
-
-      font-size: 12px;
-      font-weight: 800;
-
-      letter-spacing: 2px;
-
-      text-transform: uppercase;
-    }
-
-
-    /* =================================================
-       BOOK
-    ================================================= */
-
-    .book-title {
-      margin: 0 auto 10px;
-
-      max-width: 460px;
-
-      font-size: 30px;
-      line-height: 1.2;
-
-      font-weight: 800;
-    }
-
-
-    .book-author {
-      margin-bottom: 32px;
-
-      color: #777777;
-
-      font-size: 14px;
-    }
-
-
-    /* =================================================
-       TIMER
-    ================================================= */
-
-    .timer-label {
-      margin-bottom: 7px;
-
-      color: #777777;
-
-      font-size: 13px;
-    }
-
-
-    .timer {
-      margin-bottom: 25px;
-
-      font-size: 48px;
-      line-height: 1;
-
-      font-weight: 900;
-
-      letter-spacing: 3px;
-    }
-
-
-    /* =================================================
-       DOWNLOAD BUTTON
-    ================================================= */
-
-    .download-button {
-      display: inline-flex;
-
-      align-items: center;
-      justify-content: center;
-
-      min-width: 220px;
-      min-height: 54px;
-
-      padding: 0 28px;
-
-      border-radius: 10px;
-
-      background: #151515;
-      color: #ffffff;
-
-      text-decoration: none;
-
-      font-size: 13px;
-      font-weight: 900;
-
-      letter-spacing: 1px;
-
-      transition:
-        transform 0.2s ease,
-        opacity 0.2s ease;
-    }
-
-
-    .download-button:hover {
-      transform: translateY(-2px);
-    }
-
-
-    .download-button.disabled {
-      pointer-events: none;
-
-      opacity: 0.45;
-    }
-
-
-    /* =================================================
-       SECURITY MESSAGE
-    ================================================= */
-
-    .message {
-      max-width: 420px;
-
-      margin: 22px auto 0;
-
-      color: #777777;
-
-      font-size: 13px;
-
-      line-height: 1.6;
-    }
-
-
-    /* =================================================
-       EXPIRED SCREEN
-    ================================================= */
-
-    .expired {
-      display: none;
-    }
-
-
-    .expired.show {
-      display: block;
-    }
-
-
-    .download-content.hide {
-      display: none;
-    }
-
-
-    .expired-title {
-      margin: 0 0 12px;
-
-      font-size: 26px;
-    }
-
-
-    .expired-message {
-      margin: 0 auto;
-
-      max-width: 400px;
-
-      color: #777777;
-
-      font-size: 14px;
-
-      line-height: 1.7;
-    }
-
-
-    /* =================================================
-       ERROR SCREEN
-    ================================================= */
-
-    .error {
-      display: none;
-    }
-
-
-    .error.show {
-      display: block;
-    }
-
-
-    .error-title {
-      margin: 0 0 12px;
-
-      font-size: 26px;
-    }
-
-
-    .error-message {
-      color: #777777;
-
-      font-size: 14px;
-
-      line-height: 1.7;
-    }
-
-
-    /* =================================================
-       MOBILE
-    ================================================= */
-
-    @media (max-width: 600px) {
-
-      body {
-        padding: 16px;
-      }
-
-
-      .download-container {
-        padding: 34px 20px;
-      }
-
-
-      .book-title {
-        font-size: 24px;
-      }
-
-
-      .timer {
-        font-size: 40px;
-      }
-
-
-      .download-button {
-        width: 100%;
-      }
-
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Download — ENT Books</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8f9fb;
+  --surface: #fff;
+  --ink: #0b1324;
+  --muted: #5d6678;
+  --line: #e1e5ec;
+  --brand: #12295c;
+  --brand-ink: #fff;
+  --accent: #a9792b;
+  --soft: #f0f3f9;
+  --nav-bg: rgba(255, 255, 255, .92);
+  --grid: rgba(18, 41, 92, .06);
+  --danger: #b42318;
+  --ok: #067647;
+  --glow: #3d6bff;
+  --hh: 68px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a0f1c; --surface: #111827; --ink: #eef1f7; --muted: #9aa3b5; --line: #1f2a3d;
+    --brand: #8aa4ff; --brand-ink: #0a0f1c; --accent: #d9b068; --soft: #0f1729;
+    --nav-bg: rgba(10, 15, 28, .92); --grid: rgba(138, 164, 255, .07);
+    --danger: #f97066; --ok: #47cd89; --glow: #7d9bff; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0a0f1c; --surface: #111827; --ink: #eef1f7; --muted: #9aa3b5; --line: #1f2a3d;
+  --brand: #8aa4ff; --brand-ink: #0a0f1c; --accent: #d9b068; --soft: #0f1729;
+  --nav-bg: rgba(10, 15, 28, .92); --grid: rgba(138, 164, 255, .07);
+  --danger: #f97066; --ok: #47cd89; --glow: #7d9bff; color-scheme: dark;
+}
+
+/* ---------- base ---------- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--hh) + 24px + env(safe-area-inset-top, 0px)); }
+body {
+  font-family: Inter, system-ui, sans-serif; background: var(--bg); color: var(--ink);
+  line-height: 1.65; font-size: 16px; overflow-x: hidden; -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; }
+button, input { font: inherit; color: inherit; }
+h1, h2, h3 { font-family: "Source Serif 4", Georgia, serif; font-weight: 600; letter-spacing: -.015em; line-height: 1.15; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--glow); outline-offset: 2px; }
+.wrap { width: min(1120px, 90%); margin-inline: auto; }
+.muted { color: var(--muted); }
+.sec { padding: 72px 0; }
+.eyebrow { display: flex; align-items: center; gap: 12px; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+.eyebrow::before { content: ""; width: 28px; height: 1px; background: currentColor; }
+svg.i { width: 19px; height: 19px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- buttons ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 0 24px; border-radius: 8px; font-size: 14px; font-weight: 500; border: 1px solid transparent; cursor: pointer; transition: .2s; }
+.btn-p { background: var(--brand); color: var(--brand-ink); }
+.btn-p:hover { filter: brightness(1.12); }
+.btn-o { border-color: var(--line); background: var(--surface); color: var(--ink); }
+.btn-o:hover { border-color: var(--brand); }
+
+/* ---------- header ---------- */
+header.site { position: sticky; top: 0; z-index: 50; padding-top: env(safe-area-inset-top, 0px); background: var(--nav-bg); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+.nav { height: var(--hh); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.logo { display: inline-flex; align-items: center; gap: 10px; font-family: "Source Serif 4", Georgia, serif; font-weight: 600; font-size: 19px; letter-spacing: -.01em; }
+.logo i { width: 32px; height: 32px; display: grid; place-items: center; background: var(--brand); color: var(--brand-ink); border-radius: 7px; font-style: normal; font-size: 17px; }
+.links { display: flex; gap: 32px; }
+.links a { font-size: 14px; color: var(--muted); transition: .2s; }
+.links a:hover, .links a.active { color: var(--ink); }
+.links a.active { box-shadow: 0 8px 0 -6px var(--accent); }
+.actions { display: flex; align-items: center; gap: 10px; }
+.ib { display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 13px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); font-size: 14px; transition: .2s; }
+.ib:hover { border-color: var(--brand); }
+sup[data-cart-count] { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 99px; background: var(--brand); color: var(--brand-ink); font-size: 11px; font-weight: 600; line-height: 1; vertical-align: baseline; top: 0; }
+.acct { display: inline-flex; align-items: center; height: 38px; padding: 0 18px; border-radius: 8px; background: var(--brand); color: var(--brand-ink); font-size: 14px; font-weight: 500; }
+.acct:hover { filter: brightness(1.12); }
+.burger { display: none; width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); font-size: 18px; cursor: pointer; }
+.mm { display: none; padding: 8px 5% 20px; background: var(--surface); border-bottom: 1px solid var(--line); }
+.mm.open { display: grid; }
+.mm a { padding: 14px 2px; border-bottom: 1px solid var(--line); font-size: 15px; }
+.mm a.out { color: var(--danger); border-bottom: 0; }
+
+/* ---------- dark hero band (store, library, account) ---------- */
+.band { position: relative; overflow: hidden; isolation: isolate; color: #eef1f7; background: linear-gradient(135deg, #071027 0%, #0e2150 55%, #16358a 100%); border-bottom: 1px solid rgba(138, 164, 255, .28); }
+.band::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(rgba(138, 164, 255, .09) 1px, transparent 1px) 0 0/44px 44px, linear-gradient(90deg, rgba(138, 164, 255, .09) 1px, transparent 1px) 0 0/44px 44px; -webkit-mask-image: radial-gradient(ellipse at 75% 0, #000 15%, transparent 75%); mask-image: radial-gradient(ellipse at 75% 0, #000 15%, transparent 75%); }
+.band::after { content: ""; position: absolute; z-index: -1; right: -140px; top: -280px; width: 580px; height: 580px; border-radius: 50%; background: radial-gradient(circle, rgba(61, 107, 255, .5), transparent 65%); }
+.band .eyebrow { color: #e3c585; }
+.band h1 { color: #fff; font-size: clamp(34px, 5vw, 56px); line-height: 1.06; }
+.band .lead { margin-top: 16px; max-width: 520px; font-size: 17px; color: #b5bfd6; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; padding: 7px 13px; border: 1px solid rgba(138, 164, 255, .28); border-radius: 99px; background: rgba(138, 164, 255, .08); font-size: 13px; color: #cdd5e8; }
+.chip svg { width: 15px; height: 15px; color: #e3c585; }
+
+/* ---------- panels, feature strip ---------- */
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+.feats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.feat { padding: 24px; background: var(--surface); }
+.feat svg { color: var(--brand); }
+.feat b { display: block; margin-top: 12px; font-size: 15px; font-weight: 600; }
+.feat span { font-size: 14px; color: var(--muted); }
+.head { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; margin-bottom: 28px; }
+.head h2 { margin-top: 12px; font-size: clamp(24px, 3vw, 32px); }
+.head .btn { min-height: 40px; padding: 0 16px; white-space: nowrap; }
+
+/* ---------- book grid + cards (markup rendered by js/app.js and js/library.js) ---------- */
+.books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 22px; }
+.books-grid > p { grid-column: 1 / -1; padding: 48px 20px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 14px; background: var(--surface); }
+.book-card { position: relative; display: flex; flex-direction: column; padding: 14px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; transition: transform .3s, border-color .3s, box-shadow .3s; }
+.book-card::before { content: ""; position: absolute; inset: 0; z-index: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .3s; background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), rgba(61, 107, 255, .16), transparent 62%); }
+.book-card > * { position: relative; z-index: 1; }
+.book-card:hover { transform: translateY(-5px); border-color: var(--glow); box-shadow: 0 22px 44px -16px rgba(18, 41, 92, .38), 0 0 0 1px rgba(61, 107, 255, .22); }
+.book-card:hover::before { opacity: 1; }
+.book-card .cover, .book-card .book-cover { position: relative; width: 100%; height: 245px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 3px 8px 8px 3px; background: var(--soft); color: var(--muted); font-size: 13px; text-align: center; box-shadow: 0 10px 24px -10px rgba(10, 20, 50, .45); transition: transform .5s cubic-bezier(.2, .7, .2, 1), box-shadow .5s; }
+.book-card .cover::before, .book-card .book-cover::before { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(90deg, rgba(0, 0, 0, .3), rgba(255, 255, 255, .16) 4%, rgba(0, 0, 0, .06) 8%, transparent 16%); }
+.book-card .cover::after, .book-card .book-cover::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, .22) 50%, transparent 62%); transform: translateX(-120%); transition: transform .8s; }
+.book-card:hover .cover, .book-card:hover .book-cover { transform: perspective(700px) rotateY(-7deg) scale(1.03); box-shadow: 14px 18px 30px -12px rgba(10, 20, 50, .55), 0 0 34px rgba(61, 107, 255, .28); }
+.book-card:hover .cover::after, .book-card:hover .book-cover::after { transform: translateX(120%); }
+.book-card img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 6px; }
+.book-card .cover img, .book-card .book-cover img { height: 100%; aspect-ratio: auto; border-radius: 0; }
+.book-card h3 { margin-top: 16px; font-size: 17px; line-height: 1.3; }
+.book-card h3 a:hover { color: var(--brand); }
+.book-card p, .book-card span, .book-card small { color: var(--muted); font-size: 14px; }
+.book-card .price, .book-card .book-price, .book-card strong { color: var(--ink); font-size: 15px; font-weight: 600; }
+.book-card .category, .book-card .badge, .book-card .tag { display: inline-block; width: fit-content; margin-top: 12px; padding: 2px 9px; border: 1px solid var(--line); border-radius: 99px; background: var(--soft); font-size: 11px; font-weight: 500; }
+.book-card a.btn, .book-card .gold-btn, .book-card button { display: inline-flex; align-items: center; justify-content: center; width: 100%; min-height: 42px; margin-top: auto; padding: 0 14px; border: 0; border-radius: 8px; background: var(--brand); color: var(--brand-ink); font-size: 13px; font-weight: 500; cursor: pointer; transition: .2s; }
+.book-card h3 + *, .book-card p + a.btn, .book-card p + .gold-btn, .book-card p + button { margin-top: 10px; }
+.book-card a.btn:hover, .book-card .gold-btn:hover, .book-card button:hover { filter: brightness(1.12); }
+
+/* ---------- footer ---------- */
+.ft { padding: 64px 0 28px; background: var(--surface); border-top: 1px solid var(--line); }
+.fg { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 40px; }
+.fg p { max-width: 290px; margin-top: 16px; font-size: 14px; color: var(--muted); }
+.fg h4 { margin-bottom: 16px; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.fg nav { display: grid; gap: 11px; }
+.fg nav a { font-size: 14px; color: var(--muted); width: fit-content; }
+.fg nav a:hover { color: var(--ink); }
+.fb { padding-top: 24px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+
+/* ---------- responsive ---------- */
+@media (max-width: 960px) {
+  .feats { grid-template-columns: repeat(2, 1fr); }
+  .fg { grid-template-columns: 1fr 1fr; }
+  .fg > div:first-child { grid-column: 1 / -1; }
+}
+@media (max-width: 800px) {
+  :root { --hh: 60px; }
+  .links, .actions { display: none; }
+  .burger { display: block; }
+  .sec { padding: 56px 0; }
+}
+@media (max-width: 600px) {
+  .feats { grid-template-columns: 1fr; }
+  .books-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .book-card { padding: 10px; }
+  .book-card .cover, .book-card .book-cover { height: 190px; }
+  .head { flex-direction: column; align-items: flex-start; }
+  .fg { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+</style>
+<style>
+body {
+  min-height: 100vh; display: grid; place-items: center; padding: 24px;
+  background:
+    linear-gradient(var(--grid) 1px, transparent 1px) 0 0/48px 48px,
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0/48px 48px,
+    var(--bg);
+}
+body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 0, transparent 30%, var(--bg) 90%); }
+
+.shell { width: 100%; max-width: 520px; }
+.brand { display: flex; justify-content: center; margin-bottom: 24px; }
+
+.download-container { position: relative; overflow: hidden; padding: 40px 32px 32px; text-align: center; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 34px 80px -34px rgba(18, 41, 92, .4); }
+.download-container::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: linear-gradient(90deg, var(--brand), var(--glow), var(--accent)); }
+
+.status { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; padding: 5px 13px; border: 1px solid var(--line); border-radius: 99px; background: var(--soft); font-size: 13px; font-weight: 500; color: var(--ok); }
+.status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 4px rgba(6, 118, 71, .15); }
+
+.book-title { max-width: 440px; margin: 0 auto 8px; font-size: 30px; line-height: 1.15; }
+.book-author { margin-bottom: 28px; color: var(--muted); font-size: 14px; }
+
+.timer-box { margin-bottom: 22px; padding: 20px 20px 18px; background: var(--soft); border: 1px solid var(--line); border-radius: 14px; }
+.timer-label { margin-bottom: 6px; color: var(--muted); font-size: 13px; }
+.timer { font: 600 46px/1 "Source Serif 4", Georgia, serif; letter-spacing: .04em; font-variant-numeric: tabular-nums; }
+.bar { height: 4px; margin-top: 16px; overflow: hidden; border-radius: 99px; background: var(--line); }
+.bar i { display: block; width: 100%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--glow), var(--accent)); transition: width 1s linear; }
+
+.download-button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 54px; padding: 0 28px; border-radius: 10px; background: var(--brand); color: var(--brand-ink); font-size: 15px; font-weight: 600; box-shadow: 0 14px 30px -12px rgba(18, 41, 92, .7); transition: transform .2s, filter .2s, opacity .2s; }
+.download-button:hover { transform: translateY(-2px); filter: brightness(1.12); }
+.download-button.disabled { pointer-events: none; opacity: .45; box-shadow: none; }
+
+.message { max-width: 400px; margin: 20px auto 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+.sub-link { display: block; margin-top: 22px; text-align: center; font-size: 13px; color: var(--muted); }
+.sub-link a { font-weight: 500; color: var(--ink); border-bottom: 1px solid var(--line); }
+.sub-link a:hover { border-color: var(--brand); }
+
+/* states toggled by js/download.js */
+.expired, .error { display: none; padding: 8px 0 4px; }
+.expired.show, .error.show { display: block; }
+.download-content.hide { display: none; }
+
+.state-icon { display: grid; place-items: center; width: 54px; height: 54px; margin: 0 auto 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--soft); color: var(--accent); }
+.state-icon svg { width: 26px; height: 26px; }
+.error .state-icon { color: var(--danger); }
+.expired-title, .error-title { margin: 0 0 10px; font-size: 26px; }
+.expired-message, .error-message { max-width: 380px; margin: 0 auto 24px; color: var(--muted); font-size: 14px; line-height: 1.7; }
+.state-action { max-width: 260px; }
+
+@media (max-width: 600px) {
+  body { padding: 16px; }
+  .download-container { padding: 34px 20px 26px; }
+  .book-title { font-size: 25px; }
+  .timer { font-size: 40px; }
+}
+</style>
 </head>
-
-
 <body>
 
-  <main class="download-container">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="dl" viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></symbol>
+<symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="alert" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/></symbol>
+</svg>
 
+<div class="shell">
 
-    <!-- =============================================
-         BRAND
-    ============================================== -->
+<div class="brand">
+<a href="home.html" class="logo"><i>E</i>ENT Books</a>
+</div>
 
-    <div class="brand">
-      SANTIANO BOOKS
-    </div>
+<main class="download-container">
 
+<!-- DOWNLOAD CONTENT -->
+<section id="downloadContent" class="download-content">
 
+<div class="status">Your book is ready</div>
 
-    <!-- =============================================
-         DOWNLOAD CONTENT
-    ============================================== -->
+<h1 id="bookTitle" class="book-title">Your ENT Book</h1>
+<div id="bookAuthor" class="book-author">ENT Books</div>
 
-    <section
-      id="downloadContent"
-      class="download-content"
-    >
+<div class="timer-box">
+<div class="timer-label">Download link expires in</div>
+<div id="timer" class="timer">30:00</div>
+<div class="bar" aria-hidden="true"><i id="timerBar"></i></div>
+</div>
 
-      <div class="status">
-        Your book is ready
-      </div>
+<a id="downloadButton" class="download-button" href="#" target="_blank" rel="noopener noreferrer">
+<svg class="i"><use href="#dl"/></svg>
+Download your book
+</a>
 
+<p class="message">
+This is a secure temporary download link. It is controlled by ENT Books and expires automatically.
+</p>
 
-      <h1
-        id="bookTitle"
-        class="book-title"
-      >
-        Your Santiano Book
-      </h1>
+</section>
 
+<!-- EXPIRED -->
+<section id="expiredContent" class="expired">
+<div class="state-icon"><svg class="i"><use href="#clock"/></svg></div>
+<h2 class="expired-title">Download link expired</h2>
+<p class="expired-message">This temporary download link has expired. Return to your ENT Books library to request a new one.</p>
+<a class="btn btn-p state-action" href="library.html">Open My Library</a>
+</section>
 
-      <div
-        id="bookAuthor"
-        class="book-author"
-      >
-        Santiano Books
-      </div>
+<!-- ERROR -->
+<section id="errorContent" class="error">
+<div class="state-icon"><svg class="i"><use href="#alert"/></svg></div>
+<h2 class="error-title">Download unavailable</h2>
+<p id="errorMessage" class="error-message">This download link is invalid.</p>
+<a class="btn btn-p state-action" href="library.html">Open My Library</a>
+</section>
 
+</main>
 
+<p class="sub-link">Need another copy? <a href="library.html">Go to My Library</a></p>
 
-      <!-- TIMER -->
+</div>
 
-      <div class="timer-label">
-        Download link expires in
-      </div>
+<script src="js/download.js"></script>
 
+<script>
+/* Progress bar follows the countdown text that download.js writes into #timer */
+(function () {
+  var timer = document.getElementById("timer");
+  var bar = document.getElementById("timerBar");
+  if (!timer || !bar) return;
 
-      <div
-        id="timer"
-        class="timer"
-      >
-        30:00
-      </div>
+  var total = 0;
+  var started = false;
 
+  function seconds(text) {
+    var m = /^(\d+):(\d{2})$/.exec(String(text).trim());
+    return m ? Number(m[1]) * 60 + Number(m[2]) : null;
+  }
 
+  new MutationObserver(function () {
+    var s = seconds(timer.textContent);
+    if (s === null) return;
 
-      <!-- DOWNLOAD -->
+    /* first value written by download.js is the real starting time */
+    if (!started) { started = true; total = s || 1; }
 
-      <a
-        id="downloadButton"
-        class="download-button"
-        href="#"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        DOWNLOAD YOUR BOOK
-      </a>
-
-
-
-      <p class="message">
-        This is a secure temporary download link.
-        Your download link is controlled by
-        Santiano Books and expires automatically.
-      </p>
-
-    </section>
-
-
-
-    <!-- =============================================
-         EXPIRED CONTENT
-    ============================================== -->
-
-    <section
-      id="expiredContent"
-      class="expired"
-    >
-
-      <h2 class="expired-title">
-        Download link expired
-      </h2>
-
-
-      <p class="expired-message">
-        This temporary download link has expired.
-        Return to your Santiano Books library to
-        request a new download link.
-      </p>
-
-    </section>
-
-
-
-    <!-- =============================================
-         ERROR CONTENT
-    ============================================== -->
-
-    <section
-      id="errorContent"
-      class="error"
-    >
-
-      <h2 class="error-title">
-        Download unavailable
-      </h2>
-
-
-      <p
-        id="errorMessage"
-        class="error-message"
-      >
-        This download link is invalid.
-      </p>
-
-    </section>
-
-  </main>
-
-
-  <!-- ===============================================
-       JAVASCRIPT
-  ================================================ -->
-
-  <script src="js/download.js"></script>
+    bar.style.width = Math.max(0, Math.min(100, (s / total) * 100)) + "%";
+  }).observe(timer, { childList: true, characterData: true, subtree: true });
+})();
+</script>
 
 </body>
 </html>
