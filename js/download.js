@@ -19,12 +19,12 @@ const downloadUrl =
 
 const bookTitle =
   params.get("title") ||
-  "Your Santiano Book";
+  "Your ENT Book";
 
 
 const bookAuthor =
   params.get("author") ||
-  "Santiano Books";
+  "ENT Books";
 
 
 /*

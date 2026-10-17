@@ -6,216 +6,158 @@
 <title>Books — ENT Books</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f8f9fb;
-  --surface: #fff;
-  --ink: #0b1324;
-  --muted: #5d6678;
-  --line: #e1e5ec;
-  --brand: #12295c;
-  --brand-ink: #fff;
-  --accent: #a9792b;
-  --soft: #f0f3f9;
-  --nav-bg: rgba(255, 255, 255, .92);
-  --grid: rgba(18, 41, 92, .06);
+  --bg: #f5efe4;
+  --surface: #fffdf8;
+  --ink: #1b1813;
+  --muted: #6f675a;
+  --line: #e3d9c6;
+  --brand: #1f4d3a;
+  --brand-ink: #fffdf8;
+  --accent: #e0643a;
+  --soft: #ece3d1;
+  --nav-bg: rgba(245, 239, 228, .94);
   --danger: #b42318;
-  --ok: #067647;
-  --glow: #3d6bff;
-  --hh: 68px;
+  --hh: 64px;
   color-scheme: light;
 }
-
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0a0f1c; --surface: #111827; --ink: #eef1f7; --muted: #9aa3b5; --line: #1f2a3d;
-    --brand: #8aa4ff; --brand-ink: #0a0f1c; --accent: #d9b068; --soft: #0f1729;
-    --nav-bg: rgba(10, 15, 28, .92); --grid: rgba(138, 164, 255, .07);
-    --danger: #f97066; --ok: #47cd89; --glow: #7d9bff; color-scheme: dark;
+    --bg: #12100d; --surface: #1b1814; --ink: #f4eee2; --muted: #a39a89; --line: #2e2921;
+    --brand: #7fd1a6; --brand-ink: #10231a; --accent: #ff8a5c; --soft: #241f19;
+    --nav-bg: rgba(18, 16, 13, .94); --danger: #f97066; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0a0f1c; --surface: #111827; --ink: #eef1f7; --muted: #9aa3b5; --line: #1f2a3d;
-  --brand: #8aa4ff; --brand-ink: #0a0f1c; --accent: #d9b068; --soft: #0f1729;
-  --nav-bg: rgba(10, 15, 28, .92); --grid: rgba(138, 164, 255, .07);
-  --danger: #f97066; --ok: #47cd89; --glow: #7d9bff; color-scheme: dark;
+  --bg: #12100d; --surface: #1b1814; --ink: #f4eee2; --muted: #a39a89; --line: #2e2921;
+  --brand: #7fd1a6; --brand-ink: #10231a; --accent: #ff8a5c; --soft: #241f19;
+  --nav-bg: rgba(18, 16, 13, .94); --danger: #f97066; color-scheme: dark;
 }
 
-/* ---------- base ---------- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: calc(var(--hh) + 24px + env(safe-area-inset-top, 0px)); }
-body {
-  font-family: Inter, system-ui, sans-serif; background: var(--bg); color: var(--ink);
-  line-height: 1.65; font-size: 16px; overflow-x: hidden; -webkit-font-smoothing: antialiased;
-}
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--hh) + 16px); }
+body { font-family: "DM Sans", system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; font-size: 16px; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; }
 button, input { font: inherit; color: inherit; }
-h1, h2, h3 { font-family: "Source Serif 4", Georgia, serif; font-weight: 600; letter-spacing: -.015em; line-height: 1.15; }
+h1, h2, h3 { font-family: "Bricolage Grotesque", system-ui, sans-serif; line-height: 1.08; letter-spacing: -.02em; }
 [hidden] { display: none !important; }
-:focus-visible { outline: 2px solid var(--glow); outline-offset: 2px; }
-.wrap { width: min(1120px, 90%); margin-inline: auto; }
-.muted { color: var(--muted); }
-.sec { padding: 72px 0; }
-.eyebrow { display: flex; align-items: center; gap: 12px; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
-.eyebrow::before { content: ""; width: 28px; height: 1px; background: currentColor; }
-svg.i { width: 19px; height: 19px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-
-/* ---------- buttons ---------- */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 0 24px; border-radius: 8px; font-size: 14px; font-weight: 500; border: 1px solid transparent; cursor: pointer; transition: .2s; }
-.btn-p { background: var(--brand); color: var(--brand-ink); }
-.btn-p:hover { filter: brightness(1.12); }
-.btn-o { border-color: var(--line); background: var(--surface); color: var(--ink); }
-.btn-o:hover { border-color: var(--brand); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.wrap { width: min(1180px, 92%); margin-inline: auto; }
+svg.i { width: 20px; height: 20px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ---------- header ---------- */
-header.site { position: sticky; top: 0; z-index: 50; padding-top: env(safe-area-inset-top, 0px); background: var(--nav-bg); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
-.nav { height: var(--hh); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-.logo { display: inline-flex; align-items: center; gap: 10px; font-family: "Source Serif 4", Georgia, serif; font-weight: 600; font-size: 19px; letter-spacing: -.01em; }
-.logo i { width: 32px; height: 32px; display: grid; place-items: center; background: var(--brand); color: var(--brand-ink); border-radius: 7px; font-style: normal; font-size: 17px; }
-.links { display: flex; gap: 32px; }
-.links a { font-size: 14px; color: var(--muted); transition: .2s; }
-.links a:hover, .links a.active { color: var(--ink); }
-.links a.active { box-shadow: 0 8px 0 -6px var(--accent); }
+header.site { position: sticky; top: 0; z-index: 50; padding-top: env(safe-area-inset-top, 0px); background: var(--nav-bg); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-bottom: 2px solid var(--ink); }
+.nav { height: var(--hh); display: flex; align-items: center; gap: 20px; }
+.logo { display: inline-flex; align-items: center; gap: 10px; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -.03em; }
+.logo i { width: 34px; height: 34px; display: grid; place-items: center; background: var(--accent); color: #fff; border: 2px solid var(--ink); border-radius: 50%; font-style: normal; font-size: 16px; }
+.links { display: flex; gap: 6px; margin-left: auto; }
+.links a { padding: 8px 16px; border-radius: 99px; font-size: 14px; font-weight: 500; transition: .2s; }
+.links a:hover { background: var(--soft); }
+.links a.active { background: var(--ink); color: var(--bg); }
 .actions { display: flex; align-items: center; gap: 10px; }
-.ib { display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 13px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); font-size: 14px; transition: .2s; }
-.ib:hover { border-color: var(--brand); }
-sup[data-cart-count] { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 99px; background: var(--brand); color: var(--brand-ink); font-size: 11px; font-weight: 600; line-height: 1; vertical-align: baseline; top: 0; }
-.acct { display: inline-flex; align-items: center; height: 38px; padding: 0 18px; border-radius: 8px; background: var(--brand); color: var(--brand-ink); font-size: 14px; font-weight: 500; }
-.acct:hover { filter: brightness(1.12); }
-.burger { display: none; width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); font-size: 18px; cursor: pointer; }
-.mm { display: none; padding: 8px 5% 20px; background: var(--surface); border-bottom: 1px solid var(--line); }
+.cart-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; border: 2px solid var(--ink); border-radius: 50%; background: var(--surface); transition: .2s; }
+.cart-btn:hover { background: var(--accent); color: #fff; }
+sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 5px; border: 2px solid var(--bg); border-radius: 99px; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; line-height: 1; }
+.acct { display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 99px; background: var(--brand); color: var(--brand-ink); font-size: 14px; font-weight: 700; transition: .2s; }
+.acct:hover { filter: brightness(1.15); }
+.burger { display: none; width: 42px; height: 42px; border: 2px solid var(--ink); border-radius: 50%; background: var(--surface); font-size: 18px; cursor: pointer; }
+.mm { display: none; padding: 8px 4% 18px; background: var(--surface); border-bottom: 2px solid var(--ink); }
 .mm.open { display: grid; }
-.mm a { padding: 14px 2px; border-bottom: 1px solid var(--line); font-size: 15px; }
+.mm a { padding: 14px 4px; border-bottom: 1px solid var(--line); font-size: 16px; font-weight: 500; }
 .mm a.out { color: var(--danger); border-bottom: 0; }
 
-/* ---------- dark hero band (store, library, account) ---------- */
-.band { position: relative; overflow: hidden; isolation: isolate; color: #eef1f7; background: linear-gradient(135deg, #071027 0%, #0e2150 55%, #16358a 100%); border-bottom: 1px solid rgba(138, 164, 255, .28); }
-.band::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(rgba(138, 164, 255, .09) 1px, transparent 1px) 0 0/44px 44px, linear-gradient(90deg, rgba(138, 164, 255, .09) 1px, transparent 1px) 0 0/44px 44px; -webkit-mask-image: radial-gradient(ellipse at 75% 0, #000 15%, transparent 75%); mask-image: radial-gradient(ellipse at 75% 0, #000 15%, transparent 75%); }
-.band::after { content: ""; position: absolute; z-index: -1; right: -140px; top: -280px; width: 580px; height: 580px; border-radius: 50%; background: radial-gradient(circle, rgba(61, 107, 255, .5), transparent 65%); }
-.band .eyebrow { color: #e3c585; }
-.band h1 { color: #fff; font-size: clamp(34px, 5vw, 56px); line-height: 1.06; }
-.band .lead { margin-top: 16px; max-width: 520px; font-size: 17px; color: #b5bfd6; }
-.chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
-.chip { display: inline-flex; align-items: center; gap: 8px; padding: 7px 13px; border: 1px solid rgba(138, 164, 255, .28); border-radius: 99px; background: rgba(138, 164, 255, .08); font-size: 13px; color: #cdd5e8; }
-.chip svg { width: 15px; height: 15px; color: #e3c585; }
+/* ---------- hero ---------- */
+.hero { padding: 56px 0 28px; }
+.hero-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: end; }
+.tag-label { display: inline-block; padding: 5px 14px; border: 2px solid var(--ink); border-radius: 99px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; transform: rotate(-2deg); }
+.hero h1 { margin-top: 20px; font-size: clamp(42px, 8vw, 96px); font-weight: 800; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero p.lead { color: var(--muted); font-size: 17px; max-width: 420px; }
+.perks { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.perks span { padding: 6px 12px; border: 1.5px solid var(--line); border-radius: 99px; background: var(--surface); font-size: 13px; color: var(--muted); }
 
-/* ---------- panels, feature strip ---------- */
-.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
-.feats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
-.feat { padding: 24px; background: var(--surface); }
-.feat svg { color: var(--brand); }
-.feat b { display: block; margin-top: 12px; font-size: 15px; font-weight: 600; }
-.feat span { font-size: 14px; color: var(--muted); }
-.head { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; margin-bottom: 28px; }
-.head h2 { margin-top: 12px; font-size: clamp(24px, 3vw, 32px); }
-.head .btn { min-height: 40px; padding: 0 16px; white-space: nowrap; }
+/* search */
+.cmd { display: flex; align-items: center; height: 62px; margin-top: 32px; padding: 0 10px 0 20px; border: 2px solid var(--ink); border-radius: 99px; background: var(--surface); box-shadow: 5px 5px 0 var(--ink); transition: .2s; }
+.cmd:focus-within { box-shadow: 2px 2px 0 var(--ink); transform: translate(3px, 3px); }
+.cmd input { flex: 1; min-width: 0; height: 100%; margin: 0 12px; border: 0; outline: 0; background: transparent; font-size: 16px; -webkit-appearance: none; appearance: none; }
+.cmd input::placeholder { color: var(--muted); }
+.cmd input::-webkit-search-cancel-button { -webkit-appearance: none; display: none; }
+.cmd kbd { display: inline-grid; place-items: center; min-width: 30px; height: 30px; margin-right: 8px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--soft); font-size: 13px; font-weight: 700; color: var(--muted); }
+.clear-search { display: none; margin-right: 6px; padding: 8px 16px; border: 0; border-radius: 99px; background: var(--ink); color: var(--bg); font-size: 13px; font-weight: 700; cursor: pointer; }
+.clear-search.visible { display: inline-block; }
+.clear-search.visible + kbd { display: none; }
 
-/* ---------- book grid + cards (markup rendered by js/app.js and js/library.js) ---------- */
-.books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 22px; }
-.books-grid > p { grid-column: 1 / -1; padding: 48px 20px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 14px; background: var(--surface); }
-.book-card { position: relative; display: flex; flex-direction: column; padding: 14px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; transition: transform .3s, border-color .3s, box-shadow .3s; }
-.book-card::before { content: ""; position: absolute; inset: 0; z-index: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .3s; background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), rgba(61, 107, 255, .16), transparent 62%); }
-.book-card > * { position: relative; z-index: 1; }
-.book-card:hover { transform: translateY(-5px); border-color: var(--glow); box-shadow: 0 22px 44px -16px rgba(18, 41, 92, .38), 0 0 0 1px rgba(61, 107, 255, .22); }
-.book-card:hover::before { opacity: 1; }
-.book-card .cover, .book-card .book-cover { position: relative; width: 100%; height: 245px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 3px 8px 8px 3px; background: var(--soft); color: var(--muted); font-size: 13px; text-align: center; box-shadow: 0 10px 24px -10px rgba(10, 20, 50, .45); transition: transform .5s cubic-bezier(.2, .7, .2, 1), box-shadow .5s; }
-.book-card .cover::before, .book-card .book-cover::before { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(90deg, rgba(0, 0, 0, .3), rgba(255, 255, 255, .16) 4%, rgba(0, 0, 0, .06) 8%, transparent 16%); }
-.book-card .cover::after, .book-card .book-cover::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, .22) 50%, transparent 62%); transform: translateX(-120%); transition: transform .8s; }
-.book-card:hover .cover, .book-card:hover .book-cover { transform: perspective(700px) rotateY(-7deg) scale(1.03); box-shadow: 14px 18px 30px -12px rgba(10, 20, 50, .55), 0 0 34px rgba(61, 107, 255, .28); }
-.book-card:hover .cover::after, .book-card:hover .book-cover::after { transform: translateX(120%); }
-.book-card img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 6px; }
-.book-card .cover img, .book-card .book-cover img { height: 100%; aspect-ratio: auto; border-radius: 0; }
-.book-card h3 { margin-top: 16px; font-size: 17px; line-height: 1.3; }
-.book-card h3 a:hover { color: var(--brand); }
+/* ---------- category pills ---------- */
+.cats { position: sticky; top: calc(var(--hh) + env(safe-area-inset-top, 0px) + 2px); z-index: 40; padding: 14px 0; background: var(--bg); }
+#categoriesList { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 6px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+#categoriesList::-webkit-scrollbar { display: none; }
+#categoriesList a, #categoriesList button { flex-shrink: 0; padding: 9px 18px; border: 2px solid var(--ink); border-radius: 99px; background: var(--surface); color: var(--ink); font-size: 14px; font-weight: 500; white-space: nowrap; cursor: pointer; transition: .15s; }
+#categoriesList a:hover, #categoriesList button:hover { background: var(--soft); }
+#categoriesList .active { background: var(--brand); border-color: var(--brand); color: var(--brand-ink); font-weight: 700; }
+.categories-loading, .categories-empty { padding: 9px 4px; font-size: 14px; color: var(--muted); }
+
+/* ---------- catalogue ---------- */
+.tool { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 22px 0 22px; padding-bottom: 14px; border-bottom: 2px solid var(--ink); }
+.tool h2 { font-size: clamp(24px, 3vw, 34px); font-weight: 800; }
+.books-result-count { font-size: 14px; font-weight: 500; color: var(--muted); }
+main { padding-bottom: 88px; }
+
+.books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 28px 22px; }
+.books-grid > p { grid-column: 1 / -1; padding: 56px 20px; text-align: center; color: var(--muted); border: 2px dashed var(--line); border-radius: 20px; }
+.book-card { position: relative; display: flex; flex-direction: column; padding: 12px; background: var(--surface); border: 2px solid var(--ink); border-radius: 20px; box-shadow: 5px 5px 0 var(--ink); transition: transform .2s, box-shadow .2s; }
+.book-card:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--accent); }
+.book-card .cover, .book-card .book-cover { width: 100%; height: 270px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid var(--ink); border-radius: 12px; background: var(--soft); color: var(--muted); font-size: 13px; text-align: center; }
+.book-card img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 10px; }
+.book-card .cover img, .book-card .book-cover img { height: 100%; aspect-ratio: auto; border-radius: 0; transition: transform .4s; }
+.book-card:hover .cover img, .book-card:hover .book-cover img { transform: scale(1.05); }
+.book-card h3 { margin-top: 14px; font-size: 18px; font-weight: 700; line-height: 1.2; letter-spacing: -.01em; }
+.book-card h3 a:hover { color: var(--accent); }
 .book-card p, .book-card span, .book-card small { color: var(--muted); font-size: 14px; }
-.book-card .price, .book-card .book-price, .book-card strong { color: var(--ink); font-size: 15px; font-weight: 600; }
-.book-card .category, .book-card .badge, .book-card .tag { display: inline-block; width: fit-content; margin-top: 12px; padding: 2px 9px; border: 1px solid var(--line); border-radius: 99px; background: var(--soft); font-size: 11px; font-weight: 500; }
-.book-card a.btn, .book-card .gold-btn, .book-card button { display: inline-flex; align-items: center; justify-content: center; width: 100%; min-height: 42px; margin-top: auto; padding: 0 14px; border: 0; border-radius: 8px; background: var(--brand); color: var(--brand-ink); font-size: 13px; font-weight: 500; cursor: pointer; transition: .2s; }
+.book-card .price, .book-card .book-price, .book-card strong { color: var(--ink); font-size: 17px; font-weight: 700; }
+.book-card .category, .book-card .badge, .book-card .tag { display: inline-block; width: fit-content; margin-top: 10px; padding: 2px 10px; border: 1.5px solid var(--ink); border-radius: 99px; background: var(--soft); color: var(--ink); font-size: 11px; font-weight: 700; }
+.book-card a.btn, .book-card .gold-btn, .book-card button { display: inline-flex; align-items: center; justify-content: center; width: 100%; min-height: 44px; margin-top: auto; padding: 0 14px; border: 2px solid var(--ink); border-radius: 99px; background: var(--brand); color: var(--brand-ink); font-size: 14px; font-weight: 700; cursor: pointer; transition: .2s; }
 .book-card h3 + *, .book-card p + a.btn, .book-card p + .gold-btn, .book-card p + button { margin-top: 10px; }
-.book-card a.btn:hover, .book-card .gold-btn:hover, .book-card button:hover { filter: brightness(1.12); }
+.book-card a.btn:hover, .book-card .gold-btn:hover, .book-card button:hover { background: var(--accent); color: #fff; }
 
 /* ---------- footer ---------- */
-.ft { padding: 64px 0 28px; background: var(--surface); border-top: 1px solid var(--line); }
-.fg { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 40px; }
-.fg p { max-width: 290px; margin-top: 16px; font-size: 14px; color: var(--muted); }
-.fg h4 { margin-bottom: 16px; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
-.fg nav { display: grid; gap: 11px; }
-.fg nav a { font-size: 14px; color: var(--muted); width: fit-content; }
-.fg nav a:hover { color: var(--ink); }
-.fb { padding-top: 24px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+.ft { padding: 56px 0 28px; background: var(--ink); color: var(--bg); }
+.fg { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 36px; padding-bottom: 36px; }
+.ft .logo i { border-color: var(--bg); }
+.fg p { max-width: 290px; margin-top: 14px; font-size: 14px; opacity: .7; }
+.fg h4 { margin-bottom: 14px; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+.fg nav { display: grid; gap: 10px; }
+.fg nav a { width: fit-content; font-size: 14px; opacity: .75; }
+.fg nav a:hover { opacity: 1; }
+.fb { padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, .15); font-size: 13px; opacity: .6; }
 
 /* ---------- responsive ---------- */
-@media (max-width: 960px) {
-  .feats { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 20px; }
   .fg { grid-template-columns: 1fr 1fr; }
   .fg > div:first-child { grid-column: 1 / -1; }
 }
 @media (max-width: 800px) {
   :root { --hh: 60px; }
-  .links, .actions { display: none; }
+  .links, .acct { display: none; }
   .burger { display: block; }
-  .sec { padding: 56px 0; }
+  .actions { margin-left: auto; }   /* cart stays visible on mobile */
+  .nav { gap: 10px; }
+  .hero { padding-top: 36px; }
 }
 @media (max-width: 600px) {
-  .feats { grid-template-columns: 1fr; }
-  .books-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-  .book-card { padding: 10px; }
+  .books-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 12px; }
+  .book-card { padding: 8px; border-radius: 16px; box-shadow: 3px 3px 0 var(--ink); }
   .book-card .cover, .book-card .book-cover { height: 190px; }
-  .head { flex-direction: column; align-items: flex-start; }
+  .book-card h3 { font-size: 15px; }
+  .cmd { height: 56px; box-shadow: 4px 4px 0 var(--ink); }
+  .cmd kbd { display: none; }
   .fg { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; scroll-behavior: auto !important; }
-}
-</style>
-<style>
-/* ---------- store hero ---------- */
-.store-band .wrap { padding-top: 64px; padding-bottom: 56px; }
-.store-band h1 { margin-top: 18px; }
-
-/* command-style search */
-.cmd { display: flex; align-items: center; max-width: 660px; height: 60px; margin-top: 30px; padding: 0 12px 0 20px; border: 1px solid rgba(138, 164, 255, .35); border-radius: 14px; background: rgba(7, 16, 39, .6); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transition: border-color .2s, box-shadow .2s; }
-.cmd:focus-within { border-color: #7d9bff; box-shadow: 0 0 0 4px rgba(61, 107, 255, .22), 0 0 44px rgba(61, 107, 255, .28); }
-.cmd > svg { color: #9fb2e8; }
-.cmd input { flex: 1; min-width: 0; height: 100%; margin: 0 12px; padding: 0; border: 0; outline: 0; background: transparent; color: #fff; font-size: 16px; -webkit-appearance: none; appearance: none; }
-.cmd input::placeholder { color: #8f9bb8; }
-.cmd input::-webkit-search-cancel-button { -webkit-appearance: none; display: none; }
-.cmd kbd { display: inline-grid; place-items: center; min-width: 26px; height: 26px; padding: 0 7px; border: 1px solid rgba(138, 164, 255, .35); border-radius: 6px; background: rgba(138, 164, 255, .1); color: #b5bfd6; font: 500 12px Inter, sans-serif; }
-.clear-search { display: none; margin-right: 8px; padding: 6px 12px; border: 0; border-radius: 8px; background: rgba(138, 164, 255, .16); color: #dfe6f7; font-size: 12px; font-weight: 500; cursor: pointer; }
-.clear-search.visible { display: inline-block; }
-.clear-search.visible + kbd { display: none; }
-
-/* ---------- layout ---------- */
-.store { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 40px; align-items: start; padding: 44px 0 88px; }
-.rail { position: sticky; top: calc(var(--hh) + 24px + env(safe-area-inset-top, 0px)); padding: 18px 12px; }
-.rail h4 { padding: 0 12px 12px; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-#categoriesList { display: flex; flex-direction: column; gap: 2px; }
-#categoriesList a, #categoriesList button { display: block; width: 100%; padding: 10px 12px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); font-size: 14px; text-align: left; cursor: pointer; transition: background .2s, color .2s; }
-#categoriesList a:hover, #categoriesList button:hover { background: var(--soft); color: var(--ink); }
-#categoriesList .active { background: var(--soft); color: var(--brand); font-weight: 600; box-shadow: inset 2px 0 0 var(--glow); }
-.categories-loading, .categories-empty { padding: 10px 12px; font-size: 13px; color: var(--muted); line-height: 1.5; }
-
-.tool { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
-.books-result-count { font-size: 14px; color: var(--muted); }
-
-/* mobile category chips */
-.mobile-cats { display: none; position: sticky; top: calc(var(--hh) + env(safe-area-inset-top, 0px)); z-index: 40; padding: 12px 0; background: var(--nav-bg); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
-.mobile-cats-inner { display: flex; gap: 8px; width: 92%; margin-inline: auto; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-.mobile-cats-inner::-webkit-scrollbar { display: none; }
-#mobileCategoriesList { display: flex; align-items: center; gap: 8px; min-width: 0; }
-#mobileCategoriesList a, #mobileCategoriesList button { flex-shrink: 0; padding: 8px 15px; border: 1px solid var(--line); border-radius: 99px; background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 500; white-space: nowrap; cursor: pointer; transition: .2s; }
-#mobileCategoriesList .active { background: var(--brand); border-color: var(--brand); color: var(--brand-ink); font-weight: 600; }
-#mobileCategoriesList .categories-loading, #mobileCategoriesList .categories-empty { padding: 8px 4px; }
-
-@media (max-width: 899px) {
-  .store { grid-template-columns: 1fr; padding-top: 28px; }
-  .rail { display: none; }
-  .mobile-cats { display: block; }
-  .store-band .wrap { padding-top: 44px; padding-bottom: 40px; }
-  .cmd { height: 54px; }
-  .cmd kbd { display: none; }
+  *, *::before, *::after { transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
 </style>
 </head>
@@ -224,9 +166,6 @@ sup[data-cart-count] { display: inline-grid; place-items: center; min-width: 20p
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
 <symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></symbol>
 <symbol id="cart" viewBox="0 0 24 24"><path d="M3 4h2l2.5 11h10l2-8H6.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></symbol>
-<symbol id="bolt" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></symbol>
-<symbol id="shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
-<symbol id="device" viewBox="0 0 24 24"><rect x="3" y="4" width="14" height="11" rx="2"/><rect x="15" y="9" width="6" height="11" rx="1.5"/><path d="M7 19h5"/></symbol>
 </svg>
 
 <header class="site">
@@ -236,8 +175,7 @@ sup[data-cart-count] { display: inline-grid; place-items: center; min-width: 20p
 <a href="home.html">Home</a><a class="active" href="books.html">Books</a><a href="library.html">My Library</a>
 </nav>
 <div class="actions">
-<a class="ib" href="#book-search" aria-label="Search books"><svg class="i"><use href="#search"/></svg></a>
-<a class="ib" href="cart.html" aria-label="Shopping cart"><svg class="i"><use href="#cart"/></svg><sup data-cart-count>0</sup></a>
+<a class="cart-btn" href="cart.html" aria-label="Shopping cart"><svg class="i"><use href="#cart"/></svg><sup data-cart-count>0</sup></a>
 <a class="acct" href="account.html">My Account</a>
 </div>
 <button class="burger" id="burger" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
@@ -248,50 +186,39 @@ sup[data-cart-count] { display: inline-grid; place-items: center; min-width: 20p
 </div>
 </header>
 
-<!-- STORE HERO -->
-<section class="band store-band">
+<section class="hero">
+<div class="wrap hero-grid">
+<div>
+<span class="tag-label">ENT Digital Collection</span>
+<h1 id="booksHeading">Find your <em>next</em> great read.</h1>
+</div>
+<div>
+<p class="lead">Digital books written to inspire, educate and transform. Search by title, author or category.</p>
+<div class="perks"><span>⚡ Instant access</span><span>🔒 Secure checkout</span><span>📱 Any device</span></div>
+</div>
+</div>
 <div class="wrap">
-<span class="eyebrow">ENT Digital Collection</span>
-<h1 id="booksTitle">All Books</h1>
-<p class="lead">Digital books written to inspire, educate and transform. Find your next read by title, author or category.</p>
-
 <div class="cmd">
 <svg class="i"><use href="#search"/></svg>
 <input type="search" id="book-search" placeholder="Search books, authors or categories" autocomplete="off" aria-label="Search books">
 <button type="button" id="clear-search" class="clear-search">Clear</button>
 <kbd title="Press / to search">/</kbd>
 </div>
-
-<div class="chips">
-<span class="chip"><svg class="i"><use href="#bolt"/></svg>Instant access after purchase</span>
-<span class="chip"><svg class="i"><use href="#shield"/></svg>Secure checkout</span>
-<span class="chip"><svg class="i"><use href="#device"/></svg>Read on any device</span>
-</div>
 </div>
 </section>
 
-<!-- MOBILE CATEGORIES -->
-<div class="mobile-cats" id="mobileCategories" aria-label="Book categories">
-<div class="mobile-cats-inner">
-<div id="mobileCategoriesList"><div class="categories-loading">Loading...</div></div>
-</div>
-</div>
-
-<main class="wrap store">
-
-<aside class="panel rail" aria-label="Categories">
-<h4>Categories</h4>
+<div class="cats" aria-label="Book categories">
+<div class="wrap">
 <div id="categoriesList"><div class="categories-loading">Loading categories...</div></div>
-</aside>
+</div>
+</div>
 
-<section>
+<main class="wrap">
 <div class="tool">
-<span class="eyebrow">Catalogue</span>
+<h2 id="booksTitle">All Books</h2>
 <div class="books-result-count" data-books-result-count></div>
 </div>
 <div class="books-grid" data-books-grid></div>
-</section>
-
 </main>
 
 <footer class="ft">
@@ -312,88 +239,37 @@ sup[data-cart-count] { display: inline-grid; place-items: center; min-width: 20p
 <script src="js/app.js"></script>
 <script src="js/auth.js"></script>
 <script>
-/* ENT Books — menu, card glow, logout (inline, no external file needed) */
 (function () {
   "use strict";
-
-  function menuEls() {
-    return { burger: document.getElementById("burger"), menu: document.getElementById("mm") };
-  }
+  var burger = document.getElementById("burger");
+  var menu = document.getElementById("mm");
+  var title = document.getElementById("booksTitle");
+  var search = document.getElementById("book-search");
+  var list = document.getElementById("categoriesList");
 
   function setMenu(open) {
-    var el = menuEls();
-    if (!el.burger || !el.menu) return;
-    el.menu.classList.toggle("open", open);
-    el.burger.setAttribute("aria-expanded", String(open));
+    if (!burger || !menu) return;
+    menu.classList.toggle("open", open);
+    burger.setAttribute("aria-expanded", String(open));
   }
 
-  /* One delegated click handler, so the menu works however the page loads */
   document.addEventListener("click", function (e) {
     var t = e.target;
     if (!t || !t.closest) return;
-
-    var el = menuEls();
-
-    if (t.closest("#burger")) {
-      setMenu(!(el.menu && el.menu.classList.contains("open")));
-      return;
-    }
-
-    if (el.menu && t.closest("#mm a")) {
-      setMenu(false);
-    }
+    if (t.closest("#burger")) { setMenu(!(menu && menu.classList.contains("open"))); return; }
+    if (menu && t.closest("#mm a")) setMenu(false);
 
     var out = t.closest("[data-logout]");
     if (out) {
       e.preventDefault();
-
-      if (typeof logout === "function") {
-        logout();
-        return;
-      }
-
-      try {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        sessionStorage.clear();
-      } catch (err) { /* storage unavailable */ }
+      if (typeof logout === "function") { logout(); return; }
+      try { localStorage.removeItem("token"); localStorage.removeItem("user"); sessionStorage.clear(); } catch (err) {}
       window.location.href = "index.html";
     }
   });
 
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") setMenu(false);
-  });
-
-  /* Pointer glow on book cards (cards are rendered by JS, so delegate) */
-  document.addEventListener("pointermove", function (e) {
-    var card = e.target.closest && e.target.closest(".book-card");
-    if (!card) return;
-    var r = card.getBoundingClientRect();
-    card.style.setProperty("--mx", (e.clientX - r.left) + "px");
-    card.style.setProperty("--my", (e.clientY - r.top) + "px");
-  }, { passive: true });
-})();
-</script>
-
-<script>
-/*
- * Mirrors the category list that app.js fills (#categoriesList) into the
- * horizontal mobile strip, keeps the active state in sync, and updates
- * the page title when a category is chosen.
- */
-(function () {
-  var source = document.getElementById("categoriesList");
-  var target = document.getElementById("mobileCategoriesList");
-  var title = document.getElementById("booksTitle");
-  var search = document.getElementById("book-search");
-
-  function setTitle(category) {
-    if (title && category) title.textContent = category === "All" ? "All Books" : category;
-  }
-
-  /* "/" focuses search, like a command bar */
-  document.addEventListener("keydown", function (e) {
     var tag = (document.activeElement && document.activeElement.tagName) || "";
     if (e.key === "/" && search && tag !== "INPUT" && tag !== "TEXTAREA") {
       e.preventDefault();
@@ -401,63 +277,15 @@ sup[data-cart-count] { display: inline-grid; place-items: center; min-width: 20p
     }
   });
 
-  if (!source || !target) return;
-
-  function copyCategories() {
-    target.innerHTML = "";
-    Array.prototype.forEach.call(source.children, function (child) {
-      var clone = child.cloneNode(true);
-      if (clone.nodeType === 1) {
-        clone.removeAttribute("data-category-bound");
-        clone.querySelectorAll("[data-category-bound]").forEach(function (el) {
-          el.removeAttribute("data-category-bound");
-        });
-      }
-      target.appendChild(clone);
+  /* Update the section title when a category is chosen (app.js does the filtering) */
+  if (list && title) {
+    list.addEventListener("click", function (e) {
+      var item = e.target.closest("[data-category]");
+      if (!item) return;
+      var c = item.getAttribute("data-category");
+      title.textContent = (!c || c === "All") ? "All Books" : c;
     });
   }
-
-  copyCategories();
-
-  new MutationObserver(copyCategories).observe(source, {
-    childList: true,
-    subtree: true,
-    characterData: true,
-    attributes: true,
-    attributeFilter: ["class"]
-  });
-
-  /* Desktop rail: app.js filters, we only update the title */
-  source.addEventListener("click", function (e) {
-    var item = e.target.closest("[data-category]");
-    if (item) setTitle(item.getAttribute("data-category"));
-  });
-
-  /* Mobile strip: set active state, update title, filter */
-  target.addEventListener("click", function (e) {
-    var link = e.target.closest("[data-category]");
-    if (!link) return;
-
-    e.preventDefault();
-    e.stopPropagation();
-
-    var category = link.getAttribute("data-category");
-    if (!category) return;
-
-    document.querySelectorAll("[data-category]").forEach(function (el) {
-      el.classList.remove("active");
-    });
-    link.classList.add("active");
-
-    var original = Array.prototype.filter.call(source.querySelectorAll("[data-category]"), function (el) {
-      return el.getAttribute("data-category") === category;
-    })[0];
-    if (original) original.classList.add("active");
-
-    setTitle(category);
-
-    if (typeof filterBooks === "function") filterBooks(category);
-  });
 })();
 </script>
 
