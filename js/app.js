@@ -248,12 +248,151 @@ function getCart() {
 }
 
 
-function setCart(cart) {
+function setCart(cart, { sync = true } = {}) {
 
   localStorage.setItem(
     getCartKey(),
     JSON.stringify(cart)
   );
+
+  if (sync) {
+    pushCartToServer(cart);
+  }
+
+}
+
+
+/* =========================
+   CART SYNC (SERVER)
+========================= */
+
+let cartPushChain = Promise.resolve();
+
+
+function pushCartToServer(cart) {
+
+  if (!isLoggedIn()) {
+    return;
+  }
+
+  const body = JSON.stringify({
+    items: cart.map(item => ({
+      book_id: Number(item.id),
+      quantity: Number(item.qty || 1)
+    }))
+  });
+
+  cartPushChain = cartPushChain.then(() =>
+    fetch(apiUrl("cart"), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAuthToken()}`
+      },
+      body
+    }).catch(error =>
+      console.error("Cart sync failed:", error)
+    )
+  );
+
+}
+
+
+async function syncCartFromServer() {
+
+  if (!isLoggedIn()) {
+    return;
+  }
+
+  /* During a repurchase the local cart is a temporary one-book cart. */
+
+  if (
+    localStorage.getItem(
+      "santianoRepurchase"
+    ) === "1"
+  ) {
+    return;
+  }
+
+  try {
+
+    const response =
+      await fetch(
+        apiUrl("cart"),
+        {
+          headers: {
+            Authorization:
+              `Bearer ${getAuthToken()}`
+          }
+        }
+      );
+
+    if (!response.ok) {
+      return;
+    }
+
+    const { items } =
+      await response.json();
+
+    const merged =
+      new Map(
+        (items || []).map(item => [
+          Number(item.id),
+          { ...item }
+        ])
+      );
+
+    /* Merge anything added as a guest, then clear it. */
+
+    let guest = [];
+
+    try {
+      guest = JSON.parse(
+        localStorage.getItem(
+          "santianoCart_guest"
+        ) || "[]"
+      );
+    } catch {
+      guest = [];
+    }
+
+    guest.forEach(item => {
+
+      const existing =
+        merged.get(Number(item.id));
+
+      if (existing) {
+        existing.qty = Math.max(
+          Number(existing.qty || 1),
+          Number(item.qty || 1)
+        );
+      } else {
+        merged.set(Number(item.id), item);
+      }
+
+    });
+
+    setCart(
+      [...merged.values()],
+      { sync: guest.length > 0 }
+    );
+
+    localStorage.removeItem(
+      "santianoCart_guest"
+    );
+
+    updateCartCount();
+
+    renderCart();
+
+  } catch (error) {
+
+    console.error(
+      "Cart load failed:",
+      error
+    );
+
+  }
 
 }
 
@@ -813,7 +952,7 @@ async function repurchaseBook(bookId) {
 
       }
 
-    ]);
+    ], { sync: false });
 
 
     /* Save pending order */
@@ -2214,6 +2353,8 @@ document.addEventListener(
     updateCartCount();
 
     renderCart();
+
+    syncCartFromServer();
 
     setupCategories();
 
