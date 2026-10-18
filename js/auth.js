@@ -312,6 +312,7 @@ function logout() {
     localStorage.removeItem("santianoCheckoutReturn");
     localStorage.removeItem("santianoRepurchaseOriginalCart");
     localStorage.removeItem("santianoRepurchase");
+    localStorage.removeItem("santianoRepurchaseCart");
 
     location.href = "index.html";
 }

@@ -191,6 +191,10 @@ function logout() {
     "santianoRepurchase"
   );
 
+  localStorage.removeItem(
+    "santianoRepurchaseCart"
+  );
+
 
   window.location.href =
     "index.html";
@@ -301,16 +305,6 @@ function pushCartToServer(cart) {
 async function syncCartFromServer() {
 
   if (!isLoggedIn()) {
-    return;
-  }
-
-  /* During a repurchase the local cart is a temporary one-book cart. */
-
-  if (
-    localStorage.getItem(
-      "santianoRepurchase"
-    ) === "1"
-  ) {
     return;
   }
 
@@ -513,9 +507,99 @@ function addToCart(id) {
   updateCartCount();
 
 
-  alert(
+  showToast(
     `${book.title} added to cart.`
   );
+
+}
+
+
+/* =========================
+   TOAST MESSAGE
+========================= */
+
+let toastTimer = null;
+
+
+function showToast(message) {
+
+  let toast =
+    document.getElementById(
+      "santianoToast"
+    );
+
+
+  if (!toast) {
+
+    toast =
+      document.createElement("div");
+
+    toast.id =
+      "santianoToast";
+
+    toast.setAttribute(
+      "role",
+      "status"
+    );
+
+    toast.setAttribute(
+      "aria-live",
+      "polite"
+    );
+
+    toast.style.cssText = `
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translate(-50%, 20px);
+      max-width: min(90vw, 420px);
+      padding: 12px 20px;
+      border: 2px solid #1b1813;
+      border-radius: 99px;
+      background: #1f4d3a;
+      color: #fffdf8;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      box-shadow: 4px 4px 0 #1b1813;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s, transform .25s;
+      z-index: 9999;
+    `;
+
+    document.body.appendChild(toast);
+
+  }
+
+
+  toast.textContent =
+    message;
+
+
+  /* Let the browser apply the hidden state before showing. */
+
+  requestAnimationFrame(() => {
+
+    toast.style.opacity = "1";
+
+    toast.style.transform =
+      "translate(-50%, 0)";
+
+  });
+
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(() => {
+
+      toast.style.opacity = "0";
+
+      toast.style.transform =
+        "translate(-50%, 20px)";
+
+    }, 2200);
 
 }
 
@@ -580,6 +664,12 @@ async function startCheckout() {
 
     return;
   }
+
+
+  /* A normal checkout must never be treated as a repurchase. */
+
+  localStorage.removeItem("santianoRepurchase");
+  localStorage.removeItem("santianoRepurchaseCart");
 
 
   const items =
@@ -903,23 +993,11 @@ async function repurchaseBook(bookId) {
     }
 
 
-    /* Save original cart */
-
-    const originalCart =
-      getCart();
-
+    /* Temporary checkout cart (the real cart is never touched) */
 
     localStorage.setItem(
-      "santianoRepurchaseOriginalCart",
-      JSON.stringify(
-        originalCart
-      )
-    );
-
-
-    /* Temporary checkout cart */
-
-    setCart([
+      "santianoRepurchaseCart",
+      JSON.stringify([
 
       {
 
@@ -952,7 +1030,7 @@ async function repurchaseBook(bookId) {
 
       }
 
-    ], { sync: false });
+    ]));
 
 
     /* Save pending order */
@@ -2349,6 +2427,11 @@ function escapeHtml(value) {
 document.addEventListener(
   "DOMContentLoaded",
   () => {
+
+    /* Leftover from the old repurchase flow. */
+
+    localStorage.removeItem("santianoRepurchaseOriginalCart");
+
 
     updateCartCount();
 

@@ -88,8 +88,13 @@ function getPendingOrder() {
 
 function getCheckoutCart() {
   try {
+    // A repurchase uses its own temporary cart so the real cart is untouched.
+    const cartKey = isRepurchase()
+      ? "santianoRepurchaseCart"
+      : getCheckoutCartKey();
+
     const cart = JSON.parse(
-      localStorage.getItem(getCheckoutCartKey()) || "[]"
+      localStorage.getItem(cartKey) || "[]"
     );
 
     return Array.isArray(cart) ? cart : [];
@@ -170,35 +175,16 @@ function getCoverUrl(coverKey) {
 // =====================================================
 
 function clearCheckout() {
-  const cartKey = getCheckoutCartKey();
-
   if (isRepurchase()) {
-    const originalCart =
-      localStorage.getItem(
-        "santianoRepurchaseOriginalCart"
-      );
-
-    if (originalCart !== null) {
-      localStorage.setItem(
-        cartKey,
-        originalCart
-      );
-    }
-
-    localStorage.removeItem(
-      "santianoRepurchaseOriginalCart"
-    );
-
-    localStorage.removeItem(
-      "santianoRepurchase"
-    );
+    // A repurchase never touches the real cart.
+    localStorage.removeItem("santianoRepurchaseCart");
+    localStorage.removeItem("santianoRepurchase");
   } else {
-    localStorage.removeItem(cartKey);
+    localStorage.removeItem(getCheckoutCartKey());
   }
 
-  localStorage.removeItem(
-    "santianoPendingOrder"
-  );
+  localStorage.removeItem("santianoRepurchaseOriginalCart");
+  localStorage.removeItem("santianoPendingOrder");
 }
 
 // =====================================================

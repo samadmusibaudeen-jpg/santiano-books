@@ -424,7 +424,7 @@ async function downloadBook(
     );
 
 
-    alert(
+    showToast(
       error.message ||
       "Unable to download this book."
     );
@@ -455,7 +455,98 @@ async function downloadBook(
 
 
 /* =====================================================
-   REPURCHASE CONFIRMATION
+   TOAST MESSAGE
+===================================================== */
+
+let toastTimer = null;
+
+
+function showToast(message) {
+
+  let toast =
+    document.getElementById(
+      "santianoToast"
+    );
+
+
+  if (!toast) {
+
+    toast =
+      document.createElement("div");
+
+    toast.id =
+      "santianoToast";
+
+    toast.setAttribute(
+      "role",
+      "status"
+    );
+
+    toast.setAttribute(
+      "aria-live",
+      "polite"
+    );
+
+    toast.style.cssText = `
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translate(-50%, 20px);
+      max-width: min(90vw, 420px);
+      padding: 12px 20px;
+      border: 2px solid #1b1813;
+      border-radius: 99px;
+      background: #1f4d3a;
+      color: #fffdf8;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      box-shadow: 4px 4px 0 #1b1813;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s, transform .25s;
+      z-index: 9999;
+    `;
+
+    document.body.appendChild(toast);
+
+  }
+
+
+  toast.textContent =
+    message;
+
+
+  requestAnimationFrame(() => {
+
+    toast.style.opacity = "1";
+
+    toast.style.transform =
+      "translate(-50%, 0)";
+
+  });
+
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(() => {
+
+      toast.style.opacity = "0";
+
+      toast.style.transform =
+        "translate(-50%, 20px)";
+
+    }, 3500);
+
+}
+
+
+/* =====================================================
+   REPURCHASE
+   No browser popup. The checkout page already tells
+   the user they own this book and they must still
+   press PAY, so nothing is charged by accident.
 ===================================================== */
 
 function confirmRepurchase(
@@ -463,17 +554,6 @@ function confirmRepurchase(
   bookTitle,
   bookData
 ) {
-
-  const confirmed =
-    window.confirm(
-      "You owned this book already, are you sure you want to continue with the payment?"
-    );
-
-
-  if (!confirmed) {
-    return;
-  }
-
 
   startRepurchase(
     bookId,
@@ -596,32 +676,8 @@ async function startRepurchase(
 
 
     /* ---------------------------------------------
-       SAVE ORIGINAL CART
-    --------------------------------------------- */
-
-    const originalCart =
-      JSON.parse(
-        localStorage.getItem(
-          getCartKey()
-        ) || "[]"
-      );
-
-
-    localStorage.setItem(
-      "santianoRepurchaseOriginalCart",
-
-      JSON.stringify(
-        Array.isArray(
-          originalCart
-        )
-          ? originalCart
-          : []
-      )
-    );
-
-
-    /* ---------------------------------------------
-       TEMPORARY CART
+       TEMPORARY REPURCHASE CART
+       Stored separately: the real cart is never touched.
     --------------------------------------------- */
 
     const temporaryCart = [
@@ -663,7 +719,7 @@ async function startRepurchase(
 
 
     localStorage.setItem(
-      getCartKey(),
+      "santianoRepurchaseCart",
 
       JSON.stringify(
         temporaryCart
@@ -732,7 +788,7 @@ async function startRepurchase(
     );
 
 
-    alert(
+    showToast(
       error.message ||
       "Unable to continue with payment."
     );
@@ -1177,6 +1233,10 @@ function logout() {
 
   localStorage.removeItem(
     "santianoRepurchaseOriginalCart"
+  );
+
+  localStorage.removeItem(
+    "santianoRepurchaseCart"
   );
 
 
