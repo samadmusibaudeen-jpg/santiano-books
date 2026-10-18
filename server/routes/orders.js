@@ -626,6 +626,18 @@ router.post(
         [reference, orderId]
       );
 
+      // Remove the purchased books from the user's saved cart
+      await client.query(
+        `
+        DELETE FROM cart_items
+        WHERE user_id = $1
+          AND book_id IN (
+            SELECT book_id FROM order_items WHERE order_id = $2
+          )
+        `,
+        [order.user_id, orderId]
+      );
+
       await client.query("COMMIT");
       transactionStarted = false;
 

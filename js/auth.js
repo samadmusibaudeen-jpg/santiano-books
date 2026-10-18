@@ -309,6 +309,9 @@ function logout() {
     localStorage.removeItem(AUTH_USER_KEY);
     localStorage.removeItem(LOGIN_RETURN_KEY);
     localStorage.removeItem("santianoPendingOrder");
+    localStorage.removeItem("santianoCheckoutReturn");
+    localStorage.removeItem("santianoRepurchaseOriginalCart");
+    localStorage.removeItem("santianoRepurchase");
 
     location.href = "index.html";
 }
