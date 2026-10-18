@@ -11,6 +11,7 @@ const bookRoutes = require("./routes/books");
 const orderRoutes = require("./routes/orders");
 const libraryRoutes = require("./routes/library");
 const adminBookRoutes = require("./routes/admin-books");
+const cartRoutes = require("./routes/cart");
 
 const app = express();
 
@@ -133,6 +134,11 @@ app.use(
 app.use(
   "/api/orders",
   orderRoutes
+);
+
+app.use(
+  "/api/cart",
+  cartRoutes
 );
 
 app.use(
