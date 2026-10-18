@@ -362,6 +362,29 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
 
 <script src="js/auth.js"></script>
 <script>
+/* ENT Books — mobile menu (inline so it works without any extra file) */
+(function () {
+  "use strict";
+  var burger = document.getElementById("burger");
+  var menu = document.getElementById("mm");
+  function setMenu(open) {
+    if (!burger || !menu) return;
+    menu.classList.toggle("open", open);
+    burger.setAttribute("aria-expanded", String(open));
+    burger.textContent = open ? "\u2715" : "\u2630";
+  }
+  document.addEventListener("click", function (e) {
+    var t = e.target;
+    if (!t || !t.closest) return;
+    if (t.closest("#burger")) { setMenu(!(menu && menu.classList.contains("open"))); return; }
+    if (menu && t.closest("#mm a")) { setMenu(false); return; }
+    if (menu && menu.classList.contains("open") && !t.closest("header.site")) setMenu(false);
+  });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") setMenu(false); });
+  window.addEventListener("resize", function () { if (window.innerWidth > 800) setMenu(false); });
+})();
+</script>
+<script>
 /* The hero covers tilt gently with the pointer */
 (function () {
   var scene = document.getElementById("scene");
