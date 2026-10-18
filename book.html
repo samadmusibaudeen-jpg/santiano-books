@@ -55,6 +55,8 @@ header.site { position: sticky; top: 0; z-index: 50; padding-top: env(safe-area-
 sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 5px; border: 2px solid var(--bg); border-radius: 99px; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; line-height: 1; }
 .acct { display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 99px; background: var(--brand); color: var(--brand-ink); font-size: 14px; font-weight: 700; transition: .2s; }
 .acct:hover { filter: brightness(1.15); }
+.hd-out { display: inline-flex; align-items: center; height: 42px; padding: 0 18px; border: 2px solid var(--ink); border-radius: 99px; background: var(--surface); color: var(--ink); font-size: 14px; font-weight: 700; cursor: pointer; transition: .2s; }
+.hd-out:hover { background: var(--danger); border-color: var(--danger); color: #fff; }
 .burger { display: none; width: 42px; height: 42px; border: 2px solid var(--ink); border-radius: 50%; background: var(--surface); font-size: 18px; cursor: pointer; }
 .mm { display: none; padding: 8px 4% 18px; background: var(--surface); border-bottom: 2px solid var(--ink); }
 .mm.open { display: grid; }
@@ -105,6 +107,9 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
 .book-card a.btn, .book-card .gold-btn, .book-card button { display: inline-flex; align-items: center; justify-content: center; width: 100%; min-height: 44px; margin-top: auto; padding: 0 14px; border: 2px solid var(--ink); border-radius: 99px; background: var(--brand); color: var(--brand-ink); font-size: 14px; font-weight: 700; box-shadow: none; cursor: pointer; transition: .2s; }
 .book-card h3 + *, .book-card p + a.btn, .book-card p + .gold-btn, .book-card p + button { margin-top: 10px; }
 .book-card a.btn:hover, .book-card .gold-btn:hover, .book-card button:hover { background: var(--accent); color: #fff; transform: none; }
+.book-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: auto; padding-top: 12px; }
+.book-actions button { margin-top: 0 !important; }
+.book-card .cover h3 { margin-top: 0; padding: 10px; }
 
 /* footer */
 .ft { padding: 56px 0 28px; background: var(--ink); color: var(--bg); }
@@ -125,7 +130,7 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
 }
 @media (max-width: 800px) {
   :root { --hh: 60px; }
-  .links, .acct { display: none; }
+  .links, .acct, .hd-out { display: none; }
   .burger { display: block; }
   .actions { margin-left: auto; } /* cart stays visible on mobile */
   .nav { gap: 10px; }
@@ -203,6 +208,7 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
 <div class="actions">
 <a class="cart-btn" href="cart.html" aria-label="Shopping cart"><svg class="i"><use href="#cart"/></svg><sup data-cart-count>0</sup></a>
 <a class="acct" href="account.html">My Account</a>
+<button type="button" class="hd-out" data-logout>Logout</button>
 </div>
 <button class="burger" id="burger" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
 </div>
@@ -264,5 +270,43 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
 </footer>
 
 <script src="js/app.js"></script>
+<script>
+/* ENT Books — mobile menu + logout (inline so it works on every page) */
+(function () {
+  "use strict";
+  var burger = document.getElementById("burger");
+  var menu = document.getElementById("mm");
+
+  function setMenu(open) {
+    if (!burger || !menu) return;
+    menu.classList.toggle("open", open);
+    burger.setAttribute("aria-expanded", String(open));
+    burger.textContent = open ? "\u2715" : "\u2630";
+  }
+
+  function doLogout() {
+    if (typeof logout === "function") { logout(); return; }
+    try {
+      Object.keys(localStorage).forEach(function (k) {
+        if (/token|user|auth|session|santiano/i.test(k) && !/admin/i.test(k)) localStorage.removeItem(k);
+      });
+      sessionStorage.clear();
+    } catch (err) {}
+    window.location.href = "index.html";
+  }
+
+  document.addEventListener("click", function (e) {
+    var t = e.target;
+    if (!t || !t.closest) return;
+    if (t.closest("[data-logout]")) { e.preventDefault(); doLogout(); return; }
+    if (t.closest("#burger")) { setMenu(!(menu && menu.classList.contains("open"))); return; }
+    if (menu && t.closest("#mm a")) { setMenu(false); return; }
+    if (menu && menu.classList.contains("open") && !t.closest("header.site")) setMenu(false);
+  });
+
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") setMenu(false); });
+  window.addEventListener("resize", function () { if (window.innerWidth > 800) setMenu(false); });
+})();
+</script>
 </body>
 </html>
