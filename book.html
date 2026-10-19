@@ -156,7 +156,7 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
 .crumb-path { font-size: 13px; color: var(--muted); }
 .crumb-path a:hover { color: var(--ink); }
 
-.stage { padding: 26px 0 48px; }
+.stage { padding: 26px 0 88px; }
 .book-detail > p { padding: 56px 20px; text-align: center; color: var(--muted); border: 2px dashed var(--line); border-radius: 24px; }
 .book-detail-card { display: grid; grid-template-columns: minmax(220px, 330px) 1fr; gap: 64px; align-items: center; padding: 52px; border: 2px solid var(--ink); border-radius: 28px; background: var(--surface); box-shadow: 8px 8px 0 var(--ink); position: relative; overflow: hidden; }
 .book-detail-card::before { content: ""; position: absolute; left: -60px; top: 50%; width: 420px; height: 420px; transform: translateY(-50%); border-radius: 50%; background: var(--accent); opacity: .22; }
@@ -174,8 +174,6 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
 .book-detail-button:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); }
 .book-detail-button + .book-detail-button { margin-left: 10px; background: var(--surface); color: var(--ink); }
 
-.more { padding: 24px 0 88px; }
-.more .books-grid > *:nth-child(n+5) { display: none; }
 
 @media (max-width: 960px) { .book-detail-card { gap: 40px; padding: 36px; } }
 @media (max-width: 800px) {
@@ -201,9 +199,9 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
 
 <header class="site">
 <div class="wrap nav">
-<a href="home.html" class="logo"><i>E</i>ENT Books</a>
+<a href="books.html" class="logo"><i>E</i>ENT Books</a>
 <nav class="links">
-<a href="home.html">Home</a><a class="active" href="books.html">Books</a><a href="library.html">My Library</a>
+<a class="active" href="books.html">Books</a><a href="library.html">My Library</a>
 </nav>
 <div class="actions">
 <a class="cart-btn" href="cart.html" aria-label="Shopping cart"><svg class="i"><use href="#cart"/></svg><sup data-cart-count>0</sup></a>
@@ -213,7 +211,7 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
 <button class="burger" id="burger" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
 </div>
 <div class="mm" id="mm">
-<a href="home.html">Home</a><a href="books.html">Books</a><a href="library.html">My Library</a><a href="cart.html">Cart</a><a href="account.html">My Account</a>
+<a href="books.html">Books</a><a href="library.html">My Library</a><a href="cart.html">Cart</a><a href="account.html">My Account</a>
 <a href="#" class="out" data-logout>Logout</a>
 </div>
 </header>
@@ -222,7 +220,7 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
 
 <div class="wrap crumbs">
 <a href="books.html" class="back">← Back to Books</a>
-<span class="crumb-path"><a href="home.html">Home</a> / <a href="books.html">Books</a> / Details</span>
+<span class="crumb-path"><a href="books.html">Books</a> / Details</span>
 </div>
 
 <section class="stage">
@@ -233,35 +231,16 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
 </div>
 </section>
 
-<section class="wrap" style="padding-bottom:48px">
-<div class="feats">
-<div class="feat"><svg class="i"><use href="#bolt"/></svg><b>Instant Access</b><span>Your book is available right after purchase.</span></div>
-<div class="feat"><svg class="i"><use href="#lib"/></svg><b>Personal Library</b><span>Every book you buy stays in My Library.</span></div>
-<div class="feat"><svg class="i"><use href="#shield"/></svg><b>Secure Download</b><span>Temporary links controlled by ENT Books.</span></div>
-<div class="feat"><svg class="i"><use href="#device"/></svg><b>Read Anywhere</b><span>Phone, tablet or computer.</span></div>
-</div>
-</section>
-
-<section class="more">
-<div class="wrap">
-<div class="head">
-<h2>More to explore</h2>
-<a href="books.html" class="btn btn-o">View all books →</a>
-</div>
-<div class="books-grid" data-books-grid></div>
-</div>
-</section>
-
 </main>
 
 <footer class="ft">
 <div class="wrap">
 <div class="fg">
 <div>
-<a href="home.html" class="logo"><i>E</i>ENT Books</a>
+<a href="books.html" class="logo"><i>E</i>ENT Books</a>
 <p>Digital books for people who want to learn, grow and build.</p>
 </div>
-<div><h4>Explore</h4><nav><a href="home.html">Home</a><a href="books.html">Books</a><a href="library.html">My Library</a><a href="cart.html">Cart</a></nav></div>
+<div><h4>Explore</h4><nav><a href="books.html">Books</a><a href="library.html">My Library</a><a href="cart.html">Cart</a></nav></div>
 <div><h4>Account</h4><nav><a href="account.html">My Account</a><a href="login.html" data-logout>Logout</a></nav></div>
 <div><h4>ENT Books</h4><nav><a href="#">About</a><a href="#">Contact</a></nav></div>
 </div>
