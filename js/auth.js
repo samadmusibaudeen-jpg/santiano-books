@@ -13,6 +13,13 @@ window.SANTIANO_API =
     "https://santiano-books.onrender.com/api";
 
 
+/* Page name without ".html" so it works with clean URLs (/login or /login.html) */
+function currentPageName() {
+    const page = location.pathname.split("/").pop() || "index";
+    return page.replace(/\.html$/, "") || "index";
+}
+
+
 function authApiUrl(path = "") {
     return `${window.SANTIANO_API.replace(/\/+$/, "")}/${String(path).replace(/^\/+/, "")}`;
 }
@@ -246,20 +253,18 @@ function requireLogin() {
         return true;
     }
 
-    const page =
-        location.pathname.split("/").pop() ||
-        "index.html";
+    const page = currentPageName();
 
     const returnUrl =
         page + location.search + location.hash;
 
     const publicPages = [
         "",
-        "index.html",
-        "login.html",
-        "register.html",
-        "forgot-password.html",
-        "reset-password.html"
+        "index",
+        "login",
+        "register",
+        "forgot-password",
+        "reset-password"
     ];
 
     if (!publicPages.includes(page)) {
@@ -269,7 +274,7 @@ function requireLogin() {
         );
     }
 
-    location.href = "login.html";
+    location.href = "login";
 
     return false;
 }
@@ -284,19 +289,24 @@ function handleLoginReturn() {
 
     localStorage.removeItem(LOGIN_RETURN_KEY);
 
+    const returnPage =
+        String(returnUrl || "")
+            .split(/[?#]/)[0]
+            .replace(/\.html$/, "");
+
     if (
         returnUrl &&
-        returnUrl !== "index.html" &&
-        returnUrl !== "login.html" &&
-        returnUrl !== "register.html" &&
-        returnUrl !== "forgot-password.html" &&
-        returnUrl !== "reset-password.html"
+        returnPage !== "index" &&
+        returnPage !== "login" &&
+        returnPage !== "register" &&
+        returnPage !== "forgot-password" &&
+        returnPage !== "reset-password"
     ) {
         location.href = returnUrl;
         return;
     }
 
-    location.href = "books.html";
+    location.href = "books";
 }
 
 
@@ -314,7 +324,7 @@ function logout() {
     localStorage.removeItem("santianoRepurchase");
     localStorage.removeItem("santianoRepurchaseCart");
 
-    location.href = "index.html";
+    location.href = "/";
 }
 
 
@@ -379,16 +389,16 @@ function updateAuthNavigation() {
 ===================================================== */
 
 function redirectAuthenticatedUser() {
-    const page = location.pathname.split("/").pop();
+    const page = currentPageName();
 
     if (
         isAuthenticated() &&
         (
-            page === "login.html" ||
-            page === "register.html"
+            page === "login" ||
+            page === "register"
         )
     ) {
-        location.href = "books.html";
+        location.href = "books";
     }
 }
 
@@ -504,7 +514,7 @@ function setupRegisterForm() {
                     "Account created successfully. Welcome to Santiano Books!";
 
                 setTimeout(() => {
-                    location.href = "books.html";
+                    location.href = "books";
                 }, 500);
 
                 return;
@@ -514,7 +524,7 @@ function setupRegisterForm() {
                 "Account created successfully. Redirecting to login...";
 
             setTimeout(() => {
-                location.href = "login.html";
+                location.href = "login";
             }, 700);
         } catch (error) {
             console.error(

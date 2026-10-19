@@ -296,7 +296,7 @@ function handleLoginReturn() {
         return;
     }
 
-    location.href = "home.html";
+    location.href = "books.html";
 }
 
 
@@ -388,7 +388,7 @@ function redirectAuthenticatedUser() {
             page === "register.html"
         )
     ) {
-        location.href = "home.html";
+        location.href = "books.html";
     }
 }
 
@@ -504,7 +504,7 @@ function setupRegisterForm() {
                     "Account created successfully. Welcome to Santiano Books!";
 
                 setTimeout(() => {
-                    location.href = "home.html";
+                    location.href = "books.html";
                 }, 500);
 
                 return;

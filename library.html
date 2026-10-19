@@ -169,20 +169,20 @@ main { padding-bottom: 88px; }
 
 <header class="site">
 <div class="wrap nav">
-<a href="books.html" class="logo"><i>E</i>ENT Books</a>
+<a href="books" class="logo"><i>E</i>ENT Books</a>
 <nav class="links">
-<a href="books.html">Books</a><a class="active" href="library.html">My Library</a>
+<a href="books">Books</a><a class="active" href="library">My Library</a>
 </nav>
 <div class="actions">
-<a class="cart-btn" href="cart.html" aria-label="Shopping cart"><svg class="i"><use href="#cart"/></svg><sup data-cart-count>0</sup></a>
-<a class="acct" href="account.html">My Account</a>
+<a class="cart-btn" href="cart" aria-label="Shopping cart"><svg class="i"><use href="#cart"/></svg><sup data-cart-count>0</sup></a>
+<a class="acct" href="account">My Account</a>
 <button type="button" class="hd-out" data-logout>Logout</button>
 </div>
 <button class="burger" id="burger" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
 </div>
 <div class="mm" id="mm">
-<a href="books.html">Books</a><a href="library.html">My Library</a><a href="cart.html">Cart</a><a href="account.html">My Account</a>
-<a href="login.html" class="out" id="sidebarLogout" data-logout>Logout</a>
+<a href="books">Books</a><a href="library">My Library</a><a href="cart">Cart</a><a href="account">My Account</a>
+<a href="login" class="out" id="sidebarLogout" data-logout>Logout</a>
 </div>
 </header>
 
@@ -195,7 +195,7 @@ main { padding-bottom: 88px; }
 <h1>My <em>Library</em></h1>
 <p class="lead">Welcome back, <strong data-user-name>Reader</strong>. Every book you purchase is kept here, ready to read.</p>
 </div>
-<a class="btn btn-o" href="books.html">Browse more books →</a>
+<a class="btn btn-o" href="books">Browse more books →</a>
 </div>
 </section>
 
@@ -216,11 +216,11 @@ main { padding-bottom: 88px; }
 <div class="wrap">
 <div class="fg">
 <div>
-<a href="books.html" class="logo"><i>E</i>ENT Books</a>
+<a href="books" class="logo"><i>E</i>ENT Books</a>
 <p>Digital books for people who want to learn, grow and build.</p>
 </div>
-<div><h4>Explore</h4><nav><a href="books.html">Books</a><a href="library.html">My Library</a><a href="cart.html">Cart</a></nav></div>
-<div><h4>Account</h4><nav><a href="account.html">My Account</a><a href="login.html" id="logoutButton" data-logout>Logout</a></nav></div>
+<div><h4>Explore</h4><nav><a href="books">Books</a><a href="library">My Library</a><a href="cart">Cart</a></nav></div>
+<div><h4>Account</h4><nav><a href="account">My Account</a><a href="login" id="logoutButton" data-logout>Logout</a></nav></div>
 <div><h4>ENT Books</h4><nav><a href="#">About</a><a href="#">Contact</a></nav></div>
 </div>
 <div class="fb">© 2026 ENT Books. All rights reserved.</div>
@@ -251,7 +251,7 @@ main { padding-bottom: 88px; }
       });
       sessionStorage.clear();
     } catch (err) {}
-    window.location.href = "index.html";
+    window.location.href = "/";
   }
 
   document.addEventListener("click", function (e) {

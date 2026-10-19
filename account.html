@@ -226,19 +226,19 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
 
 <header class="site">
 <div class="wrap nav">
-<a href="books.html" class="logo"><i>E</i>ENT Books</a>
+<a href="books" class="logo"><i>E</i>ENT Books</a>
 <nav class="links">
-<a href="books.html">Books</a><a href="library.html">My Library</a>
+<a href="books">Books</a><a href="library">My Library</a>
 </nav>
 <div class="actions">
-<a class="cart-btn" href="cart.html" aria-label="Shopping cart"><svg class="i"><use href="#cart"/></svg><sup data-cart-count>0</sup></a>
-<a class="acct" href="account.html">My Account</a>
+<a class="cart-btn" href="cart" aria-label="Shopping cart"><svg class="i"><use href="#cart"/></svg><sup data-cart-count>0</sup></a>
+<a class="acct" href="account">My Account</a>
 <button type="button" class="hd-out" data-logout>Logout</button>
 </div>
 <button class="burger" id="burger" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
 </div>
 <div class="mm" id="mm">
-<a href="books.html">Books</a><a href="library.html">My Library</a><a href="cart.html">Cart</a><a href="account.html">My Account</a>
+<a href="books">Books</a><a href="library">My Library</a><a href="cart">Cart</a><a href="account">My Account</a>
 <a href="#" class="out" data-logout>Logout</a>
 </div>
 </header>
@@ -252,7 +252,7 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
 <h1>Hi, <em data-user-name>Reader</em>.</h1>
 <p class="lead">Manage your ENT Books account and your reading library.</p>
 </div>
-<a class="btn btn-o" href="books.html">Explore Books →</a>
+<a class="btn btn-o" href="books">Explore Books →</a>
 </div>
 </section>
 
@@ -267,7 +267,7 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
 <a class="active" href="#top"><svg class="i"><use href="#user"/></svg>Overview</a>
 <a href="#profile"><svg class="i"><use href="#user"/></svg>Profile</a>
 <a href="#orders"><svg class="i"><use href="#receipt"/></svg>Purchases</a>
-<a href="library.html"><svg class="i"><use href="#lib"/></svg>My Library</a>
+<a href="library"><svg class="i"><use href="#lib"/></svg>My Library</a>
 <button type="button" class="out" id="sidebarLogout" data-logout><svg class="i"><use href="#out"/></svg>Logout</button>
 </nav>
 </aside>
@@ -316,11 +316,11 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
 <div class="wrap">
 <div class="fg">
 <div>
-<a href="books.html" class="logo"><i>E</i>ENT Books</a>
+<a href="books" class="logo"><i>E</i>ENT Books</a>
 <p>Digital books for people who want to learn, grow and build.</p>
 </div>
-<div><h4>Explore</h4><nav><a href="books.html">Books</a><a href="library.html">My Library</a><a href="cart.html">Cart</a></nav></div>
-<div><h4>Account</h4><nav><a href="account.html">My Account</a><a href="login.html" id="logoutButton" data-logout>Logout</a></nav></div>
+<div><h4>Explore</h4><nav><a href="books">Books</a><a href="library">My Library</a><a href="cart">Cart</a></nav></div>
+<div><h4>Account</h4><nav><a href="account">My Account</a><a href="login" id="logoutButton" data-logout>Logout</a></nav></div>
 <div><h4>ENT Books</h4><nav><a href="#">About</a><a href="#">Contact</a></nav></div>
 </div>
 <div class="fb">© 2026 ENT Books. All rights reserved.</div>
@@ -350,7 +350,7 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
       });
       sessionStorage.clear();
     } catch (err) {}
-    window.location.href = "index.html";
+    window.location.href = "/";
   }
 
   document.addEventListener("click", function (e) {
@@ -374,7 +374,7 @@ const ACCOUNT_API = (
 const token = getAuthToken();
 
 if (!token) {
-    window.location.href = "index.html";
+    window.location.href = "/";
 }
 
 function displayUserDetails() {
@@ -511,7 +511,7 @@ async function loadAccountData() {
                         </div>
                     </div>
 
-                    <a href="library.html" class="purchase-read">Read</a>
+                    <a href="library" class="purchase-read">Read</a>
                 </div>
             `;
         }).join("");

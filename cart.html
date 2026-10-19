@@ -191,19 +191,19 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
 
 <header class="site">
 <div class="wrap nav">
-<a href="books.html" class="logo"><i>E</i>ENT Books</a>
+<a href="books" class="logo"><i>E</i>ENT Books</a>
 <nav class="links">
-<a href="books.html">Books</a><a href="library.html">My Library</a>
+<a href="books">Books</a><a href="library">My Library</a>
 </nav>
 <div class="actions">
-<a class="acct" href="account.html">My Account</a>
+<a class="acct" href="account">My Account</a>
 <button type="button" class="hd-out" data-logout>Logout</button>
 </div>
 <button class="burger" id="burger" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
 </div>
 <div class="mm" id="mm">
-<a href="books.html">Books</a><a href="library.html">My Library</a><a href="cart.html">Cart</a><a href="account.html">My Account</a>
-<a href="login.html" class="out" id="sidebarLogout" data-logout>Logout</a>
+<a href="books">Books</a><a href="library">My Library</a><a href="cart">Cart</a><a href="account">My Account</a>
+<a href="login" class="out" id="sidebarLogout" data-logout>Logout</a>
 </div>
 </header>
 
@@ -216,7 +216,7 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
 <h1>Shopping <em>Cart</em></h1>
 <p class="lead">Review your books, then head to checkout.</p>
 </div>
-<a class="btn btn-o" href="books.html">Keep browsing →</a>
+<a class="btn btn-o" href="books">Keep browsing →</a>
 </div>
 </section>
 
@@ -226,7 +226,7 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
 <div class="cart-empty">
 <h2>Your cart is empty</h2>
 <p>Browse our collection and add some books.</p>
-<a href="books.html" class="gold-btn">Explore Books</a>
+<a href="books" class="gold-btn">Explore Books</a>
 </div>
 </div>
 </div>
@@ -237,11 +237,11 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
 <div class="wrap">
 <div class="fg">
 <div>
-<a href="books.html" class="logo"><i>E</i>ENT Books</a>
+<a href="books" class="logo"><i>E</i>ENT Books</a>
 <p>Digital books for people who want to learn, grow and build.</p>
 </div>
-<div><h4>Explore</h4><nav><a href="books.html">Books</a><a href="library.html">My Library</a><a href="cart.html">Cart</a></nav></div>
-<div><h4>Account</h4><nav><a href="account.html">My Account</a><a href="login.html" data-logout>Logout</a></nav></div>
+<div><h4>Explore</h4><nav><a href="books">Books</a><a href="library">My Library</a><a href="cart">Cart</a></nav></div>
+<div><h4>Account</h4><nav><a href="account">My Account</a><a href="login" data-logout>Logout</a></nav></div>
 <div><h4>ENT Books</h4><nav><a href="#">About</a><a href="#">Contact</a></nav></div>
 </div>
 <div class="fb">© 2026 ENT Books. All rights reserved.</div>
@@ -270,7 +270,7 @@ sup[data-cart-count] { position: absolute; top: -7px; right: -7px; display: inli
       });
       sessionStorage.clear();
     } catch (err) {}
-    window.location.href = "index.html";
+    window.location.href = "/";
   }
   document.addEventListener("click", function (e) {
     var t = e.target;
