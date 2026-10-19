@@ -490,6 +490,15 @@ function renderCheckout() {
 // =====================================================
 
 async function beginPayment() {
+  // If a payment went through but confirming it failed,
+  // this click just tries to confirm it again.
+  if (window.santianoRetryReference) {
+    verifyPayment(
+      window.santianoRetryReference
+    );
+    return;
+  }
+
   const message =
     document.getElementById(
       "checkoutMessage"
@@ -625,10 +634,6 @@ async function beginPayment() {
     const popup =
       new PaystackPop();
 
-    popup.resumeTransaction(
-      data.access_code
-    );
-
     window.santianoPaystackReference =
       data.reference;
 
@@ -636,18 +641,52 @@ async function beginPayment() {
       order.id;
 
     button.textContent =
-      "VERIFY PAYMENT";
+      "WAITING FOR PAYMENT...";
 
-    button.disabled = false;
+    button.disabled = true;
 
-    button.onclick = () => {
-      verifyPayment(
-        data.reference
-      );
-    };
+    popup.resumeTransaction(
+      data.access_code,
+      {
+        // Payment finished: confirm it automatically
+        onSuccess: () => {
+          verifyPayment(
+            data.reference
+          );
+        },
 
-    message.textContent =
-      "After completing payment, click VERIFY PAYMENT.";
+        // Customer closed the window without paying
+        onCancel: () => {
+          message.textContent =
+            "Payment was not completed. You can try again.";
+
+          button.disabled = false;
+
+          button.textContent =
+            `PAY ${checkoutMoney(
+              order.total_kobo
+            )}`;
+        },
+
+        onError: (error) => {
+          console.error(
+            "Paystack error:",
+            error
+          );
+
+          message.textContent =
+            (error && error.message) ||
+            "Payment could not be completed. Please try again.";
+
+          button.disabled = false;
+
+          button.textContent =
+            `PAY ${checkoutMoney(
+              order.total_kobo
+            )}`;
+        }
+      }
+    );
 
   } catch (error) {
     console.error(
@@ -710,33 +749,50 @@ async function verifyPayment(reference) {
     "Verifying your payment...";
 
   try {
-    const response =
-      await fetch(
-        `${CHECKOUT_API}/orders/paystack/verify`,
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json",
-
-            Authorization:
-              `Bearer ${token}`
-          },
-
-          body: JSON.stringify({
-            reference
-          })
-        }
-      );
-
+    let response;
     let data;
 
-    try {
-      data = await response.json();
-    } catch {
-      throw new Error(
-        "The payment server returned an invalid response."
+    // Paystack can take a moment to mark the payment as
+    // successful, so try a few times before giving up.
+    for (let attempt = 1; attempt <= 4; attempt++) {
+      response =
+        await fetch(
+          `${CHECKOUT_API}/orders/paystack/verify`,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+
+              Authorization:
+                `Bearer ${token}`
+            },
+
+            body: JSON.stringify({
+              reference
+            })
+          }
+        );
+
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error(
+          "The payment server returned an invalid response."
+        );
+      }
+
+      if (
+        response.ok ||
+        attempt === 4 ||
+        response.status !== 400
+      ) {
+        break;
+      }
+
+      await new Promise(resolve =>
+        setTimeout(resolve, 2000)
       );
     }
 
@@ -751,6 +807,8 @@ async function verifyPayment(reference) {
         "Payment verification failed."
       );
     }
+
+    window.santianoRetryReference = null;
 
     message.textContent =
       "Payment successful. Your book is now available to download.";
@@ -773,14 +831,17 @@ async function verifyPayment(reference) {
       error
     );
 
+    window.santianoRetryReference = reference;
+
     message.textContent =
-      error.message ||
-      "Payment verification failed.";
+      (error.message ||
+      "We could not confirm your payment.") +
+      " If money was taken, tap the button to check again.";
 
     button.disabled = false;
 
     button.textContent =
-      "VERIFY PAYMENT";
+      "CHECK PAYMENT AGAIN";
   }
 }
 
