@@ -1,4 +1,4 @@
-const BOOK_API = "https://santiano-books.onrender.com/api";
+const BOOK_API = "https://ent-books.onrender.com/api";
 
 function getBookId() {
   const params = new URLSearchParams(window.location.search);

@@ -4,7 +4,7 @@
 
 const API =
   window.SANTIANO_API ||
-  "https://santiano-books.onrender.com/api";
+  "https://ent-books.onrender.com/api";
 
 
 const SUPABASE_COVERS_URL =

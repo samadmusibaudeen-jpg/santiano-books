@@ -4,7 +4,7 @@
 
 const CHECKOUT_API =
   window.SANTIANO_API ||
-  "https://santiano-books.onrender.com/api";
+  "https://ent-books.onrender.com/api";
 
 const PAYSTACK_PUBLIC_KEY =
   "pk_live_87c9da8d951f26772deb4bdfa3c3f2d832b9de25";
