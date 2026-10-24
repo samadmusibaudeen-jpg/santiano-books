@@ -496,6 +496,9 @@ function addToCart(id) {
       category:
         book.category,
 
+      pages:
+        Number(book.pages) || null,
+
       price_kobo:
         Number(
           book.price_kobo ??
@@ -1027,6 +1030,9 @@ async function repurchaseBook(bookId) {
         category:
           bookData.category,
 
+        pages:
+          Number(bookData.pages) || null,
+
         price_kobo:
           Number(
             bookData.price_kobo ??
@@ -1297,6 +1303,8 @@ async function loadBooks() {
     renderBooks();
 
     renderBook();
+
+    renderCart();
 
 
   } catch (error) {
@@ -1989,6 +1997,22 @@ function renderCart() {
             );
 
 
+          const cartBook =
+            books.find(
+              entry =>
+                Number(entry.id) ===
+                Number(item.id)
+            );
+
+
+          const cartPages =
+            pagesLabel(
+              item.pages
+                ? item
+                : cartBook
+            );
+
+
           return `
 
             <div
@@ -2049,6 +2073,8 @@ function renderCart() {
                     item.category ||
                     "General"
                   )}
+
+                  ${cartPages ? ` · ${escapeHtml(cartPages)}` : ""}
 
                 </div>
 
