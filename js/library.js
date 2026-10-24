@@ -51,6 +51,17 @@ function getCartKey() {
 
 
 /* =====================================================
+   PAGE COUNT
+===================================================== */
+
+function pagesLabel(book) {
+  const n = Number(book && book.pages);
+  if (!Number.isInteger(n) || n < 1) return "";
+  return `${n.toLocaleString("en-NG")} page${n === 1 ? "" : "s"}`;
+}
+
+
+/* =====================================================
    COVER URL
 ===================================================== */
 
@@ -963,6 +974,13 @@ function libraryBookCard(
           "General"
         )}
       </div>
+
+
+      ${
+        pagesLabel(book)
+          ? `<div class="book-pages" style="margin-top:6px;font-size:13px;color:var(--muted);">${escapeHTML(pagesLabel(book))}</div>`
+          : ""
+      }
 
 
       <div class="library-date muted">

@@ -55,6 +55,17 @@ function money(kobo) {
 
 
 /* =========================
+   PAGE COUNT
+========================= */
+
+function pagesLabel(book) {
+  const n = Number(book && book.pages);
+  if (!Number.isInteger(n) || n < 1) return "";
+  return `${n.toLocaleString("en-NG")} page${n === 1 ? "" : "s"}`;
+}
+
+
+/* =========================
    COVER URL
 ========================= */
 
@@ -1185,6 +1196,13 @@ function bookCard(book) {
       </div>
 
 
+      ${
+        pagesLabel(book)
+          ? `<div class="book-pages" style="margin-top:6px;font-size:13px;color:var(--muted);">${escapeHtml(pagesLabel(book))}</div>`
+          : ""
+      }
+
+
       <div class="price">
 
         ${money(price)}
@@ -2276,7 +2294,7 @@ function renderBook() {
               "Santiano Books"
             )}
 
-          </strong>
+          </strong>${pagesLabel(book) ? ` · ${escapeHtml(pagesLabel(book))}` : ""}
 
         </p>
 
