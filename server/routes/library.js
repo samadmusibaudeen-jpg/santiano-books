@@ -35,6 +35,7 @@ router.get(
             books.description,
             books.category,
             books.price_kobo,
+            books.pages,
             books.cover_key,
             books.file_key,
             books.created_at,
