@@ -73,6 +73,11 @@ a{color:inherit;text-decoration:none}
 .publish-btn,.login-btn{min-height:54px;padding:0 30px;border:2px solid var(--ink);border-radius:99px;background:var(--brand);color:var(--brand-ink);font-size:14px;font-weight:700;letter-spacing:.04em;box-shadow:4px 4px 0 var(--ink);transition:.15s}
 .publish-btn:hover,.login-btn:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
 .publish-btn:disabled,.login-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:4px 4px 0 var(--ink)}
+.cancel-btn{min-height:54px;padding:0 26px;border:2px solid var(--ink);border-radius:99px;background:var(--surface);font-size:14px;font-weight:700;letter-spacing:.04em;box-shadow:4px 4px 0 var(--ink);transition:.15s}
+.cancel-btn:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.cancel-btn[hidden]{display:none}
+.edit-banner{display:none;padding:10px 16px;border:2px solid var(--ink);border-radius:16px;background:var(--soft);font-size:14px;font-weight:700}
+.edit-banner.visible{display:block}
 .form-message{min-height:20px;font-size:14px;color:var(--muted)}
 .form-message.error{color:var(--danger)}
 .form-message.success{color:var(--ok)}
@@ -192,12 +197,14 @@ a{color:inherit;text-decoration:none}
 <!-- ADD BOOK -->
 <section class="section">
 <div class="section-heading">
-<h2>Add new book</h2>
-<p>Upload a digital book and assign it to a category.</p>
+<h2 id="formTitle">Add new book</h2>
+<p id="formSubtitle">Upload a digital book and assign it to a category.</p>
 </div>
 
 <div class="card">
 <form class="book-form" id="bookForm">
+
+<div class="edit-banner" id="editBanner"></div>
 
 <div class="form-grid">
 
@@ -235,6 +242,11 @@ a{color:inherit;text-decoration:none}
 <input id="priceNaira" name="priceNaira" type="number" min="1" step="1" placeholder="5000" required>
 </div>
 
+<div class="field">
+<label for="pages">Number of pages</label>
+<input id="pages" name="pages" type="number" min="1" step="1" placeholder="450" required>
+</div>
+
 <div class="field full">
 <label for="description">Description</label>
 <textarea id="description" name="description" placeholder="Write a short description of the book..." required></textarea>
@@ -243,19 +255,20 @@ a{color:inherit;text-decoration:none}
 <div class="field">
 <label for="ebook">eBook PDF</label>
 <input id="ebook" name="ebook" class="file-input" type="file" accept="application/pdf,.pdf" required>
-<small>PDF only. Maximum size: 200MB.</small>
+<small id="ebookHint">PDF only. Maximum size: 200MB.</small>
 </div>
 
 <div class="field">
 <label for="cover">Cover image</label>
 <input id="cover" name="cover" class="file-input" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp">
-<small>JPG, PNG or WebP.</small>
+<small id="coverHint">JPG, PNG or WebP.</small>
 </div>
 
 </div>
 
 <div class="form-actions">
 <button type="submit" class="publish-btn" id="publishButton">ADD BOOK</button>
+<button type="button" class="cancel-btn" id="cancelEdit" hidden>CANCEL</button>
 <div class="form-message" id="formMessage"></div>
 </div>
 
@@ -289,1851 +302,299 @@ function updateStats(books) {
 }
 </script>
 <script>
-
-    const API =
-
-      "https://ent-books.onrender.com/api";
-
-
-
-    const ADMIN_TOKEN_KEY =
-
-      "santiano_admin_token";
-
-
-
-
-
-    /* =========================
-
-       ELEMENTS
-
-    ========================= */
-
-
-
-    const loginScreen =
-
-      document.getElementById(
-
-        "loginScreen"
-
-      );
-
-
-
-    const dashboard =
-
-      document.getElementById(
-
-        "dashboard"
-
-      );
-
-
-
-    const loginForm =
-
-      document.getElementById(
-
-        "loginForm"
-
-      );
-
-
-
-    const loginEmail =
-
-      document.getElementById(
-
-        "loginEmail"
-
-      );
-
-
-
-    const loginPassword =
-
-      document.getElementById(
-
-        "loginPassword"
-
-      );
-
-
-
-    const loginButton =
-
-      document.getElementById(
-
-        "loginButton"
-
-      );
-
-
-
-    const loginMessage =
-
-      document.getElementById(
-
-        "loginMessage"
-
-      );
-
-
-
-    const logoutButton =
-
-      document.getElementById(
-
-        "logout"
-
-      );
-
-
-
-    const bookForm =
-
-      document.getElementById(
-
-        "bookForm"
-
-      );
-
-
-
-    const publishButton =
-
-      document.getElementById(
-
-        "publishButton"
-
-      );
-
-
-
-    const formMessage =
-
-      document.getElementById(
-
-        "formMessage"
-
-      );
-
-
-
-    const booksList =
-
-      document.getElementById(
-
-        "booksList"
-
-      );
-
-
-
-
-
-    /* =========================
-
-       AUTH
-
-    ========================= */
-
-
-
-    function getAdminToken() {
-
-      return localStorage.getItem(
-
-        ADMIN_TOKEN_KEY
-
-      );
-
-    }
-
-
-
-
-
-    function setAdminToken(token) {
-
-      localStorage.setItem(
-
-        ADMIN_TOKEN_KEY,
-
-        token
-
-      );
-
-    }
-
-
-
-
-
-    function clearAdminToken() {
-
-      localStorage.removeItem(
-
-        ADMIN_TOKEN_KEY
-
-      );
-
-    }
-
-
-
-
-
-    function adminHeaders() {
-
-      const token =
-
-        getAdminToken();
-
-
-
-      return {
-
-        Authorization:
-
-          `Bearer ${token}`
-
-      };
-
-    }
-
-
-
-
-
-    /* =========================
-
-       HTML ESCAPE
-
-    ========================= */
-
-
-
-    function escapeHTML(value) {
-
-      return String(value ?? "")
-
-        .replaceAll("&", "&amp;")
-
-        .replaceAll("<", "&lt;")
-
-        .replaceAll(">", "&gt;")
-
-        .replaceAll('"', "&quot;")
-
-        .replaceAll("'", "&#039;");
-
-    }
-
-
-
-
-
-    /* =========================
-
-       LOGIN SCREEN
-
-    ========================= */
-
-
-
-    function showLogin() {
-
-      loginScreen.style.display =
-
-        "grid";
-
-
-
-      dashboard.classList.remove(
-
-        "visible"
-
-      );
-
-    }
-
-
-
-
-
-    function showDashboard() {
-
-      loginScreen.style.display =
-
-        "none";
-
-
-
-      dashboard.classList.add(
-
-        "visible"
-
-      );
-
-
-
-      loadBooks();
-
-    }
-
-
-
-
-
-    /* =========================
-
-       LOGIN
-
-    ========================= */
-
-
-
-    loginForm.addEventListener(
-
-      "submit",
-
-      async event => {
-
-
-
-        event.preventDefault();
-
-
-
-        const email =
-
-          loginEmail.value.trim();
-
-
-
-        const password =
-
-          loginPassword.value;
-
-
-
-        if (!email || !password) {
-
-          loginMessage.textContent =
-
-            "Enter your email and password.";
-
-
-
-          return;
-
-        }
-
-
-
-        loginButton.disabled = true;
-
-
-
-        loginButton.textContent =
-
-          "LOGGING IN...";
-
-
-
-        loginMessage.textContent = "";
-
-
-
-        try {
-
-
-
-          const response =
-
-            await fetch(
-
-              `${API}/auth/login`,
-
-              {
-
-                method: "POST",
-
-
-
-                headers: {
-
-                  "Content-Type":
-
-                    "application/json"
-
-                },
-
-
-
-                body: JSON.stringify({
-
-                  email,
-
-                  password
-
-                })
-
-              }
-
-            );
-
-
-
-          let data = {};
-
-
-
-          try {
-
-            data =
-
-              await response.json();
-
-          } catch {
-
-            data = {};
-
-          }
-
-
-
-          if (!response.ok) {
-
-            throw new Error(
-
-              data.error ||
-
-              "Unable to login."
-
-            );
-
-          }
-
-
-
-          if (!data.token) {
-
-            throw new Error(
-
-              "Login succeeded, but no authentication token was returned."
-
-            );
-
-          }
-
-
-
-          /*
-
-           * The backend admin middleware
-
-           * remains the final authority.
-
-           */
-
-          setAdminToken(
-
-            data.token
-
-          );
-
-
-
-          loginEmail.value = "";
-
-          loginPassword.value = "";
-
-
-
-          showDashboard();
-
-
-
-        } catch (error) {
-
-
-
-          console.error(
-
-            "Admin login error:",
-
-            error
-
-          );
-
-
-
-          clearAdminToken();
-
-
-
-          loginMessage.textContent =
-
-            error.message ||
-
-            "Unable to login.";
-
-
-
-        } finally {
-
-
-
-          loginButton.disabled =
-
-            false;
-
-
-
-          loginButton.textContent =
-
-            "LOGIN";
-
-        }
-
-      }
-
-    );
-
-
-
-
-
-    /* =========================
-
-       LOAD BOOKS
-
-    ========================= */
-
-
-
-    async function loadBooks() {
-
-
-
-      booksList.innerHTML =
-
-        `<div class="empty">
-
-          Loading books...
-
-        </div>`;
-
-
-
-      try {
-
-
-
-        const response =
-
-          await fetch(
-
-            `${API}/admin/books`,
-
-            {
-
-              headers:
-
-                adminHeaders()
-
-            }
-
-          );
-
-
-
-        let data = {};
-
-
-
-        try {
-
-          data =
-
-            await response.json();
-
-        } catch {
-
-          data = {};
-
-        }
-
-
-
-        if (response.status === 401 ||
-
-            response.status === 403) {
-
-
-
-          clearAdminToken();
-
-          showLogin();
-
-
-
-          loginMessage.textContent =
-
-            "Your admin session has expired.";
-
-
-
-          return;
-
-        }
-
-
-
-        if (!response.ok) {
-
-          throw new Error(
-
-            data.error ||
-
-            "Unable to load books."
-
-          );
-
-        }
-
-
-
-        renderBooks(
-
-          Array.isArray(data.books)
-
-            ? data.books
-
-            : []
-
-        );
-
-
-
-      } catch (error) {
-
-
-
-        console.error(
-
-          "Load books error:",
-
-          error
-
-        );
-
-
-
-        booksList.innerHTML =
-
-          `<div class="empty">
-
-            ${escapeHTML(
-
-              error.message ||
-
-              "Unable to load books."
-
-            )}
-
-          </div>`;
-
-      }
-
-    }
-
-
-
-
-
-    /* =========================
-
-       RENDER BOOKS
-
-    ========================= */
-
-
-
-    function renderBooks(books) {
-      updateStats(books);
-
-
-
-      if (!books.length) {
-
-
-
-        booksList.innerHTML =
-
-          `<div class="empty">
-
-            No books have been added yet.
-
-          </div>`;
-
-
-
-        return;
-
-      }
-
-
-
-      booksList.innerHTML =
-
-        books
-
-          .map(book => {
-
-
-
-            const published =
-
-              Boolean(
-
-                book.is_published
-
-              );
-
-
-
-            const priceNaira =
-
-              Number(
-
-                book.price_kobo || 0
-
-              ) / 100;
-
-
-
-            return `
-
-              <article class="book-row">
-
-
-
-                <div class="book-info">
-
-
-
-                  <h3 class="book-title">
-
-                    ${escapeHTML(
-
-                      book.title
-
-                    )}
-
-                  </h3>
-
-
-
-                  <div class="book-category">
-
-                    ${escapeHTML(
-
-                      book.category ||
-
-                      "General"
-
-                    )}
-
-                  </div>
-
-
-
-                  <div class="book-author">
-
-                    ${escapeHTML(
-
-                      book.author ||
-
-                      "Musibau Samad Eniola"
-
-                    )}
-
-                  </div>
-
-
-
-                </div>
-
-
-
-
-
-                <div class="book-price">
-
-                  ₦${priceNaira.toLocaleString(
-
-                    "en-NG"
-
-                  )}
-
-                </div>
-
-
-
-
-
-                <div>
-
-
-
-                  <span
-
-                    class="status ${
-
-                      published
-
-                        ? "published"
-
-                        : "unpublished"
-
-                    }"
-
-                  >
-
-                    ${
-
-                      published
-
-                        ? "Published"
-
-                        : "Unpublished"
-
-                    }
-
-                  </span>
-
-
-
-                </div>
-
-
-
-
-
-                <div class="actions">
-
-
-
-                  <button
-
-                    type="button"
-
-                    class="action-btn"
-
-                    onclick="togglePublish(${Number(
-
-                      book.id
-
-                    )})"
-
-                  >
-
-                    ${
-
-                      published
-
-                        ? "Unpublish"
-
-                        : "Publish"
-
-                    }
-
-                  </button>
-
-
-
-                  <button
-
-                    type="button"
-
-                    class="action-btn delete"
-
-                    onclick="removeBook(${Number(
-
-                      book.id
-
-                    )})"
-
-                  >
-
-                    Remove
-
-                  </button>
-
-
-
-                </div>
-
-
-
-              </article>
-
-            `;
-
-          })
-
-          .join("");
-
-    }
-
-
-
-
-
-    /* =========================
-
-       ADD BOOK
-
-    ========================= */
-
-
-
-    bookForm.addEventListener(
-
-      "submit",
-
-      async event => {
-
-
-
-        event.preventDefault();
-
-
-
-        const title =
-
-          document.getElementById(
-
-            "title"
-
-          ).value.trim();
-
-
-
-        const author =
-
-          document.getElementById(
-
-            "author"
-
-          ).value.trim();
-
-
-
-        const category =
-
-          document.getElementById(
-
-            "category"
-
-          ).value.trim();
-
-
-
-        const priceNaira =
-
-          Number(
-
-            document.getElementById(
-
-              "priceNaira"
-
-            ).value
-
-          );
-
-
-
-        const description =
-
-          document.getElementById(
-
-            "description"
-
-          ).value.trim();
-
-
-
-        const ebook =
-
-          document.getElementById(
-
-            "ebook"
-
-          ).files[0];
-
-
-
-        const cover =
-
-          document.getElementById(
-
-            "cover"
-
-          ).files[0];
-
-
-
-
-
-        if (!title ||
-
-            !author ||
-
-            !category ||
-
-            !description ||
-
-            !priceNaira ||
-
-            !ebook) {
-
-
-
-          formMessage.className =
-
-            "form-message error";
-
-
-
-          formMessage.textContent =
-            "Please complete all required fields.";
-
-
-
-          return;
-
-        }
-
-
-
-
-
-        if (priceNaira <= 0) {
-
-
-
-          formMessage.className =
-
-            "form-message error";
-
-
-
-          formMessage.textContent =
-
-            "Price must be greater than zero.";
-
-
-
-          return;
-
-        }
-
-
-
-
-
-        if (
-
-          ebook.type !==
-
-          "application/pdf"
-
-        ) {
-
-
-
-          formMessage.className =
-
-            "form-message error";
-
-
-
-          formMessage.textContent =
-
-            "The eBook must be a PDF.";
-
-
-
-          return;
-
-        }
-
-
-
-
-
-        if (
-
-          ebook.size >
-
-          200 * 1024 * 1024
-
-        ) {
-
-
-
-          formMessage.className =
-
-            "form-message error";
-
-
-
-          formMessage.textContent =
-
-            "The eBook must be 200MB or smaller.";
-
-
-
-          return;
-
-        }
-
-
-
-
-
-        if (cover) {
-
-
-
-          const allowedCoverTypes = [
-
-            "image/jpeg",
-
-            "image/png",
-
-            "image/webp"
-
-          ];
-
-
-
-          if (
-
-            !allowedCoverTypes.includes(
-
-              cover.type
-
-            )
-
-          ) {
-
-
-
-            formMessage.className =
-
-              "form-message error";
-
-
-
-            formMessage.textContent =
-
-              "Cover must be JPG, PNG or WebP.";
-
-
-
-            return;
-
-          }
-
-        }
-
-
-
-
-
-        const formData =
-
-          new FormData();
-
-
-
-        formData.append(
-
-          "title",
-
-          title
-
-        );
-
-
-
-        formData.append(
-
-          "author",
-
-          author
-
-        );
-
-
-
-
-        formData.append(
-
-          "category",
-
-          category
-
-        );
-
-
-
-        formData.append(
-
-          "price_kobo",
-
-          String(
-
-            Math.round(
-
-              priceNaira * 100
-
-            )
-
-          )
-
-        );
-
-
-
-        formData.append(
-
-          "description",
-
-          description
-
-        );
-
-
-
-        formData.append(
-
-          "ebook",
-
-          ebook
-
-        );
-
-
-
-        if (cover) {
-
-          formData.append(
-
-            "cover",
-
-            cover
-
-          );
-
-        }
-
-
-
-
-
-        publishButton.disabled =
-
-          true;
-
-
-
-        publishButton.textContent =
-
-          "UPLOADING...";
-
-
-
-        formMessage.className =
-
-          "form-message";
-
-
-
-        formMessage.textContent =
-
-          "Uploading book and files. Please wait...";
-
-
-
-
-
-        try {
-
-
-
-          const response =
-
-            await fetch(
-
-              `${API}/admin/books`,
-
-              {
-
-                method: "POST",
-
-
-
-                headers:
-
-                  adminHeaders(),
-
-
-
-                body: formData
-
-              }
-
-            );
-
-
-
-          let data = {};
-
-
-
-          try {
-
-            data =
-
-              await response.json();
-
-          } catch {
-
-            data = {};
-
-          }
-
-
-
-
-
-          if (
-
-            response.status === 401 ||
-
-            response.status === 403
-
-          ) {
-
-
-
-            clearAdminToken();
-
-            showLogin();
-
-
-
-            loginMessage.textContent =
-
-              "Your admin session has expired.";
-
-
-
-            return;
-
-          }
-
-
-
-
-
-          if (!response.ok) {
-
-            throw new Error(
-
-              data.error ||
-
-              "Unable to create book."
-
-            );
-
-          }
-
-
-
-
-
-          formMessage.className =
-
-            "form-message success";
-
-
-
-          formMessage.textContent =
-
-            "Book added successfully.";
-
-
-
-
-
-          bookForm.reset();
-
-
-
-
-
-          document.getElementById(
-
-            "author"
-
-          ).value =
-
-            "Musibau Samad Eniola";
-
-
-
-
-
-          setTimeout(
-
-            () => {
-
-              formMessage.textContent =
-
-                "";
-
-            },
-
-            3000
-
-          );
-
-
-
-
-
-          await loadBooks();
-
-
-
-        } catch (error) {
-
-
-
-          console.error(
-
-            "Create book error:",
-
-            error
-
-          );
-
-
-
-          formMessage.className =
-
-            "form-message error";
-
-
-
-          formMessage.textContent =
-
-            error.message ||
-
-            "Unable to create book.";
-
-
-
-        } finally {
-
-
-
-          publishButton.disabled =
-
-            false;
-
-
-
-          publishButton.textContent =
-
-            "ADD BOOK";
-
-        }
-
-      }
-
-    );
-
-
-
-
-
-    /* =========================
-
-       PUBLISH / UNPUBLISH
-
-    ========================= */
-
-
-
-    async function togglePublish(id) {
-
-
-
-      if (!id) return;
-
-
-
-      try {
-
-
-
-        const response =
-
-          await fetch(
-
-            `${API}/admin/books/${id}/publish`,
-
-            {
-
-              method: "PATCH",
-
-              headers:
-
-                adminHeaders()
-
-            }
-
-          );
-
-
-
-        let data = {};
-
-
-
-        try {
-
-          data =
-
-            await response.json();
-
-        } catch {
-
-          data = {};
-
-        }
-
-
-
-
-
-        if (
-
-          response.status === 401 ||
-
-          response.status === 403
-
-        ) {
-
-
-
-          clearAdminToken();
-
-          showLogin();
-
-
-
-          loginMessage.textContent =
-
-            "Your admin session has expired.";
-
-
-
-          return;
-
-        }
-
-
-
-
-
-        if (!response.ok) {
-
-          throw new Error(
-
-            data.error ||
-
-            "Unable to update book."
-
-          );
-
-        }
-
-
-
-
-
-        await loadBooks();
-
-
-
-      } catch (error) {
-
-
-
-        console.error(
-
-          "Publish error:",
-
-          error
-
-        );
-
-
-
-        alert(
-
-          error.message ||
-
-          "Unable to update book."
-
-        );
-
-      }
-
-    }
-
-
-
-
-
-    /* =========================
-
-       REMOVE BOOK
-
-    ========================= */
-
-
-
-    async function removeBook(id) {
-
-
-
-      if (!id) return;
-
-
-
-      const confirmed =
-
-        window.confirm(
-
-          "Remove this book from the store?"
-
-        );
-
-
-
-      if (!confirmed) {
-
-        return;
-
-      }
-
-
-
-
-
-      try {
-
-
-
-        const response =
-
-          await fetch(
-
-            `${API}/admin/books/${id}`,
-
-            {
-
-              method: "DELETE",
-
-              headers:
-
-                adminHeaders()
-
-            }
-
-          );
-
-
-
-        let data = {};
-
-
-
-        try {
-
-          data =
-
-            await response.json();
-
-        } catch {
-
-          data = {};
-
-        }
-
-
-
-
-
-        if (
-
-          response.status === 401 ||
-
-          response.status === 403
-
-        ) {
-
-
-
-          clearAdminToken();
-
-          showLogin();
-
-
-
-          loginMessage.textContent =
-
-            "Your admin session has expired.";
-
-
-
-          return;
-
-        }
-
-
-
-
-
-        if (!response.ok) {
-
-          throw new Error(
-
-            data.error ||
-
-            "Unable to remove book."
-
-          );
-
-        }
-
-
-
-
-
-        await loadBooks();
-
-
-
-      } catch (error) {
-
-
-
-        console.error(
-
-          "Remove book error:",
-
-          error
-
-        );
-
-
-
-        alert(
-
-          error.message ||
-
-          "Unable to remove book."
-
-        );
-
-      }
-
-    }
-
-
-
-
-
-    /* =========================
-
-       LOGOUT
-
-    ========================= */
-
-
-
-    logoutButton.addEventListener(
-
-      "click",
-
-      () => {
-
-
-
-        clearAdminToken();
-
-
-
-        showLogin();
-
-
-
-        loginMessage.textContent =
-
-          "";
-
-
-
-      }
-
-    );
-
-
-
-
-
-    /* =========================
-
-       INITIALIZE
-
-    ========================= */
-
-
-
-    if (getAdminToken()) {
-
-      showDashboard();
-
-    } else {
-
-      showLogin();
-
-    }
-
-  </script>
+const API = "https://ent-books.onrender.com/api";
+const ADMIN_TOKEN_KEY = "santiano_admin_token";
+const DEFAULT_AUTHOR = "Musibau Samad Eniola";
+
+const $ = id => document.getElementById(id);
+const loginScreen = $("loginScreen"), dashboard = $("dashboard"), loginForm = $("loginForm"),
+  loginEmail = $("loginEmail"), loginPassword = $("loginPassword"), loginButton = $("loginButton"),
+  loginMessage = $("loginMessage"), logoutButton = $("logout"), bookForm = $("bookForm"),
+  publishButton = $("publishButton"), cancelEdit = $("cancelEdit"), formMessage = $("formMessage"),
+  booksList = $("booksList"), editBanner = $("editBanner");
+
+let books = [];
+let editingId = null;
+
+/* AUTH */
+const getAdminToken = () => localStorage.getItem(ADMIN_TOKEN_KEY);
+const setAdminToken = t => localStorage.setItem(ADMIN_TOKEN_KEY, t);
+const clearAdminToken = () => localStorage.removeItem(ADMIN_TOKEN_KEY);
+const adminHeaders = () => ({ Authorization: `Bearer ${getAdminToken()}` });
+
+function escapeHTML(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;").replaceAll("'", "&#039;");
+}
+
+async function readJSON(response) {
+  try { return await response.json(); } catch { return {}; }
+}
+
+function sessionExpired() {
+  clearAdminToken();
+  showLogin();
+  loginMessage.textContent = "Your admin session has expired.";
+}
+
+function setFormMessage(text, type) {
+  formMessage.className = "form-message" + (type ? " " + type : "");
+  formMessage.textContent = text;
+}
+
+/* SCREENS */
+function showLogin() {
+  loginScreen.style.display = "grid";
+  dashboard.classList.remove("visible");
+}
+function showDashboard() {
+  loginScreen.style.display = "none";
+  dashboard.classList.add("visible");
+  loadBooks();
+}
+
+/* LOGIN */
+loginForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  const email = loginEmail.value.trim();
+  const password = loginPassword.value;
+  if (!email || !password) {
+    loginMessage.textContent = "Enter your email and password.";
+    return;
+  }
+  loginButton.disabled = true;
+  loginButton.textContent = "LOGGING IN...";
+  loginMessage.textContent = "";
+  try {
+    const response = await fetch(`${API}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await readJSON(response);
+    if (!response.ok) throw new Error(data.error || "Unable to login.");
+    if (!data.token) throw new Error("Login succeeded, but no authentication token was returned.");
+    setAdminToken(data.token);
+    loginEmail.value = "";
+    loginPassword.value = "";
+    showDashboard();
+  } catch (error) {
+    console.error("Admin login error:", error);
+    clearAdminToken();
+    loginMessage.textContent = error.message || "Unable to login.";
+  } finally {
+    loginButton.disabled = false;
+    loginButton.textContent = "LOGIN";
+  }
+});
+
+/* LOAD + RENDER */
+async function loadBooks() {
+  booksList.innerHTML = `<div class="empty">Loading books...</div>`;
+  try {
+    const response = await fetch(`${API}/admin/books`, { headers: adminHeaders() });
+    const data = await readJSON(response);
+    if (response.status === 401 || response.status === 403) return sessionExpired();
+    if (!response.ok) throw new Error(data.error || "Unable to load books.");
+    books = Array.isArray(data.books) ? data.books : [];
+    renderBooks(books);
+  } catch (error) {
+    console.error("Load books error:", error);
+    booksList.innerHTML = `<div class="empty">${escapeHTML(error.message || "Unable to load books.")}</div>`;
+  }
+}
+
+function renderBooks(list) {
+  updateStats(list);
+  if (!list.length) {
+    booksList.innerHTML = `<div class="empty">No books have been added yet.</div>`;
+    return;
+  }
+  booksList.innerHTML = list.map(book => {
+    const published = Boolean(book.is_published);
+    const priceNaira = Number(book.price_kobo || 0) / 100;
+    const pages = Number(book.pages || 0);
+    const meta = escapeHTML(book.author || DEFAULT_AUTHOR) + (pages ? ` · ${pages.toLocaleString("en-NG")} pages` : "");
+    const id = Number(book.id);
+    return `
+      <article class="book-row">
+        <div class="book-info">
+          <h3 class="book-title">${escapeHTML(book.title)}</h3>
+          <div class="book-category">${escapeHTML(book.category || "General")}</div>
+          <div class="book-author">${meta}</div>
+        </div>
+        <div class="book-price">₦${priceNaira.toLocaleString("en-NG")}</div>
+        <div><span class="status ${published ? "published" : "unpublished"}">${published ? "Published" : "Unpublished"}</span></div>
+        <div class="actions">
+          <button type="button" class="action-btn" onclick="startEdit(${id})">Edit</button>
+          <button type="button" class="action-btn" onclick="togglePublish(${id})">${published ? "Unpublish" : "Publish"}</button>
+          <button type="button" class="action-btn delete" onclick="removeBook(${id})">Remove</button>
+        </div>
+      </article>`;
+  }).join("");
+}
+
+/* EDIT MODE */
+function startEdit(id) {
+  const book = books.find(b => Number(b.id) === Number(id));
+  if (!book) return;
+  editingId = Number(book.id);
+
+  $("title").value = book.title || "";
+  $("author").value = book.author || DEFAULT_AUTHOR;
+  $("category").value = book.category || "";
+  $("priceNaira").value = Number(book.price_kobo || 0) / 100;
+  $("pages").value = book.pages || "";
+  $("description").value = book.description || "";
+  $("ebook").value = "";
+  $("cover").value = "";
+  $("ebook").required = false;
+
+  $("formTitle").textContent = "Edit book";
+  $("formSubtitle").textContent = "Update the details below. Leave the files empty to keep the current ones.";
+  $("ebookHint").textContent = "Leave empty to keep the current PDF. Maximum size: 200MB.";
+  $("coverHint").textContent = "Leave empty to keep the current cover.";
+  editBanner.textContent = `Editing: ${book.title}${book.is_published ? " (published, changes go live when saved)" : ""}`;
+  editBanner.classList.add("visible");
+  publishButton.textContent = "SAVE CHANGES";
+  cancelEdit.hidden = false;
+  setFormMessage("");
+
+  bookForm.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function resetFormMode() {
+  editingId = null;
+  bookForm.reset();
+  $("author").value = DEFAULT_AUTHOR;
+  $("ebook").required = true;
+  $("formTitle").textContent = "Add new book";
+  $("formSubtitle").textContent = "Upload a digital book and assign it to a category.";
+  $("ebookHint").textContent = "PDF only. Maximum size: 200MB.";
+  $("coverHint").textContent = "JPG, PNG or WebP.";
+  editBanner.classList.remove("visible");
+  publishButton.textContent = "ADD BOOK";
+  cancelEdit.hidden = true;
+}
+
+cancelEdit.addEventListener("click", () => {
+  resetFormMode();
+  setFormMessage("");
+});
+
+/* ADD / UPDATE BOOK */
+bookForm.addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const isEdit = editingId !== null;
+  const title = $("title").value.trim();
+  const author = $("author").value.trim();
+  const category = $("category").value.trim();
+  const priceNaira = Number($("priceNaira").value);
+  const pages = Number($("pages").value);
+  const description = $("description").value.trim();
+  const ebook = $("ebook").files[0];
+  const cover = $("cover").files[0];
+
+  if (!title || !author || !category || !description || !priceNaira || !pages || (!isEdit && !ebook)) {
+    return setFormMessage("Please complete all required fields.", "error");
+  }
+  if (priceNaira <= 0) return setFormMessage("Price must be greater than zero.", "error");
+  if (!Number.isInteger(pages) || pages < 1) {
+    return setFormMessage("Pages must be a whole number greater than zero.", "error");
+  }
+  if (ebook) {
+    if (ebook.type !== "application/pdf") return setFormMessage("The eBook must be a PDF.", "error");
+    if (ebook.size > 200 * 1024 * 1024) return setFormMessage("The eBook must be 200MB or smaller.", "error");
+  }
+  if (cover && !["image/jpeg", "image/png", "image/webp"].includes(cover.type)) {
+    return setFormMessage("Cover must be JPG, PNG or WebP.", "error");
+  }
+
+  const formData = new FormData();
+  formData.append("title", title);
+  formData.append("author", author);
+  formData.append("category", category);
+  formData.append("price_kobo", String(Math.round(priceNaira * 100)));
+  formData.append("pages", String(pages));
+  formData.append("description", description);
+  if (ebook) formData.append("ebook", ebook);
+  if (cover) formData.append("cover", cover);
+
+  publishButton.disabled = true;
+  cancelEdit.disabled = true;
+  publishButton.textContent = isEdit ? "SAVING..." : "UPLOADING...";
+  setFormMessage(isEdit ? "Saving changes. Please wait..." : "Uploading book and files. Please wait...");
+
+  try {
+    const url = isEdit ? `${API}/admin/books/${editingId}` : `${API}/admin/books`;
+    const response = await fetch(url, {
+      method: isEdit ? "PUT" : "POST",
+      headers: adminHeaders(),
+      body: formData
+    });
+    const data = await readJSON(response);
+    if (response.status === 401 || response.status === 403) return sessionExpired();
+    if (!response.ok) throw new Error(data.error || (isEdit ? "Unable to update book." : "Unable to create book."));
+
+    resetFormMode();
+    setFormMessage(isEdit ? "Book updated successfully." : "Book added successfully.", "success");
+    setTimeout(() => { if (editingId === null) formMessage.textContent = ""; }, 3000);
+    await loadBooks();
+  } catch (error) {
+    console.error("Save book error:", error);
+    setFormMessage(error.message || "Unable to save book.", "error");
+  } finally {
+    publishButton.disabled = false;
+    cancelEdit.disabled = false;
+    publishButton.textContent = editingId !== null ? "SAVE CHANGES" : "ADD BOOK";
+  }
+});
+
+/* PUBLISH / UNPUBLISH */
+async function togglePublish(id) {
+  if (!id) return;
+  try {
+    const response = await fetch(`${API}/admin/books/${id}/publish`, { method: "PATCH", headers: adminHeaders() });
+    const data = await readJSON(response);
+    if (response.status === 401 || response.status === 403) return sessionExpired();
+    if (!response.ok) throw new Error(data.error || "Unable to update book.");
+    await loadBooks();
+  } catch (error) {
+    console.error("Publish error:", error);
+    alert(error.message || "Unable to update book.");
+  }
+}
+
+/* REMOVE */
+async function removeBook(id) {
+  if (!id) return;
+  if (!window.confirm("Remove this book from the store?")) return;
+  try {
+    const response = await fetch(`${API}/admin/books/${id}`, { method: "DELETE", headers: adminHeaders() });
+    const data = await readJSON(response);
+    if (response.status === 401 || response.status === 403) return sessionExpired();
+    if (!response.ok) throw new Error(data.error || "Unable to remove book.");
+    if (editingId === id) resetFormMode();
+    await loadBooks();
+  } catch (error) {
+    console.error("Remove book error:", error);
+    alert(error.message || "Unable to remove book.");
+  }
+}
+
+/* LOGOUT */
+logoutButton.addEventListener("click", () => {
+  clearAdminToken();
+  resetFormMode();
+  showLogin();
+  loginMessage.textContent = "";
+});
+
+/* INIT */
+if (getAdminToken()) showDashboard(); else showLogin();
+</script>
 
 </body>
 </html>
