@@ -55,6 +55,17 @@ function money(kobo) {
 
 
 /* =========================
+   PAGE COUNT
+========================= */
+
+function pagesLabel(book) {
+  const n = Number(book && book.pages);
+  if (!Number.isInteger(n) || n < 1) return "";
+  return `${n.toLocaleString("en-NG")} page${n === 1 ? "" : "s"}`;
+}
+
+
+/* =========================
    COVER URL
 ========================= */
 
@@ -484,6 +495,9 @@ function addToCart(id) {
 
       category:
         book.category,
+
+      pages:
+        Number(book.pages) || null,
 
       price_kobo:
         Number(
@@ -1016,6 +1030,9 @@ async function repurchaseBook(bookId) {
         category:
           bookData.category,
 
+        pages:
+          Number(bookData.pages) || null,
+
         price_kobo:
           Number(
             bookData.price_kobo ??
@@ -1185,6 +1202,13 @@ function bookCard(book) {
       </div>
 
 
+      ${
+        pagesLabel(book)
+          ? `<div class="book-pages" style="margin-top:6px;font-size:13px;color:var(--muted);">${escapeHtml(pagesLabel(book))}</div>`
+          : ""
+      }
+
+
       <div class="price">
 
         ${money(price)}
@@ -1279,6 +1303,8 @@ async function loadBooks() {
     renderBooks();
 
     renderBook();
+
+    renderCart();
 
 
   } catch (error) {
@@ -1971,6 +1997,22 @@ function renderCart() {
             );
 
 
+          const cartBook =
+            books.find(
+              entry =>
+                Number(entry.id) ===
+                Number(item.id)
+            );
+
+
+          const cartPages =
+            pagesLabel(
+              item.pages
+                ? item
+                : cartBook
+            );
+
+
           return `
 
             <div
@@ -2031,6 +2073,8 @@ function renderCart() {
                     item.category ||
                     "General"
                   )}
+
+                  ${cartPages ? ` · ${escapeHtml(cartPages)}` : ""}
 
                 </div>
 
@@ -2276,7 +2320,7 @@ function renderBook() {
               "Santiano Books"
             )}
 
-          </strong>
+          </strong>${pagesLabel(book) ? ` · ${escapeHtml(pagesLabel(book))}` : ""}
 
         </p>
 

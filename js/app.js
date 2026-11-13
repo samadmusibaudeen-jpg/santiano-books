@@ -2346,16 +2346,7 @@ function renderBook() {
         </div>
 
 
-        <p
-          class="book-detail-description"
-        >
-
-          ${escapeHtml(
-            book.description ||
-            "No description available."
-          )}
-
-        </p>
+        <div class="book-detail-description">${formatDescription(book.description)}</div>
 
 
         <ul>
@@ -2434,6 +2425,40 @@ function renderBook() {
 /* =========================
    ESCAPE HTML
 ========================= */
+
+/* Turns a plain-text description into safe HTML:
+   blank line = new paragraph, lines starting with "-", "*" or "•" = bullet list */
+function formatDescription(value) {
+  const text = String(value ?? "").replace(/\r\n?/g, "\n").trim();
+
+  if (!text) return "<p>No description available.</p>";
+
+  const bullet = /^[-*\u2022]\s+/;
+
+  return text
+    .split(/\n\s*\n/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map((block) => {
+      const lines = block
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean);
+
+      if (lines.length && lines.every((line) => bullet.test(line))) {
+        return (
+          "<ul>" +
+          lines
+            .map((line) => "<li>" + escapeHtml(line.replace(bullet, "")) + "</li>")
+            .join("") +
+          "</ul>"
+        );
+      }
+
+      return "<p>" + lines.map(escapeHtml).join("<br>") + "</p>";
+    })
+    .join("");
+}
 
 function escapeHtml(value) {
 
